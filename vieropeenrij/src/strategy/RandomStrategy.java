@@ -1,5 +1,10 @@
 package strategy;
 
+/**
+ * 
+ * @author C. Visscher and D. Ye
+ * 
+ */
 public class RandomStrategy implements Strategy{
 
 	@Override

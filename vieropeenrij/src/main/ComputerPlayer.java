@@ -2,6 +2,11 @@ package main;
 
 import strategy.Strategy;
 
+/**
+ * 
+ * @author C. Visscher and D. Ye
+ * 
+ */
 public class ComputerPlayer extends Player {
 
 	public ComputerPlayer(Mark mark, Strategy strategy) {

@@ -1,5 +1,10 @@
 package main;
 
+/**
+ * 
+ * @author C. Visscher and D. Ye
+ * 
+ */
 public class HumanPlayer extends Player {
 
 	public HumanPlayer(String name, Mark mark) {

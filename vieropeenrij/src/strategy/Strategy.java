@@ -1,8 +1,8 @@
 package strategy;
 /**
  * 
- * @author Christiaan Visscher en Dylan Ye
- * @version 05-01-2014
+ * @author C. Visscher en D. Ye
+ * @version
  */
 public interface Strategy {
 	public String getName();

@@ -2,10 +2,9 @@ package main;
 
 /**
  * 
- * @author Christiaan Visscher and Dylan Ye
+ * @author C. Visscher and D. Ye
  * 
  */
-
 public class Board {
 	
 	public static final int WIDTH = 7;
@@ -13,9 +12,11 @@ public class Board {
 	public static final int MAXFIELDS = 42;
 
 	private Mark[] fields;
+	private Rules rules;
 	
 	public Board() {
 		fields = new Mark[MAXFIELDS];
+		rules = new Rules(this);
 		reset();
 	}
 	
@@ -25,6 +26,10 @@ public class Board {
 			boardCopy.setField(i, getField(i));
 		}
 		return boardCopy;
+	}
+	
+	public Rules getRules() {
+		return rules;
 	}
 	
 	public Mark getField(int i) {
@@ -47,7 +52,6 @@ public class Board {
 	
 	public String toString() {
 		String boardRepresentation = "";
-		boardRepresentation = "1	2	3	4	5	6	7";
 		for(int i = 0 ; i < MAXFIELDS; i++) {
 			if((i % 7) == 0) {
 				boardRepresentation = boardRepresentation + "\n";

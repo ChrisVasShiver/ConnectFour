@@ -1,12 +1,18 @@
 package main;
 
+/**
+ * 
+ * @author C. Visscher and D. Ye
+ * 
+ */
 public class Game {
 	
 	public static final int MAXPLAYER = 2;
 	
 	private Board board;
 	private Player[] players;
-	private int current;
+	private Player currentPlayer;
+	private Boolean activeGame;
 	
 	
 	public Game(Player p0, Player p1) {
@@ -14,11 +20,15 @@ public class Game {
 		players = new Player[MAXPLAYER];
 		players[0] = p0;
 		players[1] = p1;
-		current = 0;
+		currentPlayer = players[0];
 	}
 	
 	public Board getBoard() {
 		return board;
+	}
+	
+	public Player getCurrentPlayer() {
+		return currentPlayer;
 	}
 	
 	public void start() {
@@ -29,7 +39,7 @@ public class Game {
 	}
 	
 	public void reset() {
-		current = 0;
+		currentPlayer = players[0];
 		board.reset();
 	}
 }

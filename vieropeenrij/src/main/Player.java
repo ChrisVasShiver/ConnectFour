@@ -2,6 +2,11 @@ package main;
 
 import strategy.Strategy;
 
+/**
+ * 
+ * @author C. Visscher and D. Ye
+ * 
+ */
 public abstract class Player {
 	private String pname;
 	private Mark pmark;
