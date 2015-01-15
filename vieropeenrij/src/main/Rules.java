@@ -21,13 +21,27 @@ public class Rules {
 		return true;
 	}
 	
+	public boolean horizontalWin(Mark m) {
+		// TODO
+		return false;
+	}
+	
+	public boolean verticalWin(Mark m) {
+		// TODO
+		return false;
+	}
+	
+	public boolean diagonalWin(Mark m) {
+		// TODO
+		return false;
+	}
+	
 	public boolean hasWinner() {
-		// TODO make body/make checks for diagonal/horizontal/vertical
+		// TODO
 		return false;
 	}
 	
 	public boolean isGameover() {
-		// TODO add winner check
-		return isBoardFull();
+		return isBoardFull() || hasWinner();
 	}
 }

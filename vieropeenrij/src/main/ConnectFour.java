@@ -13,6 +13,6 @@ public class ConnectFour {
 			game.getBoard().setField(i, Mark.RED);
 		}
 		game.update();
-		System.out.println(game.getBoard().getRules().isGameover());
+		System.out.println(game.getRules().isGameover());
 	}
 }
