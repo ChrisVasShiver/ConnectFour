@@ -60,12 +60,16 @@ public class Rules {
 	}
 
 	public boolean diagonalWin(Mark m) {
-		// TODO
+		
 		return false;
 	}
 
+	public boolean isWinner(Mark m) {
+		return horizontalWin(m) || verticalWin(m) || diagonalWin(m);
+	}
+
 	public boolean hasWinner() {
-		return horizontalWin() || verticalWin() || diagonalWin();
+		return isWinner(Mark.YELLOW) || isWinner(Mark.RED);
 	}
 
 	public boolean isGameover() {
