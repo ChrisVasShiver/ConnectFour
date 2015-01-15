@@ -8,24 +8,29 @@ import strategy.Strategy;
  * 
  */
 public abstract class Player {
-	private String pname;
-	private Mark pmark;
+	private String theName;
+	private Mark theMark;
 	/*@ requires name != null;
 	 	requires mark != null;
 	 	requires mark == Mark.YELLOW || mark == Mark.RED;
 	 */
 	public Player(String name, Mark mark) {
-		pname = name;
-		pmark = mark;
+		theName = name;
+		theMark = mark;
 	}
 	
 	public String getName() {
-		return pname;
+		return theName;
 	}
 	
 	public Mark getMark() {
-		return pmark;
+		return theMark;
 	}
 	
-	public abstract int doMove(Board board);
+	public abstract int determineMove(Board board);
+	
+	public void doMove(Board board) {
+		int move = determineMove(board);
+		board.setField(move, theMark);
+	}
 }

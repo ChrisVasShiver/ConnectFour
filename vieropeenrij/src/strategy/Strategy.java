@@ -1,4 +1,8 @@
 package strategy;
+
+import main.Board;
+import main.Mark;
+
 /**
  * 
  * @author C. Visscher en D. Ye
@@ -6,5 +10,5 @@ package strategy;
  */
 public interface Strategy {
 	public String getName();
-	public int determineMove();
+	public int determineMove(Board board, Mark m);
 }

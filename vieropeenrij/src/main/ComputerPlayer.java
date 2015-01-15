@@ -8,15 +8,20 @@ import strategy.Strategy;
  * 
  */
 public class ComputerPlayer extends Player {
+	
+	private Strategy theStrategy;
+	private Mark theMark;
 
 	public ComputerPlayer(Mark mark, Strategy strategy) {
 		super(strategy.getName(), mark);
+		theStrategy = strategy;
+		theMark = mark;
+		
 	}
 
 	@Override
-	public int doMove(Board board) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int determineMove(Board board) {
+		return theStrategy.determineMove(board, theMark);
 	}
 
 }
