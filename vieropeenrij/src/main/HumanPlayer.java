@@ -13,7 +13,7 @@ public class HumanPlayer extends Player {
 	}
 
 	@Override
-	public int doMove(Board board) {
+	public int determineMove(Board board) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

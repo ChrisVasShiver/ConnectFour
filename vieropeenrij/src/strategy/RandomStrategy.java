@@ -1,5 +1,8 @@
 package strategy;
 
+import main.Board;
+import main.Mark;
+
 /**
  * 
  * @author C. Visscher and D. Ye
@@ -13,9 +16,8 @@ public class RandomStrategy implements Strategy{
 	}
 
 	@Override
-	public int determineMove() {
+	public int determineMove(Board board, Mark m) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
 }
