@@ -60,8 +60,42 @@ public class Rules {
 	}
 
 	public boolean diagonalWin(Mark m) {
-		
+		for (int i = 0; i < currentBoard.MAXFIELDS; i++){
+			if ((scanDiagonalLeftUp(m) + scanDiagonalRightDown(m) == 3) || (scanDiagonalLeftDown(m) + scanDiagonalRightUp(m))){
+				return true;
+			}
+		}
 		return false;
+	}
+
+	public int scanDiagonalLeftUp(Mark m) {
+		for (int i = 0; i < currentBoard.MAXFIELDS; i-8) {
+			int points = 0;
+			if (i == 0 || i == 7 || i == 14 || i == 21 || i == 28 || i == 35
+					|| i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 6) {
+				break;
+			}
+			else {
+				if (currentBoard.getField(i).equals(m)){
+					points++;
+					scanDiagonalLeftUp(m);
+					
+				}
+				
+			}
+		}
+	}
+
+	public int scanDiagonalLeftDown(Mark m) {
+
+	}
+
+	public int scanDiagonalRightUp(Mark m) {
+
+	}
+
+	public int scanDiagonalRightDown(Mark m) {
+
 	}
 
 	public boolean isWinner(Mark m) {
