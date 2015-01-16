@@ -42,7 +42,7 @@ public class Board {
 	public int matrixToIndex(int row, int col) {
 		assert 0 <= row && row < HEIGHT;
 		assert 0 <= col && col < WIDTH;
-		return HEIGHT * row + col;
+		return WIDTH * row + col;
 	}
 	
 	/*@
@@ -57,7 +57,7 @@ public class Board {
 		//calculate col
 		resultArray[1] = (i % WIDTH);
 		//calculate row
-		resultArray[0] = (i - resultArray[1]) / HEIGHT;
+		resultArray[0] = (i - resultArray[1]) % HEIGHT;
 		return resultArray;
 	}
 	
@@ -106,15 +106,21 @@ public class Board {
 	}
 	
 	public String toString2() {
-		String c = "";
-		for(int col = 0; col < WIDTH; col++) {
-			c = String.valueOf(col);
-			for(int row = 0; col < HEIGHT; row++) {
-				System.out.println(matrixToIndex(row, col));
-				c = c + getField(matrixToIndex(row, col)).toString() + "\n";
+		String seperator = "-----------------------------------------------------------------------\n";
+		String board = String.format("%-1s %-7s %-1s %-7s %-1s %-7s %-1s %-7s %-1s %-7s %-1s %-7s %-1s %-7s %-1s\n", "|", 0, "|", 1, "|", 2, "|", 3, "|", 4, "|", 5, "|", 6, "|") + seperator;
+		Mark[] rowArray = new Mark[WIDTH];
+		for(int row = 0; row < HEIGHT; row++) {
+			for(int col = 0; col < WIDTH; col++) { 
+				rowArray[col] = getField(matrixToIndex(row, col));
 			}
-			
+			board = board
+					+ String.format(
+							"%-1s %-7s %-1s %-7s %-1s %-7s %-1s %-7s %-1s %-7s %-1s %-7s %-1s %-7s %-1s\n",
+							"|", rowArray[0].toString(),"|",rowArray[1].toString(), "|",
+							rowArray[2].toString(), "|", rowArray[3].toString(), "|",
+							rowArray[4].toString(), "|", rowArray[5].toString(), "|",
+							rowArray[6].toString(),"|") + seperator;
 		}
-		return c;
+		return board;
 	}
 }
