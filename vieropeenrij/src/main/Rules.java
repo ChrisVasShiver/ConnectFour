@@ -1,8 +1,5 @@
 package main;
 
-import org.junit.Before;
-import org.junit.Test;
-
 /**
  * 
  * @author C. Visscher and D. Ye
@@ -26,37 +23,32 @@ public class Rules {
 		return true;
 	}
 
-	public boolean horizontalWin(Mark m) {
-		for (int col = 0; col < currentBoard.HEIGHT; col++) {
-			for (int row = 0; row < WINNERSBLOCK; row++) {
-				int countMark = 0;
-				for (int i = 0; i < WINNERSBLOCK; i++) {
-					if (currentBoard.getField(
-							currentBoard.matrixToIndex(col + i, row)).equals(m)) {
-						countMark++;
-					}
-					if (countMark == WINNERSBLOCK) {
-						return true;
-					}
-				}
+	public boolean horizontalWin(Mark m, int index) {
+		int col = currentBoard.indexToMatrix(index)[1];
+		for (int row = 0; row < WINNERSBLOCK; row++) {
+			int countMark = 0;
+			if (currentBoard.getField(currentBoard.matrixToIndex(col, row))
+					.equals(m)) {
+				countMark++;
+			}
+			if (countMark == WINNERSBLOCK) {
+				return true;
+
 			}
 		}
 		return false;
 	}
 
-	public boolean verticalWin(Mark m) {
-		for (int row = 0; row < currentBoard.WIDTH; row++) {
-			for (int col = 0; col < WINNERSBLOCK; col++) {
-				int countMark = 0;
-				for (int i = 0; i < WINNERSBLOCK; i++) {
-					if (currentBoard.getField(
-							currentBoard.matrixToIndex(col, i * 7)).equals(m)) {
-						countMark++;
-					}
-					if (countMark == WINNERSBLOCK) {
-						return true;
-					}
-				}
+	public boolean verticalWin(Mark m, int index) {
+		int row = currentBoard.indexToMatrix(index)[1];
+		for (int col = 0; col < WINNERSBLOCK; col++) {
+			int countMark = 0;
+			if (currentBoard.getField(currentBoard.matrixToIndex(col, row))
+					.equals(m)) {
+				countMark++;
+			}
+			if (countMark == WINNERSBLOCK) {
+				return true;
 			}
 		}
 		return false;
@@ -164,23 +156,19 @@ public class Rules {
 		return points;
 	}
 
-	// public boolean isWinner(Mark m) {
-	// return horizontalWin(m) || verticalWin(m) || diagonalWin(m);
-	// }
+	 public boolean isWinner(Mark m, int index) {
+	 return horizontalWin(m, index) || verticalWin(m, index) || diagonalWin(m, index);
+	 }
 
-	// public boolean hasWinner() {
-	// return isWinner(Mark.YELLOW) || isWinner(Mark.RED);
-	// }
-
-	// public boolean isGameover() {
-	// return isBoardFull() || hasWinner();
-	// }
+	 public boolean isGameover(Mark m, int index) {
+	 return isBoardFull() || isWinner(m, index);
+	 }
 
 	public static void main(String[] args) {
 		Board board = new Board();
 		Rules rules = new Rules(board);
 
-		for (int i = 33; i > 0; i -= 8) {
+		for (int i = 33; i > 25; i -= 8) {
 			board.setField(i, Mark.RED);
 		}
 		board.setField(41, Mark.RED);
