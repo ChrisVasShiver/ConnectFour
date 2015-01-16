@@ -19,6 +19,7 @@ public class Board {
 		fields = new Mark[MAXFIELDS];
 		reset();
 	}
+	
 	/*@
 	 	ensures (\forall int i; 0 <= i && i < MAXFIELDS; \result.getField(i) == this.getField(i));
 	 	pure;
@@ -91,6 +92,7 @@ public class Board {
 		}
 	}
 	
+	
 	//TODO improve representation
 	public String toString() {
 		String boardRepresentation = "";
@@ -100,6 +102,7 @@ public class Board {
 			}
 			boardRepresentation = boardRepresentation + " " + getField(i).toString();
 		}
-		return boardRepresentation;
+		String result = String.format("%1$-20s%2$20.2f", boardRepresentation);
+		return result;
 	}
 }
