@@ -102,7 +102,19 @@ public class Board {
 			}
 			boardRepresentation = boardRepresentation + " " + getField(i).toString();
 		}
-		String result = String.format("%1$-20s%2$20.2f", boardRepresentation);
-		return result;
+		return boardRepresentation;
+	}
+	
+	public String toString2() {
+		String c = "";
+		for(int col = 0; col < WIDTH; col++) {
+			c = String.valueOf(col);
+			for(int row = 0; col < HEIGHT; row++) {
+				System.out.println(matrixToIndex(row, col));
+				c = c + getField(matrixToIndex(row, col)).toString() + "\n";
+			}
+			
+		}
+		return c;
 	}
 }

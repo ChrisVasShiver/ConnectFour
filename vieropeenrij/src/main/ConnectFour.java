@@ -1,4 +1,4 @@
-package main;
+	package main;
 
 /**
  * 
@@ -12,7 +12,7 @@ public class ConnectFour {
 		for (int i = 0; i < game.getBoard().MAXFIELDS; i++) {
 			game.getBoard().setField(i, Mark.RED);
 		}
-		game.update();
-		System.out.println(game.getRules().isGameover());
+		game.getBoard().setField(31, Mark.YELLOW);
+		System.out.println(game.getBoard().toString2());
 	}
 }
