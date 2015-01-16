@@ -65,9 +65,10 @@ public class Rules {
 		return false;
 	}
 
-	/*
-	 * @ requires m != null; requires 0 < index && index < 42; ensures 0 <=
-	 * \result && \result => 3;
+	/*@
+	 requires m != null;
+	 requires 0 < index && index < 42;
+	 ensures 0 <= \result && \result <= WINNERSBLOCK;
 	 */
 	public int scanDiagonalLeftUp(Mark m, int index) {
 		assert m != null;
@@ -87,9 +88,10 @@ public class Rules {
 		return points;
 	}
 
-	/*
-	 * @ requires m != null; requires 0 < index && index < 42; ensures 0 <=
-	 * \result && \result => 3;
+	/*@
+	 requires m != null;
+	 requires 0 < index && index < 42;
+	 ensures 0 <= \result && \result <= WINNERSBLOCK;
 	 */
 	public int scanDiagonalLeftDown(Mark m, int index) {
 		assert m != null;
@@ -110,9 +112,10 @@ public class Rules {
 		return points;
 	}
 
-	/*
-	 * @ requires m != null; requires 0 < index && index < 42; ensures 0 <=
-	 * \result && \result => 3;
+	/*@
+	 requires m != null;
+	 requires 0 < index && index < 42;
+	 ensures 0 <= \result && \result <= WINNERSBLOCK;
 	 */
 	public int scanDiagonalRightUp(Mark m, int index) {
 		assert m != null;
@@ -133,10 +136,12 @@ public class Rules {
 		return points;
 	}
 
-	/*
-	 * @ requires m != null; requires 0 < index && index < 42; ensures 0 <=
-	 * \result && \result => 3;
-	 */public int scanDiagonalRightDown(Mark m, int index) {
+	/*@
+	 requires m != null;
+	 requires 0 < index && index < 42;
+	 ensures 0 <= \result && \result <= WINNERSBLOCK;
+	 */
+	public int scanDiagonalRightDown(Mark m, int index) {
 		assert m != null;
 		assert 0 < index && index < 42;
 		int points = 0;
@@ -153,28 +158,28 @@ public class Rules {
 					break;
 			}
 		}
-		return points;
-	}
+		 return points;
+	 }
 
 	 public boolean isWinner(Mark m, int index) {
-	 return horizontalWin(m, index) || verticalWin(m, index) || diagonalWin(m, index);
+		 return horizontalWin(m, index) || verticalWin(m, index) || diagonalWin(m, index);
 	 }
 
 	 public boolean isGameover(Mark m, int index) {
-	 return isBoardFull() || isWinner(m, index);
+		 return isBoardFull() || isWinner(m, index);
 	 }
 
-	public static void main(String[] args) {
-		Board board = new Board();
-		Rules rules = new Rules(board);
+	 public static void main(String[] args) {
+		 Board board = new Board();
+		 Rules rules = new Rules(board);
 
-		for (int i = 33; i > 25; i -= 8) {
-			board.setField(i, Mark.RED);
-		}
-		board.setField(41, Mark.RED);
-		System.out.println(board.toString());
-		System.out.println(rules.scanDiagonalLeftUp(Mark.RED, 41));
-		System.out.println(rules.scanDiagonalLeftUp(Mark.RED, 19));
-	}
+		 for (int i = 33; i > 25; i -= 8) {
+			 board.setField(i, Mark.RED);
+		 }
+		 board.setField(41, Mark.RED);
+		 System.out.println(board.toString());
+		 System.out.println(rules.scanDiagonalLeftUp(Mark.RED, 41));
+		 System.out.println(rules.scanDiagonalLeftUp(Mark.RED, 19));
+	 }
 
 }
