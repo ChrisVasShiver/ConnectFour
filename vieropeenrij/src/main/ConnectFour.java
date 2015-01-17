@@ -13,6 +13,6 @@ public class ConnectFour {
 			game.getBoard().setField(i, Mark.RED);
 		}
 		game.getBoard().setField(31, Mark.YELLOW);
-		System.out.println(game.getBoard().toString2());
+		System.out.println(game.getBoard().toString());
 	}
 }

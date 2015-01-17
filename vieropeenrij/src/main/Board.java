@@ -12,6 +12,7 @@ public class Board {
 	public static final int MAXFIELDS = 42;
 	
 	//@ private invariant fields != null;
+	//@ private invariant (\forall int i; 0 <= i && i < MAXFIELDS; fields[i] == Mark.EMPTY || fields[i] == Mark.RED || fields[i] == Mark.YELLOW);
 	//@ private constraint fields.length == \old(fields.length);
 	private Mark[] fields;
 	
@@ -46,8 +47,9 @@ public class Board {
 	}
 	
 	/*@
-	 	requires 0 <= i && i < Board.MAXFIELDS;
+	 	requires 0 <= i && i < MAXFIELDS;
 	 	ensures 0 <= \result[0] && \result[0] < HEIGHT && 0 <= \result[1] && \result[1] < WIDTH;
+	 	ensures \result.length == 2;
 	 	pure;
 	 */
 	public int[] indexToMatrix(int i) {
@@ -62,7 +64,7 @@ public class Board {
 	}
 	
 	/*@ 
-		requires 0 <= i && i < Board.MAXFIELDS;
+		requires 0 <= i && i < MAXFIELDS;
 		ensures \result == Mark.EMPTY || \result == Mark.YELLOW || \result == Mark.RED;
 		pure;
 	 */
@@ -92,20 +94,10 @@ public class Board {
 		}
 	}
 	
-	
-	//TODO improve representation
+	/*@
+	 
+	 */
 	public String toString() {
-		String boardRepresentation = "";
-		for(int i = 0 ; i < MAXFIELDS; i++) {
-			if((i % 7) == 0) {
-				boardRepresentation = boardRepresentation + "\n";
-			}
-			boardRepresentation = boardRepresentation + " " + getField(i).toString();
-		}
-		return boardRepresentation;
-	}
-	
-	public String toString2() {
 		String seperator = "-----------------------------------------------------------------------\n";
 		String board = String.format("%-1s %-7s %-1s %-7s %-1s %-7s %-1s %-7s %-1s %-7s %-1s %-7s %-1s %-7s %-1s\n", "|", 0, "|", 1, "|", 2, "|", 3, "|", 4, "|", 5, "|", 6, "|") + seperator;
 		Mark[] rowArray = new Mark[WIDTH];
