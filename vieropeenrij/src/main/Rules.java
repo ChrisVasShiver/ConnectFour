@@ -22,8 +22,15 @@ public class Rules {
 		}
 		return true;
 	}
-
+	
+	/*@
+		requires m != null;
+		requires 0 <= index && index < 42;
+		ensures \result ==> countMark == 3 ==> true; 
+	 */
 	public boolean horizontalWin(Mark m, int index) {
+		assert m != null;
+		assert 0 <= index && index < currentBoard.MAXFIELDS;
 		int col = currentBoard.indexToMatrix(index)[1];
 		for (int row = 0; row < WINNERSBLOCK; row++) {
 			int countMark = 0;
@@ -38,8 +45,15 @@ public class Rules {
 		}
 		return false;
 	}
-
+	
+	/*@
+ 		requires m != null;
+ 		requires 0 <= index && index < 42;
+ 		ensures \result ==> countMark == WINNERSBLOCK ==> true;
+	 */
 	public boolean verticalWin(Mark m, int index) {
+		assert m != null;
+		assert 0 <= index && index < currentBoard.MAXFIELDS;
 		int row = currentBoard.indexToMatrix(index)[1];
 		for (int col = 0; col < WINNERSBLOCK; col++) {
 			int countMark = 0;
@@ -54,7 +68,14 @@ public class Rules {
 		return false;
 	}
 
+	/*@
+	 	requires m != null;
+	 	requires 0 <= index && index < 42;
+	 	ensures \result ==> (scanDiagonalLeftUp(m,index) + scanDiagonalRightDown(m, index) == 3 || scanDiagonalLeftDown(m, index) + scanDiagonalRightUp(m, index) == 3) ==> true;
+	 */
 	public boolean diagonalWin(Mark m, int index) {
+		assert m != null;
+		assert 0 <= index && index < currentBoard.MAXFIELDS;
 		for (int i = 0; i < currentBoard.MAXFIELDS; i++) {
 			if ((scanDiagonalLeftUp(m, index) + scanDiagonalRightDown(m, index) == 3)
 					|| (scanDiagonalLeftDown(m, index)
@@ -65,11 +86,19 @@ public class Rules {
 		return false;
 	}
 
+	/**
+	 * Scan the indices left up of the Mark placement. Returns a value representing the connecting Marks in the direction.
+	 * @param m the Mark of the move.
+	 * @param index the place where the Mark is placed
+	 * @return return an integer between 0 and 3. Based on the amount of equal Marks beneath index. Return 3 means four Marks are connected.
+	 */
+	/*@
 	/*@
 	 requires m != null;
 	 requires 0 < index && index < 42;
 	 ensures 0 <= \result && \result <= WINNERSBLOCK;
 	 */
+	//@pure
 	public int scanDiagonalLeftUp(Mark m, int index) {
 		assert m != null;
 		assert 0 < index && index < currentBoard.MAXFIELDS;
@@ -88,14 +117,22 @@ public class Rules {
 		return points;
 	}
 
+	/**
+	 * Scan the indices left down of the Mark placement. Returns a value representing the connecting Marks in the direction.
+	 * @param m the Mark of the move.
+	 * @param index the place where the Mark is placed
+	 * @return return an integer between 0 and 3. Based on the amount of equal Marks beneath index. Return 3 means four Marks are connected.
+	 */
+	/*@
 	/*@
 	 requires m != null;
 	 requires 0 < index && index < 42;
 	 ensures 0 <= \result && \result <= WINNERSBLOCK;
 	 */
+	//@pure
 	public int scanDiagonalLeftDown(Mark m, int index) {
 		assert m != null;
-		assert 0 < index && index < 42;
+		assert 0 < index && index < currentBoard.MAXFIELDS;
 		int points = 0;
 		for (int i = index; i > 0; i += 6) {
 			if (i == 0 || i == 7 || i == 14 || i == 21 || i == 28 || i == 35
@@ -112,14 +149,21 @@ public class Rules {
 		return points;
 	}
 
+	/**
+	 * Scan the indices right up of the Mark placement. Returns a value representing the connecting Marks in the direction.
+	 * @param m the Mark of the move.
+	 * @param index the place where the Mark is placed
+	 * @return return an integer between 0 and 3. Based on the amount of equal Marks beneath index. Return 3 means four Marks are connected.
+	 */
 	/*@
 	 requires m != null;
 	 requires 0 < index && index < 42;
 	 ensures 0 <= \result && \result <= WINNERSBLOCK;
 	 */
+	//@pure
 	public int scanDiagonalRightUp(Mark m, int index) {
 		assert m != null;
-		assert 0 < index && index < 42;
+		assert 0 < index && index < currentBoard.MAXFIELDS;
 		int points = 0;
 		for (int i = index; i > 0; i -= 6) {
 			if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 5
@@ -136,14 +180,21 @@ public class Rules {
 		return points;
 	}
 
+	/**
+	 * Scan the indices right down of the Mark placement. Returns a value representing the connecting Marks in the direction.
+	 * @param m the Mark of the move.
+	 * @param index the place where the Mark is placed
+	 * @return return an integer between 0 and 3. Based on the amount of equal Marks beneath index. Return 3 means four Marks are connected.
+	 */
 	/*@
 	 requires m != null;
 	 requires 0 < index && index < 42;
 	 ensures 0 <= \result && \result <= WINNERSBLOCK;
 	 */
+	//@pure
 	public int scanDiagonalRightDown(Mark m, int index) {
 		assert m != null;
-		assert 0 < index && index < 42;
+		assert 0 < index && index < currentBoard.MAXFIELDS;
 		int points = 0;
 		for (int i = index; i > 0; i += 8) {
 			if (i == 6 || i == 13 || i == 20 || i == 27 || i == 34 || i == 35
@@ -167,6 +218,31 @@ public class Rules {
 
 	 public boolean isGameover(Mark m, int index) {
 		 return isBoardFull() || isWinner(m, index);
+	 }
+	 
+	/**
+	 * Checks the lowest available index in the column, when a column is selected. It will drop the Mark into the column if it is free.
+	 * @param m the Mark of the move.
+	 * @param index the selected column where a Mark is attempted to be placed.
+	 * @return returns -1 if selected column does not have any free index. Else returns the lowest free index of the column.
+	 */
+	 /*@
+	  	requires m != null;
+	  	requires 0 <= index && index < 42;
+	  	ensures \result  -1 <= \result && \result < 42;
+	  */
+	 public int dropMark(Mark m, int index){
+		 assert m != null;
+		 assert 0 <= index && index < currentBoard.MAXFIELDS;
+		 int col = currentBoard.indexToMatrix(index)[1];
+		 int placement = -1;
+		 for (int i = 0; i < currentBoard.HEIGHT; i++){
+			 if(currentBoard.getField(col).equals(Mark.EMPTY)){
+				 placement = col;
+			 }
+			 col = col + 7;
+		 }
+		 return placement;
 	 }
 
 	 public static void main(String[] args) {

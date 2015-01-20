@@ -93,9 +93,10 @@ public class Board {
 			setField(i, Mark.EMPTY);
 		}
 	}
-	
+// 	ensures(\forall int row; row < HEIGHT; (\forall int col; col < WIDTH; fields[col] == getField(matrixToIndex(row,col))));
+
 	/*@
-	 
+		loop_invariant (\forall rowArray[col] == getField(matrixToIndex(row,col));
 	 */
 	public String toString() {
 		String seperator = "-----------------------------------------------------------------------\n";
