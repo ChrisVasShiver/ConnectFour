@@ -22,6 +22,10 @@ public class Board {
 		reset();
 	}
 	
+	/**
+	 * Make a copy of the board.
+	 * @return a new board with exact the same values as this board.
+	 */
 	/*@
 	 	ensures (\forall int i; 0 <= i && i < MAXFIELDS; \result.getField(i) == this.getField(i));
 	 	pure;
@@ -35,6 +39,12 @@ public class Board {
 		return boardCopy;
 	}
 	
+	/**
+	 * Converts a matrix into an index
+	 * @param row the row number of the matrix
+	 * @param col the colum number of the matrix
+	 * @return the index number between 0 and 63
+	 */
 	/*@ 
 	 	requires 0 <= row && row < Board.HEIGHT;
 	 	requires 0 <= col && col < Board.WIDTH;
@@ -47,6 +57,11 @@ public class Board {
 		return WIDTH * row + col;
 	}
 	
+	/**
+	 * Converts a index into a matrix
+	 * @param i the index number of the field
+	 * @return an array of integers of length 2 with the first integer beeing the row of the maxtrix and the second integer the colum of the matrix.
+	 */
 	/*@
 	 	requires 0 <= i && i < MAXFIELDS;
 	 	ensures 0 <= \result[0] && \result[0] < HEIGHT && 0 <= \result[1] && \result[1] < WIDTH;
@@ -64,6 +79,11 @@ public class Board {
 		return resultArray;
 	}
 	
+	/**
+	 * 
+	 * @param i
+	 * @return
+	 */
 	/*@ 
 		requires 0 <= i && i < MAXFIELDS;
 		ensures \result == Mark.EMPTY || \result == Mark.YELLOW || \result == Mark.RED;
@@ -74,6 +94,11 @@ public class Board {
 		return fields[i];
 	}
 	
+	/**
+	 * Checks if the field is 
+	 * @param i the index of the field
+	 * @return true if getField equals Mark.Empty else return false
+	 */
 	public boolean isEmptyField(int i) {
 		if(getField(i) != Mark.EMPTY) {
 			return false;
