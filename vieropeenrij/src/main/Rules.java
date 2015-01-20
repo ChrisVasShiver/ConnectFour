@@ -20,12 +20,12 @@ public class Rules {
 	}
 	
 	/**
-	 * Checks if the board is filled with either Mark.RED or Mark.Yellow.
+	 * Checks if the board is full. 
 	 * @return returns true if board is full. Returns false if board has atleast one Mark.EMPTY spot.
 	 */
 	public boolean isBoardFull() {
 		for (int i = 0; i < Board.MAXFIELDS; i++) {
-			if (currentBoard.getField(i) == Mark.EMPTY) {
+			if (!currentBoard.isEmptyField(i)) {
 				return false;
 			}
 		}

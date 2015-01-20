@@ -37,8 +37,12 @@ public class Game {
 		return rules;
 	}
 	
-	public int getCurrentPlayer() {
+	public int getCurrentPlayerIndex() {
 		return currentP;
+	}
+	
+	public Player[] getPlayers() {
+		return players;
 	}
 	
 	public boolean readBoolean(String message) {
@@ -75,23 +79,18 @@ public class Game {
 		}
 	}
 	
-	public void stop() {
-	}
-	
-	
-	// TODO verander true in isGameOver()
 	public void gameLoop() {
 		update();
 		while(!rules.getGameOver()) {
-			rules.isGameOver(players[getCurrentPlayer()].getMark(), players[getCurrentPlayer()].doMove(board));
-			currentP = (currentP + 1) % 2;
+			rules.isGameOver(players[getCurrentPlayerIndex()].getMark(), players[getCurrentPlayerIndex()].doMove(board));
 			update();
+			currentP = (currentP + 1) % 2;
 		}
-		//gameResult(); 
+		endGame(); 
 	}
 	
 	public void update() {
-		System.out.println("current game situation\n" + "It is " + players[getCurrentPlayer()].getMark() + "'s turn\n\n" + board.toString());
+		System.out.println("current game situation\n" + "It is " + players[getCurrentPlayerIndex()].getMark() + "'s turn\n\n" + board.toString());
 	}
 	
 	public void reset() {
@@ -102,5 +101,6 @@ public class Game {
 	
 	// TODO implement endGame
 	public void endGame() {
-		}
+		int winningP = currentP - 1;
+	}
 }
