@@ -11,9 +11,10 @@ public class Board {
 	public static final int HEIGHT = 6;
 	public static final int MAXFIELDS = 42;
 	
-	//@ private invariant fields != null;
-	//@ private invariant (\forall int i; 0 <= i && i < MAXFIELDS; fields[i] == Mark.EMPTY || fields[i] == Mark.RED || fields[i] == Mark.YELLOW);
-	//@ private constraint fields.length == \old(fields.length);
+	/*@ private invariant fields != null;
+ 		private invariant (\forall int i; 0 <= i && i < MAXFIELDS; fields[i] == Mark.EMPTY || fields[i] == Mark.RED || fields[i] == Mark.YELLOW);
+		private constraint fields.length == \old(fields.length);
+	*/ 
 	private Mark[] fields;
 	
 	public Board() {
@@ -73,6 +74,14 @@ public class Board {
 		return fields[i];
 	}
 	
+	public boolean isEmptyField(int i) {
+		if(getField(i) != Mark.EMPTY) {
+			return false;
+		} else {
+		return true;
+		}
+	}
+	
 	/*@
 	 	requires 0 <= i && i < Board.MAXFIELDS;
 	 	requires m == Mark.EMPTY || m == Mark.RED || m == Mark.YELLOW;
@@ -93,16 +102,15 @@ public class Board {
 			setField(i, Mark.EMPTY);
 		}
 	}
-// 	ensures(\forall int row; row < HEIGHT; (\forall int col; col < WIDTH; fields[col] == getField(matrixToIndex(row,col))));
-
-	/*@
-		loop_invariant (\forall rowArray[col] == getField(matrixToIndex(row,col));
-	 */
+	
+	@Override
 	public String toString() {
 		String seperator = "-----------------------------------------------------------------------\n";
 		String board = String.format("%-1s %-7s %-1s %-7s %-1s %-7s %-1s %-7s %-1s %-7s %-1s %-7s %-1s %-7s %-1s\n", "|", 0, "|", 1, "|", 2, "|", 3, "|", 4, "|", 5, "|", 6, "|") + seperator;
 		Mark[] rowArray = new Mark[WIDTH];
+		//@loop_invariant 0 <= row && row < HEIGHT;
 		for(int row = 0; row < HEIGHT; row++) {
+			//@loop_invariant 0 <= col && col < WIDTH;
 			for(int col = 0; col < WIDTH; col++) { 
 				rowArray[col] = getField(matrixToIndex(row, col));
 			}
