@@ -14,6 +14,10 @@ public class Rules {
 		currentBoard = board;
 	}
 
+	/**
+	 * Checks if the board is filled with either Mark.RED or Mark.Yellow.
+	 * @return returns true if board is full. Returns false if board has atleast one Mark.EMPTY spot.
+	 */
 	public boolean isBoardFull() {
 		for (int i = 0; i < Board.MAXFIELDS; i++) {
 			if (currentBoard.getField(i) == Mark.EMPTY) {
@@ -23,10 +27,16 @@ public class Rules {
 		return true;
 	}
 	
+	/**
+	 * Determines if the move with the given Mark will lead to horizontal win.
+	 * @param m the Mark of the move.
+	 * @param index the place where the Mark is placed
+	 * @return returns true when there is a horizontal four in a row. Returns false when there is no four in a row.
+	 */
 	/*@
 		requires m != null;
 		requires 0 <= index && index < 42;
-		ensures \result ==> countMark == 3 ==> true; 
+		ensures countMark == 3 ==> \result == true;
 	 */
 	public boolean horizontalWin(Mark m, int index) {
 		assert m != null;
@@ -46,6 +56,12 @@ public class Rules {
 		return false;
 	}
 	
+	/**
+	 * Determines if the move with the given Mark will lead to vertical win.
+	 * @param m the Mark of the move.
+	 * @param index the place where the Mark is placed
+	 * @return returns true when there is a vertical four in a row. Returns false when there is no four in a row.
+	 */
 	/*@
  		requires m != null;
  		requires 0 <= index && index < 42;
@@ -68,6 +84,12 @@ public class Rules {
 		return false;
 	}
 
+	/**
+	 * Determines if the move with the given Mark will lead to diagonal win.
+	 * @param m the Mark of the move.
+	 * @param index the place where the Mark is placed
+	 * @return returns true when there is a diagonal four in a row. Returns false when there is no four in a row.
+	 */
 	/*@
 	 	requires m != null;
 	 	requires 0 <= index && index < 42;
@@ -87,7 +109,7 @@ public class Rules {
 	}
 
 	/**
-	 * Scan the indices left up of the Mark placement. Returns a value representing the connecting Marks in the direction.
+	 * Scans the indices left up of the Mark placement. Returns a value representing the connecting Marks in the direction.
 	 * @param m the Mark of the move.
 	 * @param index the place where the Mark is placed
 	 * @return return an integer between 0 and 3. Based on the amount of equal Marks beneath index. Return 3 means four Marks are connected.
@@ -118,7 +140,7 @@ public class Rules {
 	}
 
 	/**
-	 * Scan the indices left down of the Mark placement. Returns a value representing the connecting Marks in the direction.
+	 * Scans the indices left down of the Mark placement. Returns a value representing the connecting Marks in the direction.
 	 * @param m the Mark of the move.
 	 * @param index the place where the Mark is placed
 	 * @return return an integer between 0 and 3. Based on the amount of equal Marks beneath index. Return 3 means four Marks are connected.
@@ -150,7 +172,7 @@ public class Rules {
 	}
 
 	/**
-	 * Scan the indices right up of the Mark placement. Returns a value representing the connecting Marks in the direction.
+	 * Scans the indices right up of the Mark placement. Returns a value representing the connecting Marks in the direction.
 	 * @param m the Mark of the move.
 	 * @param index the place where the Mark is placed
 	 * @return return an integer between 0 and 3. Based on the amount of equal Marks beneath index. Return 3 means four Marks are connected.
@@ -181,7 +203,7 @@ public class Rules {
 	}
 
 	/**
-	 * Scan the indices right down of the Mark placement. Returns a value representing the connecting Marks in the direction.
+	 * Scans the indices right down of the Mark placement. Returns a value representing the connecting Marks in the direction.
 	 * @param m the Mark of the move.
 	 * @param index the place where the Mark is placed
 	 * @return return an integer between 0 and 3. Based on the amount of equal Marks beneath index. Return 3 means four Marks are connected.
