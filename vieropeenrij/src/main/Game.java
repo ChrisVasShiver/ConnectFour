@@ -82,12 +82,12 @@ public class Game {
 	// TODO verander true in isGameOver()
 	public void gameLoop() {
 		update();
-		while(true) {
+		while(!rules.isGameover()) {
 			players[getCurrentPlayer()].doMove(board);
 			currentP = (currentP + 1) % 2;
 			update();
 		}
-		//gameResult();
+		//gameResult(); 
 	}
 	
 	public void update() {
@@ -97,6 +97,7 @@ public class Game {
 	public void reset() {
 		currentP = 0;
 		board.reset();
+		rules.reset();
 	}
 	
 	// TODO implement endGame

@@ -95,7 +95,7 @@ public class Board {
 	}
 	
 	/**
-	 * Checks if the field is 
+	 * Checks if the field value is empty 
 	 * @param i the index of the field
 	 * @return true if getField equals Mark.Empty else return false
 	 */
@@ -128,6 +128,7 @@ public class Board {
 		}
 	}
 	
+	//@ ensures \result != null;
 	@Override
 	public String toString() {
 		String seperator = "-----------------------------------------------------------------------\n";

@@ -285,7 +285,12 @@ public class Rules {
 		 }
 		 return placement;
 	 }
-
+	 
+	 
+	 public void reset() {
+		 isGameOver = false;
+	 }
+	 
 	 public static void main(String[] args) {
 		 Board board = new Board();
 		 Rules rules = new Rules(board);
