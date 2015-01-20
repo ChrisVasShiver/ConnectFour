@@ -7,12 +7,7 @@
  */
 public class ConnectFour {
 	public static void main(String[] args) {
-		Game game = new Game(null, null);
-		game.update();
-		for (int i = 0; i < game.getBoard().MAXFIELDS; i++) {
-			game.getBoard().setField(i, Mark.RED);
-		}
-		game.getBoard().setField(31, Mark.YELLOW);
-		System.out.println(game.getBoard().toString());
+		Game game = new Game(new HumanPlayer("Henk", Mark.RED), new HumanPlayer("Jan", Mark.YELLOW));
+		game.start();
 	}
 }

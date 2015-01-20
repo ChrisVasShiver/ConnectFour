@@ -12,8 +12,8 @@ public class Game {
 	private Board board;
 	private Rules rules;
 	private Player[] players;
-	private Player currentPlayer;
-	private Boolean running;
+	private int currentP;
+	private boolean running = false;
 	
 	
 	public Game(Player p0, Player p1) {
@@ -22,7 +22,7 @@ public class Game {
 		players = new Player[MAXPLAYER];
 		players[0] = p0;
 		players[1] = p1;
-		currentPlayer = players[0];
+		currentP = 0;
 	}
 	
 	public Board getBoard() {
@@ -33,19 +33,36 @@ public class Game {
 		return rules;
 	}
 	
-	public Player getCurrentPlayer() {
-		return currentPlayer;
+	public int getCurrentPlayer() {
+		return currentP;
 	}
 	
 	public void start() {
+		running = true;
+		while (running) {
+			reset();
+			gameLoop();
+		}
+	}
+	
+	public void stop() {
+	}
+	
+	public void gameLoop() {
+		update();
+		while(true) {
+			players[getCurrentPlayer()].doMove(board);
+			currentP = (currentP + 1) % 2;
+			update();
+		}
 	}
 	
 	public void update() {
-		System.out.println(board.toString());
+		System.out.println("current game situation\n" + "It is " + players[getCurrentPlayer()].getMark() + "'s turn\n\n" + board.toString());
 	}
 	
 	public void reset() {
-		currentPlayer = players[0];
+		currentP = 0;
 		board.reset();
 	}
 }
