@@ -9,7 +9,8 @@ public class Rules {
 
 	private Board currentBoard;
 	public static final int WINNERSBLOCK = 4;
-
+	private boolean isGameOver = false;
+	
 	public Rules(Board board) {
 		currentBoard = board;
 	}
@@ -28,6 +29,7 @@ public class Rules {
 				return false;
 			}
 		}
+		isGameOver = true;
 		return true;
 	}
 	
@@ -247,12 +249,15 @@ public class Rules {
 		 return points;
 	 }
 
-	 public boolean isWinner(Mark m, int index) {
-		 return horizontalWin(m, index) || verticalWin(m, index) || diagonalWin(m, index);
+	public boolean isWinner(Mark m, int index) {
+		if (horizontalWin(m, index) || verticalWin(m, index) || diagonalWin(m, index)){
+			isGameOver = true;
+			return true;
+		} else return false;
 	 }
 	 
-	 public boolean isGameover(Mark m, int index) {
-		 return isBoardFull() || isWinner(m, index);
+	 public boolean isGameover() {
+		 return isGameOver;
 	 }
 	 
 	/**
