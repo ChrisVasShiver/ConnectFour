@@ -21,8 +21,8 @@ public class RandomStrategy implements Strategy{
 	@Override
 	public int determineMove(Board board, Mark m) {
 		Set<Integer> validmoves = new HashSet<Integer>();
-		for (int i = 0; i < 9; i++) {
-			if (board.getField(i).equals(Mark.EMPTY)) {
+		for (int i = 0; i < board.MAXFIELDS; i++) {
+			if (board.isEmptyField(i)) {
 				validmoves.add(i);
 			}
 		}
