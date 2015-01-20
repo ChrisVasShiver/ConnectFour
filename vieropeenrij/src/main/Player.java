@@ -19,6 +19,9 @@ public abstract class Player {
 		theMark = mark;
 	}
 	
+	/*@
+	 	ensures \result != null;
+	 */
 	public String getName() {
 		return theName;
 	}
