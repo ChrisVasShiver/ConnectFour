@@ -362,7 +362,8 @@ public class Rules {
 		 System.out.println(board.toString());
 		 System.out.println(rules.scanDiagonalLeftUp(Mark.RED, 41));
 		 System.out.println(rules.scanDiagonalLeftDown(Mark.YELLOW, 5));
-		 System.out.println("Scan horizontal " + rules.horizontalWin(Mark.RED, 36));
+		 System.out.println("Scan horizontal " + rules.horizontalWin(Mark.RED, 38));
+		 System.out.println(board.matrixToIndex(8, 0));
 		 System.out.println("Scan vertical " + rules.verticalWin(Mark.YELLOW, 0));
 
 	 }
