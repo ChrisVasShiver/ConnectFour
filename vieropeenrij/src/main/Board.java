@@ -12,7 +12,7 @@ public class Board {
 	public static final int MAXFIELDS = 42;
 	
 	/*@ private invariant fields != null;
- 		private invariant (\forall int i; 0 <= i && i < MAXFIELDS; fields[i] == Mark.EMPTY || fields[i] == Mark.RED || fields[i] == Mark.YELLOW);
+ 		private invariant (\forall int i; 0 <= i && i < Board.MAXFIELDS; fields[i] == Mark.EMPTY || fields[i] == Mark.RED || fields[i] == Mark.YELLOW);
 		private constraint fields.length == \old(fields.length);
 	*/ 
 	private Mark[] fields;
@@ -80,9 +80,9 @@ public class Board {
 	}
 	
 	/**
-	 * 
-	 * @param i
-	 * @return
+	 * Returns the value of a field.
+	 * @param i the index you want to retrieve the field from.
+	 * @return the mark/value of the field
 	 */
 	/*@ 
 		requires 0 <= i && i < MAXFIELDS;
@@ -97,16 +97,43 @@ public class Board {
 	/**
 	 * Checks if the field value is empty 
 	 * @param i the index of the field
-	 * @return true if getField equals Mark.Empty else return false
+	 * @return true if getField equals Mark.Empty, otherwise false
+	 */
+	/*@
+	 	requires 0 <= i && i < MAXFIELDS;
+	 	ensures getField(i) == Mark.EMPTY ==> \result == true || getField(i) != Mark.EMPTY ==> \result == false;
+	 	pure;
 	 */
 	public boolean isEmptyField(int i) {
 		if(getField(i) != Mark.EMPTY) {
-			return false;
+			return true;
 		} else {
-		return true;
+		return false;
 		}
 	}
 	
+	/**
+	 * Check if the given index is an existing field
+	 * @param i the index that needs to be checked
+	 * @return true if i is a integer between 0 and 41, otherwise false
+	 */
+	/*@ 
+	 	ensures 0 <= i && i < MAXFIELDS ==> \result == true || i < 0 && i >= MAXFIELDS ==> \result == false;
+	 	pure;
+	 */
+	public boolean isExistingField(int i) {
+		if(0 <= i && i < MAXFIELDS) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Sets a field to the given mark
+	 * @param i the index of the field
+	 * @param m the mark the value of the field will be set too
+	 */
 	/*@
 	 	requires 0 <= i && i < Board.MAXFIELDS;
 	 	requires m == Mark.EMPTY || m == Mark.RED || m == Mark.YELLOW;
@@ -118,6 +145,9 @@ public class Board {
 		fields[i] = m;
 	}
 	
+	/**
+	 * Resets the board by setting all the fields to empty
+	 */
 	/*@
 	 	ensures (\forall int i; 0 <= i && i < Board.MAXFIELDS; this.getField(i) == Mark.EMPTY);
 	 */
