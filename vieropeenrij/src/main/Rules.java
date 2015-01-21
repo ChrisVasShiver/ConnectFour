@@ -61,7 +61,7 @@ public class Rules {
 		ensures \result == true || false;
 		pure;
 	 */
-	public boolean horizontalWin(Mark m, int index) {
+	public boolean horizontalWin2(Mark m, int index) {
 		assert m != null;
 		assert 0 <= index && index < currentBoard.MAXFIELDS;
 		int row = currentBoard.indexToMatrix(index)[0];
@@ -84,6 +84,34 @@ public class Rules {
 		return false;
 	}
 	
+	
+	public boolean horizontalWin(Mark m, int index) {
+		assert m != null;
+		assert 0 <= index && index < Board.MAXFIELDS;
+		int row = currentBoard.indexToMatrix(index)[0];
+		int startingCol = currentBoard.indexToMatrix(index)[1];
+		int countL = 0;
+		int countR = 0;
+		for (int colL = startingCol ; colL >= 0; colL--) {
+			if(currentBoard.getField(currentBoard.matrixToIndex(row, colL)).equals(m)) {
+				countL++;
+			} else {
+				break;
+			}
+		}
+		for (int colR = startingCol; colR < Board.WIDTH; colR++) {
+			if(currentBoard.getField(currentBoard.matrixToIndex(row, colR)).equals(m)) {
+				countR++;
+			} else {
+				break;
+			}
+		}
+		if(countL >= WINNERSBLOCK || countR >= WINNERSBLOCK || countL + countR - 1 >= WINNERSBLOCK) {
+			return true;
+		} else {
+		return false;
+		}
+	}
 	
 	/**
 	 * Determines if the move with the given Mark will lead to horizontal win.
@@ -132,9 +160,9 @@ public class Rules {
 		assert 0 <= index && index < currentBoard.MAXFIELDS;
 		//loop_invariant 0 <= i && i < currentBoard.MAXFIEDS;
 		for (int i = 0; i < currentBoard.MAXFIELDS; i++) {
-			if ((scanDiagonalLeftUp(m, index) + scanDiagonalRightDown(m, index) == 4)
+			if ((scanDiagonalLeftUp(m, index) + scanDiagonalRightDown(m, index) >= 4)
 					|| (scanDiagonalLeftDown(m, index)
-							+ scanDiagonalRightUp(m, index) == 4)) {
+							+ scanDiagonalRightUp(m, index) >= 4)) {
 				return true;
 			}
 		}
