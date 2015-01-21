@@ -60,7 +60,6 @@ public class Game {
 		while (running) {
 			reset();
 			update();
-			System.out.println("currentplayer" + currentP);
 			gameLoop();
 			running = readBoolean("Want to play another game? (yes/no)");
 		}
@@ -87,7 +86,6 @@ public class Game {
 	
 	public void endGame() {
 		if(rules.getHasWinner()) { 
-			System.out.println(currentP);
 			int winner = Math.abs((currentP - 1));
 			System.out.println(winner);
 			System.out.println("The Winner is: " + players[winner].getName() + "!!!\n");

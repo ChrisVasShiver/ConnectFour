@@ -20,6 +20,7 @@ public class HumanPlayer extends Player {
 		boolean isExistingField = false;
 		isExistingField = board.isExistingField(value);
 		while(!isExistingField) {
+			System.out.println("You enterd a wrong move");
 			value = determineMove(board);
 			isExistingField = board.isExistingField(value);
 		}

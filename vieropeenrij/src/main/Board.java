@@ -54,7 +54,7 @@ public class Board {
 	public int matrixToIndex(int row, int col) {
 		assert 0 <= row && row < HEIGHT;
 		assert 0 <= col && col < WIDTH;
-		return WIDTH * row + col;
+		return (row * WIDTH) + col;
 	}
 	
 	/**
@@ -174,7 +174,7 @@ public class Board {
 		assert m != null;
 		assert 0 <= index && index < MAXFIELDS;
 		int col = indexToMatrix(index)[1];
-		int placement = -1;
+		int placement = index;
 		if (isExistingField(index)){
 			for (int row = 0; row < HEIGHT; row++){
  				if(isEmptyField(matrixToIndex(row, col))){

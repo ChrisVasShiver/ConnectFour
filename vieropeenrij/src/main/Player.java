@@ -33,7 +33,7 @@ public abstract class Player {
 	public abstract int determineMove(Board board);
 	
 	public int doMove(Board board) {
-		int move = board.dropMark(theMark, determineMove(board));
+		int move = determineMove(board);
 		board.setField(move, theMark);
 		return move;
 	}
