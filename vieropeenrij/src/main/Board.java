@@ -158,6 +158,33 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * Checks the lowest available index in the column, when a column is selected. It will drop the Mark into the column if it is free.
+	 * @param m the Mark of the move.
+	 * @param index the selected column where a Mark is attempted to be placed.
+	 * @return returns -1 if selected column does not have any free index. Else returns the lowest free index of the column.
+	 */
+	 /*@
+	  	requires m != null;
+	  	requires 0 <= index && index < Board.MAXFIELDS;
+	  	ensures isExistingField(index)==> 0 <= \result && \result < 42;
+		pure;
+	  */
+	public int dropMark(Mark m, int index){
+		assert m != null;
+		assert 0 <= index && index < MAXFIELDS;
+		int row = indexToMatrix(index)[0];
+		int placement = -1;
+		if (isExistingField(index)){
+			for (int i = 0; i < HEIGHT; i++){
+				if(isEmptyField(i))
+					placement = row;
+			}
+			row = row + 7;
+		}
+		return placement;
+	}
+	
 	//@ ensures \result != null;
 	@Override
 	public String toString() {

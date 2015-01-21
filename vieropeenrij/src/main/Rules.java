@@ -327,33 +327,6 @@ public class Rules {
 	}
 	 
 	/**
-	 * Checks the lowest available index in the column, when a column is selected. It will drop the Mark into the column if it is free.
-	 * @param m the Mark of the move.
-	 * @param index the selected column where a Mark is attempted to be placed.
-	 * @return returns -1 if selected column does not have any free index. Else returns the lowest free index of the column.
-	 */
-	 /*@
-	  	requires m != null;
-	  	requires 0 <= index && index < Board.MAXFIELDS;
-	  	ensures isValidMove(index)==> 0 <= \result && \result < 42;
-		pure;
-	  */
-	public int dropMark(Mark m, int index){
-		assert m != null;
-		assert 0 <= index && index < currentBoard.MAXFIELDS;
-		int col = currentBoard.indexToMatrix(index)[1];
-		int placement = -1;
-		if (isValidMove(index)){
-			for (int i = 0; i < currentBoard.HEIGHT; i++){
-				if(currentBoard.isEmptyField(i))
-					placement = col;
-			}
-			col = col + 7;
-		}
-		return placement;
-	}
-	 
-	/**
 	 * Resets the winner and gameover variables to false.
 	 */
 	/*@

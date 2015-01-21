@@ -21,6 +21,7 @@ public class HumanPlayer extends Player {
 		isExistingField = board.isExistingField(value);
 		while(!isExistingField) {
 			value = determineMove(board);
+			isExistingField = board.isExistingField(value);
 		}
 		return value;
 	}

@@ -60,17 +60,17 @@ public class Game {
 		while (running) {
 			reset();
 			update();
+			System.out.println("currentplayer" + currentP);
 			gameLoop();
 			running = readBoolean("Want to play another game? (yes/no)");
 		}
 	}
 	
 	public void gameLoop() {
-		update();
 		while(!rules.getGameOver()) {
 			rules.isGameOver(players[getCurrentPlayerIndex()].getMark(), players[getCurrentPlayerIndex()].doMove(board));
-			update();
 			currentP = (currentP + 1) % MAXPLAYER;
+			update();
 		}
 		endGame(); 
 	}
