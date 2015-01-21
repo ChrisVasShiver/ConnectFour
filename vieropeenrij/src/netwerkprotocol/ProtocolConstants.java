@@ -1,4 +1,4 @@
-package netwerkprotocol;
+package protocol;
 
 /**
  * Alle benodigde constanten voor commands tussen server en client.
@@ -6,7 +6,7 @@ package netwerkprotocol;
  * Aanpassingen door:
  * @author Martijn Gemmink
  * @author Bas Hendrikse
- * @version 1.0 (13-01-2015)
+ * @version 1.1 (20-01-2015)
  */
 
 public interface ProtocolConstants {

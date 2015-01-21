@@ -17,15 +17,30 @@ public class Rules {
 		currentBoard = board;
 	}
 	
+	/**
+	 * 
+	 * @param i
+	 * @return
+	 */
+	/*@
+	 	requires 0 <= i && i < Board.MAXFIELDS;
+		ensures (\forall int i; 0 <= i && i < Board.MAXFIELDS; Board.isExistingField(i) == true) \result == true;
+	 	pure;
+	 */
 	public boolean isValidMove(int i) {
-		return currentBoard.isEmptyField(i);
+		return currentBoard.isExistingField(i);
 	}
 	
 	/**
 	 * Checks if the board is full. 
 	 * @return returns true if board is full. Returns false if board has atleast one Mark.EMPTY spot.
 	 */
+	/*@
+	 	ensures (\forall int i; 0 <= i && i < Board.MAXFIELDS; Board.isEmptyField(i)) ==> \result == true;
+	 	pure
+	 */
 	public boolean isBoardFull() {
+		//@ loop_invariant 0 <= i && i < Board.MAXFIELDS;
 		for (int i = 0; i < Board.MAXFIELDS; i++) {
 			if (!currentBoard.isEmptyField(i)) {
 				return false;
@@ -35,26 +50,25 @@ public class Rules {
 	}
 	
 	/**
-	 * Determines if the move with the given Mark will lead to horizontal win.
+	 * Determines if the move with the given Mark will lead to vertical win.
 	 * @param m the Mark of the move.
 	 * @param index the place where the Mark is placed
-	 * @return returns true when there is a horizontal four in a row. Returns false when there is no four in a row.
+	 * @return returns true when there is a vertical four in a row. Returns false when there is no four in a row.
 	 */
 	/*@
 		requires m != null;
-		requires 0 <= index && index < 42;
-		//ensures countMark == WINNERSBLOCK ==> \result == true;
-		//ensures countMark != WINNERSBLOCK ==> \result == false;
+		requires 0 <= index && index < Board.MAXFIELDS;
+		ensures \result == true || false;
 		pure;
 	 */
-	public boolean horizontalWin(Mark m, int index) {
+	public boolean verticalWin(Mark m, int index) {
 		assert m != null;
 		assert 0 <= index && index < currentBoard.MAXFIELDS;
 		int col = currentBoard.indexToMatrix(index)[1];
 		//@ loop_invariant 0 <= row && row < WINNERSBLOCK;
 		for (int row = 0; row < WINNERSBLOCK; row++) {
 			int countMark = 0;
-			if (currentBoard.getField(currentBoard.matrixToIndex(col, row))
+			if (currentBoard.getField(currentBoard.matrixToIndex(row,col))
 					.equals(m)) {
 				countMark++;
 			}
@@ -68,27 +82,25 @@ public class Rules {
 	
 	
 	/**
-	 * Determines if the move with the given Mark will lead to vertical win.
+	 * Determines if the move with the given Mark will lead to horizontal win.
 	 * @param m the Mark of the move.
 	 * @param index the place where the Mark is placed
-	 * @return returns true when there is a vertical four in a row. Returns false when there is no four in a row.
+	 * @return returns true when there is a horizontal four in a row. Returns false when there is no four in a row.
 	 */
 	/*@
  		requires m != null;
- 		requires 0 <= index && index < 42;
-
-		//ensures countMark == WINNERSBLOCK ==> \result == true;
-		//ensures countMark != WINNERSBLOCK ==> \result == false;
+ 		requires 0 <= index && index < Board.MAXFIELDS;
+		ensures \result == true || false;
 		pure;
 	 */
-	public boolean verticalWin(Mark m, int index) {
+	public boolean horizontalWin(Mark m, int index) {
 		assert m != null;
 		assert 0 <= index && index < currentBoard.MAXFIELDS;
-		int row = currentBoard.indexToMatrix(index)[1];
+		int row = currentBoard.indexToMatrix(index)[0];
 		//@ loop_invariant 0 <= col && col < WINNERSBLOCK;
 		for (int col = 0; col < WINNERSBLOCK; col++) {
 			int countMark = 0;
-			if (currentBoard.getField(currentBoard.matrixToIndex(col, row))
+			if (currentBoard.getField(currentBoard.matrixToIndex(row,col))
 					.equals(m)) {
 				countMark++;
 			}
@@ -107,7 +119,7 @@ public class Rules {
 	 */
 	/*@
 	 	requires m != null;
-	 	requires 0 <= index && index < 42;
+	 	requires 0 <= index && index < Board.MAXFIELDS;
 	 	ensures \result ==> (scanDiagonalLeftUp(m,index) + scanDiagonalRightDown(m, index) == 3 || scanDiagonalLeftDown(m, index) + scanDiagonalRightUp(m, index) == 3) ==> true;
 	 	pure;
 	 */
@@ -134,7 +146,7 @@ public class Rules {
 	
 	/*@
 	 requires m != null;
-	 requires 0 < index && index < 42;
+	 requires 0 < index && index < Board.MAXFIELDS;
 	 ensures 0 <= \result && \result <= WINNERSBLOCK;
 	 pure;
 	 */
@@ -164,9 +176,9 @@ public class Rules {
 	 */
 	/*@
 	 requires m != null;
-	 requires 0 < index && index < 42;
+	 requires 0 < index && index < Board.MAXFIELDS;
 	 ensures 0 <= \result && \result <= WINNERSBLOCK;
-	 pure
+	 pure;
 	 */
 	public int scanDiagonalLeftDown(Mark m, int index) {
 		assert m != null;
@@ -195,13 +207,13 @@ public class Rules {
 	 */
 	/*@
 	 requires m != null;
-	 requires 0 < index && index < 42;
+	 requires 0 < index && index < Board.MAXFIELDS;
 	 ensures 0 <= \result && \result <= WINNERSBLOCK;
 	 pure;
 	 */
 	public int scanDiagonalRightUp(Mark m, int index) {
 		assert m != null;
-		assert 0 < index && index < currentBoard.MAXFIELDS;
+		assert 0 <= index && index < currentBoard.MAXFIELDS;
 		int points = 0;
 		for (int i = index; i > 0; i -= 6) {
 			if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 5
@@ -226,13 +238,13 @@ public class Rules {
 	 */
 	/*@
 	 requires m != null;
-	 requires 0 < index && index < 42;
+	 requires 0 <= index && index < Board.MAXFIELDS;
 	 ensures 0 <= \result && \result <= WINNERSBLOCK;
 	 pure;
 	 */
 	public int scanDiagonalRightDown(Mark m, int index) {
 		assert m != null;
-		assert 0 < index && index < currentBoard.MAXFIELDS;
+		assert 0  <= index && index < currentBoard.MAXFIELDS;
 		int points = 0;
 		for (int i = index; i > 0; i += 8) {
 			if (i == 6 || i == 13 || i == 20 || i == 27 || i == 34 || i == 35
@@ -250,7 +262,22 @@ public class Rules {
 		 return points;
 	 }
 
+	/**
+	 * Checks if there is a winner after a move is done.
+	 * @param m the Mark of the move.
+	 * @param index the place where the Mark is placed
+	 * @return true if there is a winner. False if there is not a winner.
+	 */
+	/*@
+	 	requires m != null;
+		requires 0 <= index && index < Board.MAXFIELDS;
+		ensures (horizontalWin(m, index) == true || verticalWin(m,index) == true || diagonalWin(m, index) == true) ==> \result == true && getGameOver() == true;
+		ensures (horizontalWin(m, index) == false || verticalWin(m,index) == false || diagonalWin(m, index) == false) ==> \result == false && getGameOver() == false;
+	 	pure
+	 */
 	public boolean isWinner(Mark m, int index) {
+		assert m != null;
+		assert 0 <= index && index < Board.MAXFIELDS;
 		if (horizontalWin(m, index) || verticalWin(m, index) || diagonalWin(m, index)){
 			hasWinner = true;
 			return true;
@@ -259,15 +286,41 @@ public class Rules {
 		}
 	 }
 	 
-	
+	/**
+	 * Checks if there is a winner. This method exists to differentiate, when the board is full, if there is a winner or a full board.
+	 * @return true if there is a winner. False if there is not a winner.
+	 */
+	/*@
+	 	ensures \result == getHasWinner();
+	 	pure;
+	 */
 	public boolean getHasWinner() {
 		return hasWinner;
 	}
 	
+	/**
+	 * Checks if the game is over because there is a winner and/or the board is full.
+	 * @return true if there is a winner or the board is full. Return false if there is no winner or the board is not full.
+	 */
+	/*@
+	 	ensures \result == getGameOver();
+	 	pure;
+	 */
 	public boolean getGameOver() {
 		return gameover;
 	}
 	 
+	/**
+	 * 
+	 * @param m
+	 * @param index
+	 */
+	/*@
+	 	requires m != null;
+		requires 0 <= index && index < Board.MAXFIELDS;
+		ensures (isWinner(m, index) == true || isBoardFull() == true) ==> getGameOver() == true;
+		ensures (isWinner(m, index) == false || isBoardFull() == false) ==> getGameOver() == false;
+	 */
 	public void isGameOver(Mark m, int index) {
 		if (isWinner(m, index) || isBoardFull()) {
 			gameover = true;
@@ -282,8 +335,8 @@ public class Rules {
 	 */
 	 /*@
 	  	requires m != null;
-	  	requires 0 <= index && index < 42;
-	  	ensures \result  -1 <= \result && \result < 42;
+	  	requires 0 <= index && index < Board.MAXFIELDS;
+	  	ensures isValidMove(index)==> 0 <= \result && \result < 42;
 		pure;
 	  */
 	public int dropMark(Mark m, int index){
@@ -291,16 +344,23 @@ public class Rules {
 		assert 0 <= index && index < currentBoard.MAXFIELDS;
 		int col = currentBoard.indexToMatrix(index)[1];
 		int placement = -1;
-		for (int i = 0; i < currentBoard.HEIGHT; i++){
-			if(currentBoard.getField(col).equals(Mark.EMPTY)){
-				placement = col;
+		if (isValidMove(index)){
+			for (int i = 0; i < currentBoard.HEIGHT; i++){
+				if(currentBoard.isEmptyField(i))
+					placement = col;
 			}
 			col = col + 7;
 		}
 		return placement;
 	}
 	 
-	 
+	/**
+	 * Resets the winner and gameover variables to false.
+	 */
+	/*@
+	 	ensures getGameOver() == false;
+	 	ensures getHasWinner() == false;
+	 */
 	 public void reset() {
 		 gameover = false;
 		 hasWinner = false;
@@ -316,7 +376,6 @@ public class Rules {
 		 board.setField(41, Mark.RED);
 		 System.out.println(board.toString());
 		 System.out.println(rules.scanDiagonalLeftUp(Mark.RED, 41));
-		 System.out.println(rules.scanDiagonalLeftUp(Mark.RED, 19));
-	 }
+		 System.out.println(rules.scanDiagonalLeftUp(Mark.RED, 19));}
 
 }

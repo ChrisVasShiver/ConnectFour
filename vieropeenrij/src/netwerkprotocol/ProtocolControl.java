@@ -1,11 +1,11 @@
-package netwerkprotocol;
+package protocol;
 /**
  * Protocol voor de te gebruiken commando's tussen server en client.
  * Op basis van het protocol van vorig jaar, gemaakt door: Christian Versloot
  * Aanpassingen door:
  * @author Martijn Gemmink
  * @author Bas Hendrikse
- * @version 1.0 (13-01-2015)
+ * @version 1.1 (20-01-2015)
  * 
  *  
  * Delimeter beschrijving:
@@ -94,5 +94,28 @@ public interface ProtocolControl {
 	 * @param reden - wat de reden is van het stoppen van het spel
 	 */
 	String endGame = "endGame";
-
+    
+    
+    // ---- Extensions ----
+    
+	/**
+	 * Extension - Chatbox
+	 * Richting: [Client] -> [Server]
+	 * @param message - het bericht dat je wilt sturen.
+	 */
+    String sendMessage = "sendMessage";
+    
+    /**
+	 * Extension - Leaderboard
+     * Client vraagt het leaderboard op.
+	 * Richting: [Client] -> [Server]
+	 */
+    String getLeaderboard = "getLeaderboard";
+    
+    /**
+	 * Extension - Leaderboard
+     * Server stuurt het leaderboard terug.
+	 * Richting: [Server] -> [Client]
+	 */
+    String sendLeaderboard = "sendLeaderboard";
 }
