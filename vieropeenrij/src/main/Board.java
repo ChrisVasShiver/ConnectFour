@@ -105,7 +105,7 @@ public class Board {
 	 	pure;
 	 */
 	public boolean isEmptyField(int i) {
-		if(getField(i) != Mark.EMPTY) {
+		if(getField(i) == Mark.EMPTY) {
 			return true;
 		} else {
 		return false;
@@ -173,14 +173,14 @@ public class Board {
 	public int dropMark(Mark m, int index){
 		assert m != null;
 		assert 0 <= index && index < MAXFIELDS;
-		int row = indexToMatrix(index)[0];
+		int col = indexToMatrix(index)[1];
 		int placement = -1;
 		if (isExistingField(index)){
-			for (int i = 0; i < HEIGHT; i++){
-				if(isEmptyField(i))
-					placement = row;
+			for (int row = 0; row < HEIGHT; row++){
+ 				if(isEmptyField(matrixToIndex(row, col))){
+					placement = matrixToIndex(row, col);
+				}
 			}
-			row = row + 7;
 		}
 		return placement;
 	}

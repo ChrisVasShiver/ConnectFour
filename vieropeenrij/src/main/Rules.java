@@ -128,9 +128,9 @@ public class Rules {
 		assert 0 <= index && index < currentBoard.MAXFIELDS;
 		//loop_invariant 0 <= i && i < currentBoard.MAXFIEDS;
 		for (int i = 0; i < currentBoard.MAXFIELDS; i++) {
-			if ((scanDiagonalLeftUp(m, index) + scanDiagonalRightDown(m, index) == 3)
+			if ((scanDiagonalLeftUp(m, index) + scanDiagonalRightDown(m, index) == 4)
 					|| (scanDiagonalLeftDown(m, index)
-							+ scanDiagonalRightUp(m, index) == 3)) {
+							+ scanDiagonalRightUp(m, index) == 4)) {
 				return true;
 			}
 		}
@@ -159,7 +159,7 @@ public class Rules {
 					|| i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 6) {
 				break;
 			} else {
-				if (currentBoard.getField(i).equals(m) && points != 3) {
+				if (currentBoard.getField(i).equals(m) && points != 4) {
 					points++;
 				} else
 					break;
@@ -190,7 +190,7 @@ public class Rules {
 					|| i == 41) {
 				break;
 			} else {
-				if (currentBoard.getField(i).equals(m) && points != 3) {
+				if (currentBoard.getField(i).equals(m) && points != 4) {
 					points++;
 				} else
 					break;
@@ -221,7 +221,7 @@ public class Rules {
 					|| i == 41) {
 				break;
 			} else {
-				if (currentBoard.getField(i).equals(m) && points != 3) {
+				if (currentBoard.getField(i).equals(m) && points != 4) {
 					points++;
 				} else
 					break;
@@ -252,7 +252,7 @@ public class Rules {
 					|| i == 41) {
 				break;
 			} else {
-				if (currentBoard.getField(i).equals(m) && points != 3) {
+				if (currentBoard.getField(i).equals(m) && points != 4) {
 					points++;
 				} else
 					break;
@@ -342,7 +342,7 @@ public class Rules {
 		 Board board = new Board();
 		 Rules rules = new Rules(board);
 
-		 for (int i = 33; i > 25; i -= 8) {
+		 for (int i = 33; i > 0; i -= 8) {
 			 board.setField(i, Mark.RED);
 		 }
 		 board.setField(41, Mark.RED);
