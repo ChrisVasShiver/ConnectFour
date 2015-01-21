@@ -1,4 +1,4 @@
-package protocol;
+package netwerkprotocol;
 
 /**
  * Alle benodigde constanten voor commands tussen server en client.

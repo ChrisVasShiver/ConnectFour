@@ -55,24 +55,6 @@ public class Game {
 		return input.equals(YES);
 	}
 	
-	
-	// TODO finish method
-	public int readInteger(String message) {
-		boolean isInteger = false;
-		int value = 0;
-		do {
-			System.out.println(message);
-			Scanner in = new Scanner(System.in);
-			if(in.hasNextInt()) {
-				value = in.nextInt();
-				isInteger = true;
-			} else {
-				isInteger = false;
-			}
-		} while (!isInteger);
-		return value;
-	}
-	
 	public void start() {
 		running = true;
 		while (running) {

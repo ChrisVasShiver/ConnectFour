@@ -1,4 +1,4 @@
-package protocol;
+package netwerkprotocol;
 /**
  * Protocol voor de te gebruiken commando's tussen server en client.
  * Op basis van het protocol van vorig jaar, gemaakt door: Christian Versloot
