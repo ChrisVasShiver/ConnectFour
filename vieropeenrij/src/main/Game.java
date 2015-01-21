@@ -84,7 +84,7 @@ public class Game {
 		while(!rules.getGameOver()) {
 			rules.isGameOver(players[getCurrentPlayerIndex()].getMark(), players[getCurrentPlayerIndex()].doMove(board));
 			update();
-			currentP = (currentP + 1) % 2;
+			currentP = (currentP + 1) % MAXPLAYER;
 		}
 		endGame(); 
 	}
@@ -99,8 +99,15 @@ public class Game {
 		rules.reset();
 	}
 	
-	// TODO implement endGame
+	// TODO implement endGame error in check vakje 41
 	public void endGame() {
-		int winningP = currentP - 1;
+		if(rules.getHasWinner()) { 
+			System.out.println(currentP);
+			int winner = Math.abs((currentP - 1));
+			System.out.println(winner);
+			System.out.println("The Winner is: " + players[winner].getName() + "!!!\n");
+		} else {
+			System.out.println("It is a Draw!\n");
+		}
 	}
 }

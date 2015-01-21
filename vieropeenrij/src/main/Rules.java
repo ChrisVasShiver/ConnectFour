@@ -6,10 +6,12 @@ package main;
  *
  */
 public class Rules {
-
-	private Board currentBoard;
+	
 	public static final int WINNERSBLOCK = 4;
+	
+	private Board currentBoard;
 	private boolean gameover = false;
+	private boolean hasWinner = false;
 	
 	public Rules(Board board) {
 		currentBoard = board;
@@ -250,21 +252,27 @@ public class Rules {
 
 	public boolean isWinner(Mark m, int index) {
 		if (horizontalWin(m, index) || verticalWin(m, index) || diagonalWin(m, index)){
+			hasWinner = true;
 			return true;
 		} else {
 			return false;
 		}
 	 }
 	 
-	 public boolean getGameOver() {
-		 return gameover;
-	 }
+	
+	public boolean getHasWinner() {
+		return hasWinner;
+	}
+	
+	public boolean getGameOver() {
+		return gameover;
+	}
 	 
-	 public void isGameOver(Mark m, int index) {
-		 if (isWinner(m, index) || isBoardFull()) {
-			 gameover = true;
-		 }
-	 }
+	public void isGameOver(Mark m, int index) {
+		if (isWinner(m, index) || isBoardFull()) {
+			gameover = true;
+		}
+	}
 	 
 	/**
 	 * Checks the lowest available index in the column, when a column is selected. It will drop the Mark into the column if it is free.
@@ -278,23 +286,24 @@ public class Rules {
 	  	ensures \result  -1 <= \result && \result < 42;
 		pure;
 	  */
-	 public int dropMark(Mark m, int index){
-		 assert m != null;
-		 assert 0 <= index && index < currentBoard.MAXFIELDS;
-		 int col = currentBoard.indexToMatrix(index)[1];
-		 int placement = -1;
-		 for (int i = 0; i < currentBoard.HEIGHT; i++){
-			 if(currentBoard.getField(col).equals(Mark.EMPTY)){
-				 placement = col;
-			 }
-			 col = col + 7;
-		 }
-		 return placement;
-	 }
+	public int dropMark(Mark m, int index){
+		assert m != null;
+		assert 0 <= index && index < currentBoard.MAXFIELDS;
+		int col = currentBoard.indexToMatrix(index)[1];
+		int placement = -1;
+		for (int i = 0; i < currentBoard.HEIGHT; i++){
+			if(currentBoard.getField(col).equals(Mark.EMPTY)){
+				placement = col;
+			}
+			col = col + 7;
+		}
+		return placement;
+	}
 	 
 	 
 	 public void reset() {
 		 gameover = false;
+		 hasWinner = false;
 	 }
 	 
 	 public static void main(String[] args) {
