@@ -61,19 +61,15 @@ public class Rules {
 		ensures \result == true || false;
 		pure;
 	 */
-	public boolean horizontalWin(Mark m, int index) {
+	public boolean verticalWin(Mark m, int index) {
 		assert m != null;
 		assert 0 <= index && index < currentBoard.MAXFIELDS;
-		int row = currentBoard.indexToMatrix(index)[0];
-		int countMark = 0;
+		int col = currentBoard.indexToMatrix(index)[1];
 		//@ loop_invariant 0 <= row && row < WINNERSBLOCK;
-		for (int col = 0; col < currentBoard.WIDTH; col++) {
-			System.out.println("countMark= "+countMark);
+		for (int row = 0; row < WINNERSBLOCK; row++) {
+			int countMark = 0;
 			if (currentBoard.getField(currentBoard.matrixToIndex(row,col))
-					.equals(m) && countMark != WINNERSBLOCK) {
-				System.out.println("row= "+ row + " col= "+ col);
-				System.out.println(currentBoard.getField(currentBoard.matrixToIndex(row,col))
-					.equals(m));
+					.equals(m)) {
 				countMark++;
 			}
 			if (countMark == WINNERSBLOCK) {
@@ -97,15 +93,15 @@ public class Rules {
 		ensures \result == true || false;
 		pure;
 	 */
-	public boolean verticalWin(Mark m, int index) {
+	public boolean horizontalWin(Mark m, int index) {
 		assert m != null;
 		assert 0 <= index && index < currentBoard.MAXFIELDS;
-		int col = currentBoard.indexToMatrix(index)[1];
-		int countMark = 0;
+		int row = currentBoard.indexToMatrix(index)[0];
 		//@ loop_invariant 0 <= col && col < WINNERSBLOCK;
-		for (int row = 0; row < WINNERSBLOCK; row++) {
+		for (int col = 0; col < WINNERSBLOCK; col++) {
+			int countMark = 0;
 			if (currentBoard.getField(currentBoard.matrixToIndex(row,col))
-					.equals(m) && countMark != WINNERSBLOCK) {
+					.equals(m)) {
 				countMark++;
 			}
 			if (countMark == WINNERSBLOCK) {
@@ -349,22 +345,9 @@ public class Rules {
 		 for (int i = 33; i > 0; i -= 8) {
 			 board.setField(i, Mark.RED);
 		 }
-		 for(int i = 35; i > 0 ; i-=6){
-			 board.setField(i, Mark.YELLOW);
-		 }
-		 for(int i = 36; i < 42; i++){
-			 board.setField(i, Mark.RED);
-		 }
-		 for(int i = 0; i < 42; i+=7){
-			 board.setField(i, Mark.YELLOW);
-		 }
 		 board.setField(41, Mark.RED);
 		 System.out.println(board.toString());
 		 System.out.println(rules.scanDiagonalLeftUp(Mark.RED, 41));
-		 System.out.println(rules.scanDiagonalLeftDown(Mark.YELLOW, 5));
-		 System.out.println("Scan horizontal " + rules.horizontalWin(Mark.RED, 36));
-		 System.out.println("Scan vertical " + rules.verticalWin(Mark.YELLOW, 0));
-
-	 }
+		 System.out.println(rules.scanDiagonalLeftUp(Mark.RED, 19));}
 
 }
