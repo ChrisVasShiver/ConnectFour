@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Scanner;
+
 /**
  * 
  * @author C. Visscher and D. Ye
@@ -9,13 +11,33 @@ public class HumanPlayer extends Player {
 
 	public HumanPlayer(String name, Mark mark) {
 		super(name, mark);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public int determineMove(Board board) {
-		// TODO Auto-generated method stub
-		return 0;
+		String message = "Enter your move";
+		int value = readInteger(message);
+		boolean isExistingField = false;
+		isExistingField = board.isExistingField(value);
+		while(!isExistingField) {
+			value = determineMove(board);
+		}
+		return value;
 	}
-
+	
+	public int readInteger(String message) {
+		boolean isInteger = false;
+		int value = 0;
+		do {
+			System.out.println(message);
+			Scanner in = new Scanner(System.in);
+			if(in.hasNextInt()) {
+				value = in.nextInt();
+				isInteger = true;
+			} else {
+				isInteger = false;
+			}
+		} while (!isInteger);
+		return value;
+	}
 }

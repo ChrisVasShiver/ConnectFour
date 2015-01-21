@@ -63,9 +63,13 @@ public class Game {
 		do {
 			System.out.println(message);
 			Scanner in = new Scanner(System.in);
-			String input = in.hasNextLine() ? in.nextLine() : null;
-			
-			} while (!isInteger);
+			if(in.hasNextInt()) {
+				value = in.nextInt();
+				isInteger = true;
+			} else {
+				isInteger = false;
+			}
+		} while (!isInteger);
 		return value;
 	}
 	
@@ -99,7 +103,6 @@ public class Game {
 		rules.reset();
 	}
 	
-	// TODO implement endGame error in check vakje 41
 	public void endGame() {
 		if(rules.getHasWinner()) { 
 			System.out.println(currentP);
