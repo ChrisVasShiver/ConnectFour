@@ -24,6 +24,11 @@ public class HumanPlayer extends Player {
 			value = determineMove(board);
 			isExistingField = board.isExistingField(value);
 		}
+		value = board.dropMark(getMark(), value);
+		if(value == -1) {
+			System.out.println("the colum is already full, try another move");
+			value = determineMove(board);
+		}
 		return value;
 	}
 	

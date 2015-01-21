@@ -174,7 +174,7 @@ public class Board {
 		assert m != null;
 		assert 0 <= index && index < MAXFIELDS;
 		int col = indexToMatrix(index)[1];
-		int placement = index;
+		int placement = -1;
 		if (isExistingField(index)){
 			for (int row = 0; row < HEIGHT; row++){
  				if(isEmptyField(matrixToIndex(row, col))){
