@@ -18,13 +18,13 @@ public class Rules {
 	}
 	
 	/**
-	 * 
-	 * @param i
-	 * @return
+	 * Checks if the move is valid.
+	 * @param i the entered move.
+	 * @return return true if i >= 0 && i < 42. Return false if it is something else.
 	 */
 	/*@
 	 	requires 0 <= i && i < Board.MAXFIELDS;
-		ensures (\forall int i; 0 <= i && i < Board.MAXFIELDS; Board.isExistingField(i) == true) \result == true;
+//		ensures (\forall int i; 0 <= i && i < Board.MAXFIELDS; Board.isExistingField(i) == true) \result == true;
 	 	pure;
 	 */
 	public boolean isValidMove(int i) {
@@ -36,7 +36,7 @@ public class Rules {
 	 * @return returns true if board is full. Returns false if board has atleast one Mark.EMPTY spot.
 	 */
 	/*@
-	 	ensures (\forall int i; 0 <= i && i < Board.MAXFIELDS; Board.isEmptyField(i)) ==> \result == true;
+//	 	ensures (\forall int i; 0 <= i && i < Board.MAXFIELDS; Board.isEmptyField(i) == true) ==> \result == true;
 	 	pure
 	 */
 	public boolean isBoardFull() {
@@ -252,7 +252,6 @@ public class Rules {
 					|| i == 41) {
 				break;
 			} else {
-				System.out.println(currentBoard.getField(i).equals(m));
 				if (currentBoard.getField(i).equals(m) && points != 3) {
 					points++;
 				} else
