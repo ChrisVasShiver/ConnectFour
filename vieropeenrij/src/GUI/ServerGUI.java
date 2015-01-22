@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
@@ -12,8 +13,10 @@ public class ServerGUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	public static int WIDTH = 320;
-	public static int HEIGHT = 320 / 16 * 9;
+	public static int HEIGHT = WIDTH / 16 * 9;
 	public static int SCALE = 4;
+	public static int buttonWIDTH = 15;
+	public static int buttonHEIGHT = buttonWIDTH / 16 * 9; 
 	
 	public ServerGUI() {
 		buildGUI();		
@@ -21,13 +24,12 @@ public class ServerGUI extends JFrame {
 	
 	public void buildGUI() {
 		Dimension dimension = new Dimension(WIDTH * SCALE, HEIGHT * SCALE);
-		setLayout(new GridLayout(3, 3));
+		setLayout(null);
 		
-		JPanel p1 = new JPanel();
-		JPanel p2 = new JPanel(new BorderLayout());
-		
-		JButton startServer = new JButton("Start", )
-		
+		JButton startButton = new JButton("Start");		
+				
+		add(startButton);
+		startButton.setBounds(25, 25, startButton.getSize().width, startButton.getSize().height);
 		setResizable(false);
 		setTitle("ConnectFour Server");
 		setSize(dimension);
