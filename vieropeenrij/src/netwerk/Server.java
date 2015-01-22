@@ -19,4 +19,32 @@ public class Server extends Thread{
 			e.printStackTrace();
 		}
 	}
+	
+	public void sendBoard(){
+		
+	}
+	
+	public void acceptRequest(){
+		
+	}
+	
+	public void startGame(){
+		
+	}
+	
+	public void moveResult(){
+		
+	}
+	
+	public void turn(){
+		
+	}
+	
+	public void endGame(){
+		
+	}
+	
+	public void sendLeaderboard(){
+		
+	}
 }
