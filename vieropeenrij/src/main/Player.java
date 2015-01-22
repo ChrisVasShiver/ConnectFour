@@ -30,6 +30,10 @@ public abstract class Player {
 		return theMark;
 	}
 	
+	public void setMark(Mark m){
+		theMark = m;
+	}
+	
 	public abstract int determineMove(Board board);
 	
 	public int doMove(Board board) {

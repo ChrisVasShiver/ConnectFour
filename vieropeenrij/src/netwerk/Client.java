@@ -25,6 +25,7 @@ public class Client extends Thread implements ProtocolControl,
 	private BufferedWriter out;
 	private Socket socket;
 	private Game game;
+	private Player thisplayer;
 
 	public Client(InetAddress InetAddress, int port, String name) {
 		this.port = port;
@@ -46,57 +47,54 @@ public class Client extends Thread implements ProtocolControl,
 
 	}
 
-	public void handleCommands(String command){
+	public void handleCommands(String command) {
 		String[] commandSplit = command.split(msgSeperator);
 
-		switch(commandSplit[0]){
+		switch (commandSplit[0]) {
 
-			case sendBoard:
+		case sendBoard:
 			Mark mark = null;
-			for (int i = 1; 1 <= i && i < 42; i++){
-				if(commandSplit[i].equals(ProtocolConstants.yellow)){
+			for (int i = 1; 1 <= i && i < 42; i++) {
+				if (commandSplit[i].equals(ProtocolConstants.yellow)) {
 					mark = Mark.YELLOW;
 				}
-				if(commandSplit[i].equals(ProtocolConstants.red)){
+				if (commandSplit[i].equals(ProtocolConstants.red)) {
 					mark = Mark.RED;
 				}
-				if(commandSplit[i].equals(ProtocolConstants.empty)){
+				if (commandSplit[i].equals(ProtocolConstants.empty)) {
 					mark = Mark.EMPTY;
 				}
-				game.getBoard().setField(i-1, mark);
+				game.getBoard().setField(i - 1, mark);
 			}
 
-			case acceptRequest:
-			if (commandSplit[1].equals(ProtocolConstants.yellow)){
-				new 
+		case acceptRequest:
+			if (commandSplit[1].equals(ProtocolConstants.yellow)) {
+				thisplayer.setMark(Mark.YELLOW);
 			}
-			if (commandSplit[1].equals(ProtocolConstants.red)){
+			if (commandSplit[1].equals(ProtocolConstants.red)) {
+				thisplayer.setMark(Mark.RED);
 			}
 
-
-			case startGame:
-			Player thisplayer = null;
+		case startGame:
 			Player opponent = null;
-			if (commandSplit[1].equals(this.name)){
+			if (commandSplit[1].equals(this.name)) {
 				thisplayer = new HumanPlayer(commandSplit[1], Mark.YELLOW);
-				opponent = new Player(commandSplit[2], Mark.RED);
+				opponent = new HumanPlayer(commandSplit[2], Mark.RED);
 				game = new Game(thisplayer, opponent);
 
-			}
-			else {
+			} else {
 				thisplayer = new HumanPlayer(commandSplit[2], Mark.RED);
-				opponent = new Player(commandSplit[1], Mark.YELLOW);
+				opponent = new HumanPlayer(commandSplit[1], Mark.YELLOW);
 				game = new Game(opponent, thisplayer);
 			}
-			
 
-			case turn:
+		case turn:
 			game.getCurrentPlayer();
 
-			case endGame:
+		case endGame:
 			game.endGame();
 
-			//TODO
+			// TODO
 			// case sendLeaderboard:
 
 		}
@@ -105,7 +103,7 @@ public class Client extends Thread implements ProtocolControl,
 	/*
 	 * getBoard moet opgevraagd worden na elke zet en aan het begin van het spel
 	 */
-	public void getBoard() {
+	public Board getBoard() {
 		return game.getBoard();
 
 	}
@@ -118,16 +116,17 @@ public class Client extends Thread implements ProtocolControl,
 	 * De client die aan de beurt is stuurt een “doMove” command gevolgd door
 	 * een spatie en dan de index waar hij zijn zet wil doen naar de server.
 	 */
-	public void doMove(int move) {
-
+	public String doMove(int move) {
+		String doMove = Integer.toString(move);
+		return (ProtocolControl.doMove + ProtocolConstants.msgSeperator + doMove);
 	}
 
 	/*
 	 * opvragen wie aan de beurt is. Returned de naam van de client die aan de
 	 * beurt is.
 	 */
-	public void playerTurn() {
-
+	public String playerTurn() {
+		return game.getCurrentPlayer();
 	}
 
 	public void sendMessage(String msg) {

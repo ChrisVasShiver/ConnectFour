@@ -2,6 +2,12 @@ package netwerk;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.List;
+
+import main.Game;
+import netwerkprotocol.ProtocolConstants;
+import netwerkprotocol.ProtocolControl;
 
 public class Server extends Thread implements ProtocolControl, ProtocolConstants{
 	
@@ -39,7 +45,7 @@ public class Server extends Thread implements ProtocolControl, ProtocolConstants
 
 			case sendMessage:
 
-			case getLeaderBoard:
+//			case getLeaderBoard:
 
 		}
 
