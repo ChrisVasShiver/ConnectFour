@@ -118,7 +118,7 @@ public class Rules {
 		assert 0 <= index && index < Board.MAXFIELDS;
 		int col = currentBoard.indexToMatrix(index)[1];
 		int countMark = 0;
-		for (int row = 0; 0 <= row && row < Board.MAXFIELDS; row += 7) {
+		for (int row = 0; 0 <= row && row < Board.HEIGHT; row += 7) {
 			if (currentBoard.getField(currentBoard.matrixToIndex(row, col))
 					.equals(m) && countMark != WINNERSBLOCK) {
 				countMark++;

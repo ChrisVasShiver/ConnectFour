@@ -43,8 +43,22 @@ public class Game {
 		return rules;
 	}
 	
-	public int getCurrentPlayerIndex() {
-		return currentP;
+	// public int getCurrentPlayerIndex() {
+	// 	return currentP;
+	// }
+
+	public String getCurrentPlayer(){
+		return Player[currentP];
+
+	}
+
+	public void setCurrentPlayer(String name){
+		if (Player[0].equals(name)){
+			currentP = 0;
+		}
+		if (Player[1].equals(name)){
+			currentP = 1;
+		}
 	}
 	
 	public Player[] getPlayers() {

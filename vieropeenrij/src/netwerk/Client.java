@@ -9,21 +9,23 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 import main.Board;
+import main.Game;
+import main.Mark;
 import netwerkprotocol.ProtocolConstants;
 import netwerkprotocol.ProtocolControl;
 
 public class Client extends Thread implements ProtocolControl, ProtocolConstants {
 	
-	private int thePort;
-	private String theName;
+	private int port;
+	private String name;
 	private BufferedReader in;
 	private BufferedWriter out;
 	private Socket socket;
+	private Game game;
 
 	public Client(InetAddress InetAddress, int port, String name) {
-		thePort = port;
-		theName = name;
-		thePort = port;
+		this.port = port;
+		this. name = name;
 		try {
 			socket = new Socket(InetAddress, port);
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -38,14 +40,61 @@ public class Client extends Thread implements ProtocolControl, ProtocolConstants
 		
 	}
 	
+	public void handleCommands(String command){
+		String[] commandSplit = command.split(msgSeperator);
+
+		switch(commandSplit[0]){
+
+			case sendBoard:
+			Mark mark = null;
+			for (int i = 1; 1 <= i && i < 42; i++){
+				if(commandSplit[i].equals(ProtocolConstants.red)){
+					mark = Mark.RED;
+				}
+				if(commandSplit[i].equals(ProtocolConstants.yellow)){
+					mark = Mark.YELLOW;
+				}
+				if(commandSplit[i].equals(ProtocolConstants.empty)){
+					mark = Mark.EMPTY;
+				}
+				game.getBoard().setField(i-1, mark);
+			}
+
+			case acceptRequest:
+			if (commandSplit[1].equals(ProtocolConstants.red)){
+				new Player
+			}
+			if (commandSplit[1].equals(ProtocolConstants.yellow)){
+				game.setMark(Mark.YELLOW);
+			}
+
+
+			case startGame:
+			game = new Game(new HumanPlayer(commandSplit[1], Mark.YELLOW), new HumanPlayer(commandSplit[2], Mark.RED));
+
+			case turn:
+			game.getCurrentPlayer();
+
+			case endGame:
+			game.endGame();
+
+			//TODO
+			// case sendLeaderboard:
+
+		}
+	}
+
+
 	/*
 	 * getBoard moet opgevraagd worden na elke zet en aan het begin van het spel
 	 */
 	public void getBoard(){
+		return game.getBoard();
 
 	}
 		
 	public void joinRequest(String clientname){
+
 		
 	}
 
