@@ -2,6 +2,8 @@ package GUI;
 
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -30,9 +32,6 @@ public class ServerGUI extends JFrame {
 	
 	public static int messageBoxWIDTH = 320 - (2 * SPACING);
 	public static int messageBoxHEIGHT = 140;
-
-	
-	
 	
 	public ServerGUI() {
 		buildGUI();		
@@ -53,7 +52,7 @@ public class ServerGUI extends JFrame {
 		JLabel ipLabel = new JLabel("Internet Adress:  ");
 		JLabel portLabel = new JLabel("Port: ");
 		
-		JTextField ipTField= new JTextField("tralalala");
+		JTextField ipTField= new JTextField(getIPAddress());
 		ipTField.setEditable(false);
 		JTextField portTField = new JTextField();
 		
@@ -84,6 +83,15 @@ public class ServerGUI extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
+	}
+	
+	private String getIPAddress() {
+		try  {
+			InetAddress ipadress = InetAddress.getLocalHost();
+			return ipadress.getHostAddress();
+		} catch (UnknownHostException e) {
+			return "unkown";
+		}
 	}
 	
 	public static void main(String[] args) {
