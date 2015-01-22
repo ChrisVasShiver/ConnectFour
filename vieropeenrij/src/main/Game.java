@@ -9,6 +9,11 @@ import java.util.Scanner;
  */
 public class Game {
 	
+	/*@
+	 	invariant MAXPLAYER == 2;
+	 	invariant YES == "yes";
+	 	invariant NO == "no";
+	 */
 	public static final int MAXPLAYER = 2;
 	public static final String YES = "yes";
 	public static final String NO = "no";
@@ -18,6 +23,7 @@ public class Game {
 	private Player[] players;
 	private int currentP;
 	private boolean running = false;
+	
 	
 	
 	public Game(Player p0, Player p1) {

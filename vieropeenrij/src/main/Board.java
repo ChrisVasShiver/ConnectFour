@@ -7,6 +7,11 @@ package main;
  */
 public class Board {
 	
+	/*@
+	 	invariant WIDTH == 7;
+	 	invariant HEIGHT == 6;
+ 		invariant MAXFIELDS == 42;
+	 */
 	public static final int WIDTH = 7;
 	public static final int HEIGHT = 6;
 	public static final int MAXFIELDS = 42;
@@ -17,6 +22,12 @@ public class Board {
 	*/ 
 	private Mark[] fields;
 	
+	/**
+	 *	Creates a field array of size 41. Every index is filled with Mark.EMPTY.
+	 */
+	/*@
+	 	ensures (\forall int i; 0 <= i && i < MAXFIELDS; getField(i).equals(Mark.EMPTY));
+	 */
 	public Board() {
 		fields = new Mark[MAXFIELDS];
 		reset();
@@ -185,6 +196,9 @@ public class Board {
 		return placement;
 	}
 	
+	/**
+	 * The Textial User Interface.
+	 */
 	//@ ensures \result != null;
 	@Override
 	public String toString() {
