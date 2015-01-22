@@ -10,12 +10,15 @@ import java.net.Socket;
 
 import main.Board;
 import main.Game;
+import main.HumanPlayer;
 import main.Mark;
+import main.Player;
 import netwerkprotocol.ProtocolConstants;
 import netwerkprotocol.ProtocolControl;
 
-public class Client extends Thread implements ProtocolControl, ProtocolConstants {
-	
+public class Client extends Thread implements ProtocolControl,
+		ProtocolConstants {
+
 	private int port;
 	private String name;
 	private BufferedReader in;
@@ -25,21 +28,24 @@ public class Client extends Thread implements ProtocolControl, ProtocolConstants
 
 	public Client(InetAddress InetAddress, int port, String name) {
 		this.port = port;
-		this. name = name;
+		this.name = name;
 		try {
 			socket = new Socket(InetAddress, port);
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-		} catch (IOException e){
-			System.out.println("ERROR: could not create client on " + InetAddress
-					+ " and port " + port);		}
+			in = new BufferedReader(new InputStreamReader(
+					socket.getInputStream()));
+			out = new BufferedWriter(new OutputStreamWriter(
+					socket.getOutputStream()));
+		} catch (IOException e) {
+			System.out.println("ERROR: could not create client on "
+					+ InetAddress + " and port " + port);
+		}
 	}
-	
+
 	@Override
 	public void run() {
-		
+
 	}
-	
+
 	public void handleCommands(String command){
 		String[] commandSplit = command.split(msgSeperator);
 
@@ -48,11 +54,11 @@ public class Client extends Thread implements ProtocolControl, ProtocolConstants
 			case sendBoard:
 			Mark mark = null;
 			for (int i = 1; 1 <= i && i < 42; i++){
-				if(commandSplit[i].equals(ProtocolConstants.red)){
-					mark = Mark.RED;
-				}
 				if(commandSplit[i].equals(ProtocolConstants.yellow)){
 					mark = Mark.YELLOW;
+				}
+				if(commandSplit[i].equals(ProtocolConstants.red)){
+					mark = Mark.RED;
 				}
 				if(commandSplit[i].equals(ProtocolConstants.empty)){
 					mark = Mark.EMPTY;
@@ -61,16 +67,28 @@ public class Client extends Thread implements ProtocolControl, ProtocolConstants
 			}
 
 			case acceptRequest:
-			if (commandSplit[1].equals(ProtocolConstants.red)){
-				new Player
-			}
 			if (commandSplit[1].equals(ProtocolConstants.yellow)){
-				game.setMark(Mark.YELLOW);
+				new 
+			}
+			if (commandSplit[1].equals(ProtocolConstants.red)){
 			}
 
 
 			case startGame:
-			game = new Game(new HumanPlayer(commandSplit[1], Mark.YELLOW), new HumanPlayer(commandSplit[2], Mark.RED));
+			Player thisplayer = null;
+			Player opponent = null;
+			if (commandSplit[1].equals(this.name)){
+				thisplayer = new HumanPlayer(commandSplit[1], Mark.YELLOW);
+				opponent = new Player(commandSplit[2], Mark.RED);
+				game = new Game(thisplayer, opponent);
+
+			}
+			else {
+				thisplayer = new HumanPlayer(commandSplit[2], Mark.RED);
+				opponent = new Player(commandSplit[1], Mark.YELLOW);
+				game = new Game(opponent, thisplayer);
+			}
+			
 
 			case turn:
 			game.getCurrentPlayer();
@@ -84,44 +102,43 @@ public class Client extends Thread implements ProtocolControl, ProtocolConstants
 		}
 	}
 
-
 	/*
 	 * getBoard moet opgevraagd worden na elke zet en aan het begin van het spel
 	 */
-	public void getBoard(){
+	public void getBoard() {
 		return game.getBoard();
 
 	}
-		
-	public void joinRequest(String clientname){
 
-		
+	public void joinRequest(String clientname) {
+
 	}
 
 	/*
 	 * De client die aan de beurt is stuurt een “doMove” command gevolgd door
 	 * een spatie en dan de index waar hij zijn zet wil doen naar de server.
 	 */
-	public void doMove(int move){
-		
+	public void doMove(int move) {
+
 	}
-	
+
 	/*
-	 * opvragen wie aan de beurt is. Returned de naam van de client die aan de beurt is.
+	 * opvragen wie aan de beurt is. Returned de naam van de client die aan de
+	 * beurt is.
 	 */
-	public void playerTurn(){
-		
+	public void playerTurn() {
+
 	}
-	
-	public void sendMessage(String msg){
-		
+
+	public void sendMessage(String msg) {
+
 	}
-	
-	public void getLeaderBoard(){
-		
+
+	public void getLeaderBoard() {
+
 	}
-	
-	public void sendLeaderBoard(){
-		
+
+	public void sendLeaderBoard() {
+
 	}
 }
