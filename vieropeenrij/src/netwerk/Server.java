@@ -29,10 +29,9 @@ public class Server extends Thread implements ProtocolControl, ProtocolConstants
 		switch(commandSplit[0]){
 
 			case getBoard:
+			sendBoard();
 
 			case joinRequest:
-
-			case startGame:
 
 			case moveResult:
 
@@ -46,7 +45,9 @@ public class Server extends Thread implements ProtocolControl, ProtocolConstants
 
 	}
 	
-	public void sendBoard(){
+	public void sendBoard(int gameID){
+		games.get(gameID);
+
 		
 	}
 	
