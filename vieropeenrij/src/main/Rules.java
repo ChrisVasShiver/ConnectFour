@@ -94,13 +94,13 @@ public class Rules {
 				break;
 			}
 		}
-		if(countL >= WINNERSBLOCK || countR >= WINNERSBLOCK || countL + countR - 1 >= WINNERSBLOCK) {
+		if(countL + countR - 1 >= WINNERSBLOCK) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-
+	
 	/**
 	 * Determines if the move with the given Mark will lead to a vertical win.
 	 * @param m the Mark of the move.
@@ -118,16 +118,14 @@ public class Rules {
 		assert 0 <= index && index < Board.MAXFIELDS;
 		int col = currentBoard.indexToMatrix(index)[1];
 		int countMark = 0;
-		for (int row = 0; row < 3; row++) {
-			for (int i = row; i < Board.MAXFIELDS; i += 7) {
-				if (currentBoard.getField(currentBoard.matrixToIndex(row, col))
-						.equals(m) && countMark != WINNERSBLOCK) {
-					countMark++;
-				}
+		for (int row = 0; 0 <= row && row < Board.MAXFIELDS; row += 7) {
+			if (currentBoard.getField(currentBoard.matrixToIndex(row, col))
+					.equals(m) && countMark != WINNERSBLOCK) {
+				countMark++;
 			}
-			if (countMark == WINNERSBLOCK) {
-				return true;
-			}
+		}
+		if (countMark == WINNERSBLOCK) {
+			return true;
 		}
 		return false;
 	}
@@ -149,9 +147,9 @@ public class Rules {
 		assert 0 <= index && index < Board.MAXFIELDS;
 		//loop_invariant 0 <= i && i < currentBoard.MAXFIEDS;
 		for (int i = 0; i < Board.MAXFIELDS; i++) {
-			if ((scanDiagonalLeftUp(m, index) + scanDiagonalRightDown(m, index) >= 4)
+			if ((scanDiagonalLeftUp(m, index) + scanDiagonalRightDown(m, index) >= WINNERSBLOCK)
 					|| (scanDiagonalLeftDown(m, index)
-							+ scanDiagonalRightUp(m, index) >= 4)) {
+							+ scanDiagonalRightUp(m, index) >= WINNERSBLOCK)) {
 				return true;
 			}
 		}
@@ -176,8 +174,7 @@ public class Rules {
 		assert 0 < index && index < Board.MAXFIELDS;
 		int points = 0;
 		for (int i = index; i > 0; i -= 8) {
-			if (i == 0 || i == 7 || i == 14 || i == 21 || i == 28 || i == 35
-					|| i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 6) {
+			if (i % 7 == 0 || i >= 1 && i <= 7) {
 				break;
 			} else {
 				if (currentBoard.getField(i).equals(m) && points != 4) {
@@ -206,9 +203,7 @@ public class Rules {
 		assert 0 < index && index < Board.MAXFIELDS;
 		int points = 0;
 		for (int i = index; i > 0; i += 6) {
-			if (i == 0 || i == 7 || i == 14 || i == 21 || i == 28 || i == 35
-					|| i == 36 || i == 37 || i == 38 || i == 39 || i == 40
-					|| i == 41) {
+			if (i % 7 == 0 || i >= 35 && i <= 41) {
 				break;
 			} else {
 				if (currentBoard.getField(i).equals(m) && points != 4) {
@@ -237,9 +232,7 @@ public class Rules {
 		assert 0 <= index && index < Board.MAXFIELDS;
 		int points = 0;
 		for (int i = index; i > 0; i -= 6) {
-			if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 5
-					|| i == 6 || i == 13 || i == 20 || i == 27 || i == 34
-					|| i == 41) {
+			if (i >= 0 && i <= 6 || i == 13 || i == 20 || i == 27 ||  i == 34 || i == 41){
 				break;
 			} else {
 				if (currentBoard.getField(i).equals(m) && points != 4) {
@@ -268,9 +261,7 @@ public class Rules {
 		assert 0  <= index && index < Board.MAXFIELDS;
 		int points = 0;
 		for (int i = index; i > 0; i += 8) {
-			if (i == 6 || i == 13 || i == 20 || i == 27 || i == 34 || i == 35
-					|| i == 36 || i == 37 || i == 38 || i == 39 || i == 40
-					|| i == 41) {
+			if (i >= 34 && i <= 41 || i == 6 || i == 13 || i == 20 || i == 27){
 				break;
 			} else {
 				if (currentBoard.getField(i).equals(m) && points != 4) {
