@@ -29,7 +29,7 @@ public class Server extends Thread implements ProtocolControl, ProtocolConstants
 		}
 	}
 
-	public void handleCommands(String command){
+	public void handleCommands(String command, clienthandler){
 		String[] commandSplit = command.split(msgSeperator);
 
 		switch(commandSplit[0]){

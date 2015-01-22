@@ -44,7 +44,21 @@ public class Client extends Thread implements ProtocolControl,
 
 	@Override
 	public void run() {
+		while (true) {
+			try {
+				if (in == null) {
+					// TODO
+				}
 
+				if (in.ready()) {
+					String command = in.readLine();
+					handleCommands(command);
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void handleCommands(String command) {
@@ -74,6 +88,7 @@ public class Client extends Thread implements ProtocolControl,
 			if (commandSplit[1].equals(ProtocolConstants.red)) {
 				thisplayer.setMark(Mark.RED);
 			}
+			break;
 
 		case startGame:
 			Player opponent = null;
@@ -87,16 +102,41 @@ public class Client extends Thread implements ProtocolControl,
 				opponent = new HumanPlayer(commandSplit[1], Mark.YELLOW);
 				game = new Game(opponent, thisplayer);
 			}
+			game.setCurrentPlayer(commandSplit[0]);
+			break;
 
 		case turn:
 			game.getCurrentPlayer();
+			break;
 
 		case endGame:
 			game.endGame();
+			break;
 
-			// TODO
-			// case sendLeaderboard:
+		// TODO
+		// case sendLeaderboard:
+		// break;
 
+		case ProtocolConstants.invalidUsername:
+			System.out.println("ERROR: Username is invalid.");
+			break;
+
+		case ProtocolConstants.invalidMove:
+			System.out.println("ERROR: Move is invalid.");
+			break;
+
+		case ProtocolConstants.invalidCommand:
+			System.out.println("ERROR: Command is invalid.");
+			break;
+
+		case ProtocolConstants.usernameInUse:
+			System.out
+					.println("ERROR: Username is in use, please use a different username.");
+			break;
+
+		case ProtocolConstants.invalidUserTurn:
+			System.out.println("ERROR: Please wait your turn.");
+			break;
 		}
 	}
 
