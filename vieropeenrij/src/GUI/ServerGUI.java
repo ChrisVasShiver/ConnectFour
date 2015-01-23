@@ -1,7 +1,10 @@
 package GUI;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -11,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 
-public class ServerGUI extends JFrame {
+public class ServerGUI extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 1L;
 
 	public static int SCALE = 4;
@@ -33,6 +36,14 @@ public class ServerGUI extends JFrame {
 	public static int messageBoxWIDTH = 320 - (2 * SPACING);
 	public static int messageBoxHEIGHT = 140;
 	
+	private JLabel ipLabel;
+	private JLabel portLabel;
+	private JTextField ipTField;
+	private JTextField portTField;
+	private JButton startButton;
+	private JButton stopButton;
+	private JTextArea messageBox;
+	
 	public ServerGUI() {
 		buildGUI();		
 	}
@@ -49,17 +60,20 @@ public class ServerGUI extends JFrame {
 		setTitle("ConnectFour Server");
 		setSize(dimension);
 		
-		JLabel ipLabel = new JLabel("Internet Adress:  ");
-		JLabel portLabel = new JLabel("Port: ");
+		ipLabel = new JLabel("Internet Adress:  ");
+		portLabel = new JLabel("Port: ");
 		
-		JTextField ipTField= new JTextField(getIPAddress());
+		ipTField= new JTextField(getIPAddress());
 		ipTField.setEditable(false);
-		JTextField portTField = new JTextField();
+		portTField = new JTextField();
 		
-		JButton startButton = new JButton("Start server");	
-		JButton stopButton = new JButton("Stop Server");
+		startButton = new JButton("Start server");
+		startButton.addActionListener(this);
+		stopButton = new JButton("Stop Server");
+		stopButton.setEnabled(false);
+		stopButton.addActionListener(this);
 		
-		JTextArea messageBox = new JTextArea();
+		messageBox = new JTextArea();
 		messageBox.setEditable(false);
 		
 		add(ipLabel);
@@ -79,7 +93,7 @@ public class ServerGUI extends JFrame {
 		stopButton.setBounds((int)portTField.getBounds().getMaxX() + SPACING * SCALE, (int)startButton.getBounds().getMaxY() + SPACING * SCALE, buttonSize.width, buttonSize.height);
 		
 		messageBox.setBounds(SPACING * SCALE, (int)portTField.getBounds().getMaxY() + SPACING * SCALE, messageBoxSize.width, messageBoxSize.height);
-		
+		getContentPane().setBackground(new Color(183, 105, 211));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -87,14 +101,28 @@ public class ServerGUI extends JFrame {
 	
 	private String getIPAddress() {
 		try  {
-			InetAddress ipadress = InetAddress.getLocalHost();
-			return ipadress.getHostAddress();
+			return InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e) {
 			return "unkown";
+		}
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		if(event.getSource() == startButton) {
+			startButton.setEnabled(false);
+			stopButton.setEnabled(true);
+		}
+		
+		if(event.getSource() == stopButton) {
+			startButton.setEnabled(true);
+			stopButton.setEnabled(false);
 		}
 	}
 	
 	public static void main(String[] args) {
 		new ServerGUI();
 	}
+
+
 }
