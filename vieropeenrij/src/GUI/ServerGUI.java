@@ -17,12 +17,12 @@ import javax.swing.JTextArea;
 public class ServerGUI extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 1L;
 
-	public static int SCALE = 4;
+	private static int SCALE = 4;
 	private static int SPACING = 4;
 	
-	public static int WIDTH = 320;
-	public static int halfWIDTH = 160;
-	public static int HEIGHT = WIDTH / 16 * 9;
+	private static int WIDTH = 320;
+	private static int halfWIDTH = 160;
+	private static int HEIGHT = WIDTH / 16 * 9;
 
 	private static int labelWIDTH = 32;
 	private static int labelHEIGHT = (labelWIDTH / 16 * 9) / 2;

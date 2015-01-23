@@ -30,6 +30,8 @@ class MainMenu implements ActionListener {
 	private JButton multiPlayer;
 	private JButton credits;
 	
+	private MultiPlayerMenu mpmenu;
+	
 	public MainMenu(JFrame frame) {
 		this.frame = frame;
 		c = frame.getContentPane();
@@ -86,6 +88,8 @@ class MainMenu implements ActionListener {
 			c.repaint();
 		} else if (event.getSource() == multiPlayer) {
 			c.removeAll();
+			mpmenu = new MultiPlayerMenu(frame, this);
+			mpmenu.buildMPMenu();
 			c.repaint();
 		} else if (event.getSource() == credits) {
 			c.removeAll();
