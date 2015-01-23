@@ -124,7 +124,7 @@ public class Rules {
 				countMark++;
 			}
 		}
-		if (countMark == WINNERSBLOCK) {
+		if (countMark >= WINNERSBLOCK) {
 			return true;
 		}
 		return false;
@@ -147,9 +147,9 @@ public class Rules {
 		assert 0 <= index && index < Board.MAXFIELDS;
 		//loop_invariant 0 <= i && i < currentBoard.MAXFIEDS;
 		for (int i = 0; i < Board.MAXFIELDS; i++) {
-			if ((scanDiagonalLeftUp(m, index) + scanDiagonalRightDown(m, index) >= WINNERSBLOCK)
+			if ((scanDiagonalLeftUp(m, index) + scanDiagonalRightDown(m, index) - 1 >= WINNERSBLOCK)
 					|| (scanDiagonalLeftDown(m, index)
-							+ scanDiagonalRightUp(m, index) >= WINNERSBLOCK)) {
+							+ scanDiagonalRightUp(m, index) - 1 >= WINNERSBLOCK)) {
 				return true;
 			}
 		}
@@ -162,7 +162,6 @@ public class Rules {
 	 * @param index the place where the Mark is placed
 	 * @return return an integer between 0 and 3. Based on the amount of equal Marks beneath index. Return 3 means four Marks are connected.
 	 */
-
 	/*@
 	 requires m != null;
 	 requires 0 < index && index < Board.MAXFIELDS;
@@ -175,6 +174,9 @@ public class Rules {
 		int points = 0;
 		for (int i = index; i > 0; i -= 8) {
 			if (i % 7 == 0 || i >= 1 && i <= 7) {
+				if (currentBoard.getField(i).equals(m) && points != 4) {
+					points++;
+				}
 				break;
 			} else {
 				if (currentBoard.getField(i).equals(m) && points != 4) {
@@ -204,6 +206,9 @@ public class Rules {
 		int points = 0;
 		for (int i = index; i > 0; i += 6) {
 			if (i % 7 == 0 || i >= 35 && i <= 41) {
+				if (currentBoard.getField(i).equals(m) && points != 4) {
+					points++;
+				}
 				break;
 			} else {
 				if (currentBoard.getField(i).equals(m) && points != 4) {
@@ -233,6 +238,9 @@ public class Rules {
 		int points = 0;
 		for (int i = index; i > 0; i -= 6) {
 			if (i >= 0 && i <= 6 || i == 13 || i == 20 || i == 27 ||  i == 34 || i == 41){
+				if (currentBoard.getField(i).equals(m) && points != 4) {
+					points++;
+				}
 				break;
 			} else {
 				if (currentBoard.getField(i).equals(m) && points != 4) {
@@ -262,6 +270,9 @@ public class Rules {
 		int points = 0;
 		for (int i = index; i > 0; i += 8) {
 			if (i >= 34 && i <= 41 || i == 6 || i == 13 || i == 20 || i == 27){
+				if (currentBoard.getField(i).equals(m) && points != 4) {
+					points++;
+				}
 				break;
 			} else {
 				if (currentBoard.getField(i).equals(m) && points != 4) {

@@ -9,7 +9,7 @@ import strategy.RandomStrategy;
  */
 public class ConnectFour {
 	public static void main(String[] args) {
-		Game game = new Game(new HumanPlayer("Henk", Mark.RED), new ComputerPlayer(Mark.YELLOW, new RandomStrategy()));
+		Game game = new Game(new HumanPlayer("Carolijn", Mark.RED), new HumanPlayer("Christiaan" ,Mark.YELLOW));
 		game.start();
 	}
 }
