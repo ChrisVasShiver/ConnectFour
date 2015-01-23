@@ -18,23 +18,23 @@ public class ServerGUI extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 1L;
 
 	public static int SCALE = 4;
-	public static int SPACING = 4;
+	private static int SPACING = 4;
 	
 	public static int WIDTH = 320;
 	public static int halfWIDTH = 160;
 	public static int HEIGHT = WIDTH / 16 * 9;
 
-	public static int labelWIDTH = 32;
-	public static int labelHEIGHT = (labelWIDTH / 16 * 9) / 2;
+	private static int labelWIDTH = 32;
+	private static int labelHEIGHT = (labelWIDTH / 16 * 9) / 2;
 	
-	public static int textFieldWIDTH = 32;
-	public static int textFieldHEIGHT = (textFieldWIDTH / 16 * 9) / 2;
+	private static int textFieldWIDTH = 32;
+	private static int textFieldHEIGHT = (textFieldWIDTH / 16 * 9) / 2;
 	
-	public static int buttonWIDTH = 32;
-	public static int buttonHEIGHT = (buttonWIDTH / 16 * 9) / 2; 
+	private static int buttonWIDTH = 32;
+	private static int buttonHEIGHT = (buttonWIDTH / 16 * 9) / 2; 
 	
-	public static int messageBoxWIDTH = 320 - (2 * SPACING);
-	public static int messageBoxHEIGHT = 140;
+	private static int messageBoxWIDTH = 320 - (2 * SPACING);
+	private static int messageBoxHEIGHT = 140;
 	
 	private JLabel ipLabel;
 	private JLabel portLabel;
@@ -94,6 +94,7 @@ public class ServerGUI extends JFrame implements ActionListener{
 		
 		messageBox.setBounds(SPACING * SCALE, (int)portTField.getBounds().getMaxY() + SPACING * SCALE, messageBoxSize.width, messageBoxSize.height);
 		getContentPane().setBackground(new Color(183, 105, 211));
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);
