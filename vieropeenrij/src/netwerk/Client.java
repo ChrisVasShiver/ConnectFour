@@ -105,6 +105,8 @@ public class Client extends Thread implements ProtocolControl,
 			game.setCurrentPlayer(commandSplit[0]);
 			break;
 
+		case moveResult:
+			
 		case turn:
 			game.getCurrentPlayer();
 			break;

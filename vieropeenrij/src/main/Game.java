@@ -51,6 +51,11 @@ public class Game {
 		return players[currentP].getName();
 
 	}
+	
+	public String getNextPlayer(){
+		int temp = currentP + 1 % 2;
+		return players[temp].getName();
+	}
 
 	public void setCurrentPlayer(String name){
 		if (players[0].equals(name)){
