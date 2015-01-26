@@ -239,7 +239,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentLi
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == connectButton) {
 			connect();
-			if(connectionSucces == true) {
+			if(connectionSucces && client.getClientRunning()) {
  			c.removeAll();
 			boardGUI = new BoardGUI(frame, client);
 			boardGUI.buildBoardGUI();

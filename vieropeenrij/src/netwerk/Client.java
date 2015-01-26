@@ -229,6 +229,9 @@ public class Client extends Thread implements ProtocolControl,
 		}
 	}
 
+	public boolean getClientRunning(){
+		return clientRunning;
+	}
 	public void sendMessage(String msg) {
 
 	}
