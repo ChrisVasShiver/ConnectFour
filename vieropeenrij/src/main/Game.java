@@ -18,6 +18,12 @@ public class Game {
 	public static final String YES = "yes";
 	public static final String NO = "no";
 	
+	/*@
+	 	private invariant board != null;
+	 	private invariant rules != null;
+	 	private invariant players.length == 2;
+	 	private invariant currentP == 0 || currentP == 1;
+	 */
 	private Board board;
 	private Rules rules;
 	private Player[] players;

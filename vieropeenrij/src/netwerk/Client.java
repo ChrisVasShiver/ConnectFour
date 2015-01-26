@@ -207,6 +207,7 @@ public class Client extends Thread implements ProtocolControl,
 		}
 
 	}
+	
 
 	public void getGameBoard() {
 		try {

@@ -47,7 +47,7 @@ public class Server extends Thread implements ProtocolControl,
 				Socket clientsocket = serversocket.accept();
 				ClientHandler clienthandler = new ClientHandler(clientsocket,
 						this);
-				clienthandler.setGameID(games.size());
+				clienthandler.setGameID(games.size()+1);
 				threads.add(clienthandler);
 			}  catch (SocketException e) {
 				break;
