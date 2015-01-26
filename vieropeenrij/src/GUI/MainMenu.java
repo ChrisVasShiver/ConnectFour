@@ -96,7 +96,7 @@ class MainMenu implements ActionListener {
 			c.repaint();
 		} else if (event.getSource() == credits) {
 			c.removeAll();
-			creditsmenu.buildCredisMenu();
+			creditsmenu.buildCreditsMenu();
 			c.repaint();
 		}
 		

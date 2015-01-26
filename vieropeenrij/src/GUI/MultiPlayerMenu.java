@@ -49,6 +49,8 @@ public class MultiPlayerMenu implements ActionListener, ItemListener {
 	
 	private MainMenu mainMenu;
 	private Container c;
+	private JFrame frame
+	private BoardGUI boardGUI;
 	
 	private JButton connectButton;
 	private JButton backButton;
@@ -175,7 +177,8 @@ public class MultiPlayerMenu implements ActionListener, ItemListener {
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == connectButton) {
-			
+			c.removeAll();
+			c.repaint();
 		} else if(event.getSource() == backButton) {
 			c.removeAll();
 			mainMenu.buildMenu();

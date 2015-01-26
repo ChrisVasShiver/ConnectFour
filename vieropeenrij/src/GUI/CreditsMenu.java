@@ -28,10 +28,10 @@ public class CreditsMenu implements ActionListener {
 	private JLabel madeBy;
 	public CreditsMenu(JFrame frame, MainMenu menu) {
 		c = frame.getContentPane();
-		this.menu = menu;
+		this.menu = menu;		
 	}
 	
-	public void buildCredisMenu() {
+	public void buildCreditsMenu() {
 		Dimension buttonSize = new Dimension(buttonWIDTH * ClientGUI.SCALE, buttonHEIGHT * ClientGUI.SCALE);
 		Dimension labelSize = new Dimension(labelWIDTH * ClientGUI.SCALE, labelHEIGHT * ClientGUI.SCALE);
 		
