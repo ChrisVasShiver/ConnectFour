@@ -39,7 +39,8 @@ public class CreditsMenu implements ActionListener {
 		Dimension labelSize = new Dimension(labelWIDTH * ClientGUI.SCALE, labelHEIGHT * ClientGUI.SCALE);
 		
 		Font menuFont = new Font("Ariel", Font.BOLD, 16);
-		Font creditsFont = new Font("Ariel", Font.BOLD + Font.ITALIC, 32);
+		Font nameFont = new Font("Ariel", Font.BOLD + Font.ITALIC, 32);
+		Font titleFont = new Font("Ariel", Font.BOLD, 64);
 		
 		backButton = new JButton("Back to Menu");
 		backButton.addActionListener(this);
@@ -49,15 +50,15 @@ public class CreditsMenu implements ActionListener {
 		
 		madeBy = new JLabel("Made By:", SwingConstants.CENTER);
 		madeBy.setForeground(Color.RED);
-		madeBy.setFont(creditsFont);
+		madeBy.setFont(titleFont);
 		
-		person1 = new JLabel("Made By:", SwingConstants.CENTER);
+		person1 = new JLabel("C. Visscher", SwingConstants.CENTER);
 		person1.setForeground(Color.RED);
-		person1.setFont(creditsFont);
+		person1.setFont(nameFont);
 		
-		person2 = new JLabel("Made By:", SwingConstants.CENTER);
+		person2 = new JLabel("D. Ye", SwingConstants.CENTER);
 		person2.setForeground(Color.RED);
-		person2.setFont(creditsFont);
+		person2.setFont(nameFont);
 		
 		c.add(backButton);
 		c.add(madeBy);
@@ -65,9 +66,9 @@ public class CreditsMenu implements ActionListener {
 		c.add(person2);
 		
 		backButton.setBounds(10, 10, buttonSize.width + 10, buttonSize.height);
-		madeBy.setBounds((ClientGUI.halfWIDTH - (labelWIDTH / 2)) * ClientGUI.SCALE, ((ClientGUI.halfHEIGHT + ClientGUI.quaterHEIGHT) - (labelHEIGHT / 2)) * ClientGUI.SCALE, labelSize.width, labelSize.height);
-		person1.setBounds((ClientGUI.halfWIDTH - (labelWIDTH / 2)) * ClientGUI.SCALE,(ClientGUI.halfHEIGHT - (labelHEIGHT /2)) * ClientGUI.SCALE, labelSize.width, labelSize.height);
-		person2.setBounds((ClientGUI.halfWIDTH - (labelWIDTH / 2)) * ClientGUI.SCALE, (ClientGUI.quaterHEIGHT - (labelHEIGHT /2)) * ClientGUI.SCALE, labelSize.width, labelSize.height);
+		madeBy.setBounds((ClientGUI.halfWIDTH - (labelWIDTH / 2)) * ClientGUI.SCALE, (ClientGUI.quaterHEIGHT - (labelHEIGHT /2)) * ClientGUI.SCALE, labelSize.width, labelSize.height);
+		person1.setBounds((ClientGUI.halfWIDTH - (labelWIDTH / 2)) * ClientGUI.SCALE, ClientGUI.halfHEIGHT + ClientGUI.SCALE * 4, labelSize.width, labelSize.height);
+		person2.setBounds((ClientGUI.halfWIDTH - (labelWIDTH / 2)) * ClientGUI.SCALE, (int)person1.getBounds().getMinY() + (labelHEIGHT/2) , labelSize.width, labelSize.height);
 	}
 
 	@Override

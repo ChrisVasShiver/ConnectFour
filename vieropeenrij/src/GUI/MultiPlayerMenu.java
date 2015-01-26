@@ -16,6 +16,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -51,8 +52,12 @@ public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentLi
 	private static int comboBoxWIDTH = 32;
 	private static int comboBoxHEIGHT = (labelWIDTH / 16 * 9) / 2;
 	
-	private static int messageBoxWIDTH = ClientGUI.WIDTH - (2 * SPACING);
+	private static int scrollBarWIDTH = 4;
+	
+	private static int messageBoxWIDTH = ClientGUI.WIDTH - (2 * SPACING) - scrollBarWIDTH;
 	private static int messageBoxHEIGHT = ClientGUI.HEIGHT - (8 * SPACING) - (3 * labelHEIGHT) - comboBoxHEIGHT;
+	
+
 	
 	private boolean connectionSucces;
 	
@@ -74,6 +79,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentLi
 	private JTextField ipTField;
 	private JTextField portTField;
 	private JTextArea messageBox;
+	private JScrollPane scrollMessageBox;
 	
 	
 	
@@ -91,6 +97,8 @@ public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentLi
 		Dimension messageBoxSize = new Dimension(messageBoxWIDTH * ClientGUI.SCALE, messageBoxHEIGHT * ClientGUI.SCALE);
 		Dimension checkBoxSize = new Dimension (checkBoxWIDTH * ClientGUI.SCALE, checkBoxHEIGHT * ClientGUI.SCALE);
 		Dimension comboBoxSize = new Dimension (comboBoxWIDTH * ClientGUI.SCALE, comboBoxHEIGHT * ClientGUI.SCALE);
+		Dimension scrollBarSize = new Dimension(scrollBarWIDTH * ClientGUI.SCALE ,messageBoxHEIGHT * ClientGUI.SCALE);
+		
 		
 		Font menuFont = new Font("Ariel", Font.BOLD, 16);
 		
@@ -149,8 +157,9 @@ public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentLi
 		messageBox.setFont(menuFont);
 		messageBox.setForeground(Color.RED);
 		messageBox.setBackground(Color.LIGHT_GRAY);
-		DefaultCaret caret = (DefaultCaret)messageBox.getCaret();
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		scrollMessageBox = new JScrollPane(messageBox);
+		scrollMessageBox.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollMessageBox.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
 		backButton = new JButton("Back to Menu");
 		backButton.addActionListener(this);
@@ -169,7 +178,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentLi
 		c.add(AIComboBox);
 		c.add(connectButton);
 		c.add(backButton);
-		c.add(messageBox);
+		c.add(scrollMessageBox);
 		
 		backButton.setBounds(10, 10, buttonSize.width + 10, buttonSize.height);
 		
@@ -189,6 +198,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentLi
 		AICheckBox.setBounds((int)AIComboBox.getBounds().getMaxX() + SPACING * ClientGUI.SCALE, (int)portLabel.getBounds().getMaxY() + SPACING * ClientGUI.SCALE, checkBoxSize.width, checkBoxSize.height);
 		
 		messageBox.setBounds(SPACING * ClientGUI.SCALE, (int)AIComboBox.getBounds().getMaxY() + SPACING * ClientGUI.SCALE, messageBoxSize.width, messageBoxSize.height);
+		scrollMessageBox.setBounds((SPACING * ClientGUI.SCALE), (int)messageBox.getBounds().getMinY(), messageBoxSize.width + scrollBarSize.width, scrollBarSize.height);
 	}
 	
 	public void addMessage(String message) {
@@ -238,12 +248,17 @@ public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentLi
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == connectButton) {
+			addMessage("<Message: Trying to connect, please wait!>");
+			connectButton.setEnabled(false);
 			connect();
 			if(connectionSucces && client.getClientRunning()) {
  			c.removeAll();
 			boardGUI = new BoardGUI(frame, client);
 			boardGUI.buildBoardGUI();
 			c.repaint();
+			} else {
+				addMessage("<Error: Making Connection failed!>");
+				connectButton.setEnabled(true);
 			}
 		} else if(event.getSource() == backButton) {
 			c.removeAll();

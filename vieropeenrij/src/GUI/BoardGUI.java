@@ -35,6 +35,7 @@ public class BoardGUI implements ActionListener {
 		this.frame = frame;
 		c = frame.getContentPane();
 		this.client = client;
+		client.getBoard();
 	}
 	
 	public void buildBoardGUI() {
