@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
+import javax.swing.text.DefaultCaret;
 
 public class ServerGUI extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -75,6 +76,8 @@ public class ServerGUI extends JFrame implements ActionListener{
 		
 		messageBox = new JTextArea();
 		messageBox.setEditable(false);
+		DefaultCaret caret = (DefaultCaret)messageBox.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 		
 		add(ipLabel);
 		add(portLabel);

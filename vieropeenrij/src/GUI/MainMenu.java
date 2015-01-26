@@ -31,15 +31,19 @@ class MainMenu implements ActionListener {
 	private JButton credits;
 	
 	private MultiPlayerMenu mpmenu;
+	private CreditsMenu creditsmenu;
 	
 	public MainMenu(JFrame frame) {
 		this.frame = frame;
 		c = frame.getContentPane();
+		mpmenu = new MultiPlayerMenu(frame, this);
+		creditsmenu = new CreditsMenu(frame, this);
 	}
 	
 	public void buildMenu() {
 		Dimension buttonSize = new Dimension(buttonWIDTH * ClientGUI.SCALE, buttonHEIGHT * ClientGUI.SCALE);
 		Dimension titleSize = new Dimension(titleWIDTH * ClientGUI.SCALE, titleHEIGHT * ClientGUI.SCALE);
+		
 		Font titleFont = new Font("Ariel", Font.BOLD, 64);
 		Font menuFont = new Font("Ariel", Font.BOLD, 32);
 		
@@ -88,11 +92,11 @@ class MainMenu implements ActionListener {
 			c.repaint();
 		} else if (event.getSource() == multiPlayer) {
 			c.removeAll();
-			mpmenu = new MultiPlayerMenu(frame, this);
 			mpmenu.buildMPMenu();
 			c.repaint();
 		} else if (event.getSource() == credits) {
 			c.removeAll();
+			creditsmenu.buildCredisMenu();
 			c.repaint();
 		}
 		
