@@ -22,12 +22,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.DefaultCaret;
 
 import netwerk.Client;
-import main.Game;
-import main.HumanPlayer;
-import main.Mark;
 
 public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentListener {
 	private static int SPACING = 4;

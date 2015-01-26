@@ -2,10 +2,8 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.BindException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -15,7 +13,6 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
-import javax.swing.text.DefaultCaret;
 
 import netwerk.Server;
 
