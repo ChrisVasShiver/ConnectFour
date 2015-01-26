@@ -54,7 +54,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentLi
 	private static int messageBoxWIDTH = ClientGUI.WIDTH - (2 * SPACING);
 	private static int messageBoxHEIGHT = ClientGUI.HEIGHT - (8 * SPACING) - (3 * labelHEIGHT) - comboBoxHEIGHT;
 	
-	
+	private boolean connectionSucces = true;
 	
 	private MainMenu mainMenu;
 	private Container c;
@@ -74,6 +74,8 @@ public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentLi
 	private JTextField ipTField;
 	private JTextField portTField;
 	private JTextArea messageBox;
+	
+	
 	
 	public MultiPlayerMenu(JFrame frame, MainMenu mainMenu) {
 		this.mainMenu = mainMenu;
@@ -198,11 +200,13 @@ public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentLi
 		String IPadressstr = ipTField.getText();
 		InetAddress ipadress;
 		String name;
+
 		
 		try {
 			port = Integer.parseInt(portTField.getText());
 		} catch (NumberFormatException e) {
 			addMessage("<Error: Invalid port:" + port + "!>");
+			connectionSucces = false;
 			return;
 		}
 		
@@ -226,17 +230,21 @@ public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentLi
 			 client.start();
 		 } catch(UnknownHostException e) {
 			 addMessage("<Error: Making Connection failed!>");
+			 connectionSucces = false;
+			 return;
 		 }
 	}
 		
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == connectButton) {
-			c.removeAll();
 			connect();
+			if(connectionSucces == true) {
+ 			c.removeAll();
 			boardGUI = new BoardGUI(frame, client);
 			boardGUI.buildBoardGUI();
 			c.repaint();
+			}
 		} else if(event.getSource() == backButton) {
 			c.removeAll();
 			mainMenu.buildMenu();
