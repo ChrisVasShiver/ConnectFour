@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.ConnectException;
 
 import main.Board;
 import main.Game;
@@ -37,8 +36,6 @@ public class Client extends Thread implements ProtocolControl,
 					socket.getInputStream()));
 			out = new BufferedWriter(new OutputStreamWriter(
 					socket.getOutputStream()));
-		} catch (ConnectException e) {
-			
 		} catch (IOException e) {
 			System.out.println("ERROR: could not create client on "
 					+ InetAddress + " and port " + port);
