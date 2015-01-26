@@ -40,7 +40,6 @@ public class ClientGUI extends JFrame {
 		
 		menu.buildMenu();
 		
-		
 		c.setBackground(Color.BLACK);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);

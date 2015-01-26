@@ -15,27 +15,27 @@ import javax.swing.JPanel;
 import main.Board;
 import main.Game;
 
-public class BoardGUI implements ActionListener {
+public class test extends JFrame implements ActionListener {
 	
 	private Container c;
 	private Game game;
 //	private MultiPlayerMenu mpmenu;
 	private Board board;
-	private JFrame frame;
 	
 	private JButton[] fields = new JButton[board.MAXFIELDS];
 	private JPanel boardPanel;
 	private JPanel p2;
 
 	
-	public BoardGUI(JFrame frame, Game game) {
-		this.frame = frame;
-		c = frame.getContentPane();
-		this.game = game;
-		board = game.getBoard();
+	public test() {
+		c = getContentPane();
+	//	this.game = game;
+	//	board = game.getBoard();
+		buildBoardGUI();
 	}
 	
 	public void buildBoardGUI() {
+		setLayout(null);
 		
 		boardPanel = new JPanel(new GridLayout(board.HEIGHT, board.WIDTH));
 		boardPanel.setBackground(Color.BLACK);
@@ -48,11 +48,15 @@ public class BoardGUI implements ActionListener {
 			boardPanel.add(fields[i]);
 		}
 		
-		c.add(boardPanel);
-		c.add(p2);
+		add(boardPanel);
+		add(p2);
 		
 		boardPanel.setBounds(0, 0, 960, 700);
 		p2.setBounds((int)boardPanel.getBounds().getMaxX(), 0, 320, 710);
+
+		
+		setSize(1280, 720);
+		setVisible(true);
 	}
 	
 
@@ -60,5 +64,9 @@ public class BoardGUI implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public static void main(String [] args) {
+		new test();
 	}
 }

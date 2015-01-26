@@ -26,6 +26,9 @@ public class CreditsMenu implements ActionListener {
 	
 	private JButton backButton;
 	private JLabel madeBy;
+	private JLabel person1;
+	private JLabel person2;
+	
 	public CreditsMenu(JFrame frame, MainMenu menu) {
 		c = frame.getContentPane();
 		this.menu = menu;		
@@ -48,11 +51,23 @@ public class CreditsMenu implements ActionListener {
 		madeBy.setForeground(Color.RED);
 		madeBy.setFont(creditsFont);
 		
+		person1 = new JLabel("Made By:", SwingConstants.CENTER);
+		person1.setForeground(Color.RED);
+		person1.setFont(creditsFont);
+		
+		person2 = new JLabel("Made By:", SwingConstants.CENTER);
+		person2.setForeground(Color.RED);
+		person2.setFont(creditsFont);
+		
 		c.add(backButton);
 		c.add(madeBy);
+		c.add(person1);
+		c.add(person2);
 		
 		backButton.setBounds(10, 10, buttonSize.width + 10, buttonSize.height);
-		madeBy.setBounds((ClientGUI.halfWIDTH - (labelWIDTH / 2)) * ClientGUI.SCALE, SPACING * ClientGUI.SCALE, labelSize.width, labelSize.height);
+		madeBy.setBounds((ClientGUI.halfWIDTH - (labelWIDTH / 2)) * ClientGUI.SCALE, ((ClientGUI.halfHEIGHT + ClientGUI.quaterHEIGHT) - (labelHEIGHT / 2)) * ClientGUI.SCALE, labelSize.width, labelSize.height);
+		person1.setBounds((ClientGUI.halfWIDTH - (labelWIDTH / 2)) * ClientGUI.SCALE,(ClientGUI.halfHEIGHT - (labelHEIGHT /2)) * ClientGUI.SCALE, labelSize.width, labelSize.height);
+		person2.setBounds((ClientGUI.halfWIDTH - (labelWIDTH / 2)) * ClientGUI.SCALE, (ClientGUI.quaterHEIGHT - (labelHEIGHT /2)) * ClientGUI.SCALE, labelSize.width, labelSize.height);
 	}
 
 	@Override

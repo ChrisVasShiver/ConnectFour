@@ -19,6 +19,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.text.DefaultCaret;
 
+import main.Game;
+import main.HumanPlayer;
+import main.Mark;
+
 public class MultiPlayerMenu implements ActionListener, ItemListener {
 	private static int SPACING = 4;
 	
@@ -49,7 +53,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener {
 	
 	private MainMenu mainMenu;
 	private Container c;
-	private JFrame frame
+	private JFrame frame;
 	private BoardGUI boardGUI;
 	
 	private JButton connectButton;
@@ -67,6 +71,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener {
 	
 	public MultiPlayerMenu(JFrame frame, MainMenu mainMenu) {
 		this.mainMenu = mainMenu;
+		this.frame = frame;
 		c = frame.getContentPane();
 	}
 	
@@ -178,6 +183,8 @@ public class MultiPlayerMenu implements ActionListener, ItemListener {
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == connectButton) {
 			c.removeAll();
+			Game game = new Game(new HumanPlayer("Carolijn", Mark.RED), new HumanPlayer("Christiaan" ,Mark.YELLOW));
+			new BoardGUI(frame, game).buildBoardGUI();
 			c.repaint();
 		} else if(event.getSource() == backButton) {
 			c.removeAll();

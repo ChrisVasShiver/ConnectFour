@@ -26,7 +26,6 @@ class MainMenu implements ActionListener {
 	private JFrame frame;
 	
 	private JLabel title;
-	private JButton singlePlayer;
 	private JButton multiPlayer;
 	private JButton credits;
 	
@@ -51,12 +50,6 @@ class MainMenu implements ActionListener {
 		title.setFont(titleFont);
 		title.setForeground(Color.red);
 		
-		singlePlayer = new JButton("Singleplayer");
-		singlePlayer.addActionListener(this);
-		singlePlayer.setFont(menuFont);
-		singlePlayer.setForeground(Color.RED);
-		singlePlayer.setBorderPainted(false);
-		
 		multiPlayer = new JButton("Multiplayer");
 		multiPlayer.addActionListener(this);
 		multiPlayer.setFont(menuFont);
@@ -70,27 +63,20 @@ class MainMenu implements ActionListener {
 		credits.setBorderPainted(false);
 		
 		c.add(title);
-		c.add(singlePlayer);
 		c.add(multiPlayer);
 		c.add(credits);
-		
-		
-		singlePlayer.setBounds((ClientGUI.halfWIDTH - (buttonWIDTH / 2)) * ClientGUI.SCALE, (ClientGUI.quaterHEIGHT - (buttonHEIGHT /2)) * ClientGUI.SCALE, buttonSize.width, buttonSize.height);
 		
 		multiPlayer.setBounds((ClientGUI.halfWIDTH - (buttonWIDTH / 2)) * ClientGUI.SCALE, (ClientGUI.halfHEIGHT - (buttonHEIGHT /2)) * ClientGUI.SCALE, buttonSize.width, buttonSize.height);
 		
 		credits.setBounds((ClientGUI.halfWIDTH - (buttonWIDTH / 2)) * ClientGUI.SCALE, ((ClientGUI.halfHEIGHT + ClientGUI.quaterHEIGHT) - (buttonHEIGHT / 2)) * ClientGUI.SCALE, buttonSize.width, buttonSize.height);
 		
-		title.setBounds((ClientGUI.halfWIDTH - (titleWIDTH / 2)) * ClientGUI.SCALE, (int)singlePlayer.getBounds().getMinY() - buttonSize.height, titleSize.width, titleSize.height);
+		title.setBounds((ClientGUI.halfWIDTH - (titleWIDTH / 2)) * ClientGUI.SCALE, (ClientGUI.quaterHEIGHT - (titleHEIGHT /2)) * ClientGUI.SCALE, titleSize.width, titleSize.height);
 	}
 	
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		if (event.getSource() == singlePlayer) {
-			c.removeAll();
-			c.repaint();
-		} else if (event.getSource() == multiPlayer) {
+		if (event.getSource() == multiPlayer) {
 			c.removeAll();
 			mpmenu.buildMPMenu();
 			c.repaint();
