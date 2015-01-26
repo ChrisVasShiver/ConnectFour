@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import netwerk.Client;
 import main.Board;
 import main.Game;
 import main.Mark;
@@ -19,6 +20,7 @@ import main.Mark;
 public class BoardGUI implements ActionListener {
 	
 	private Container c;
+	private Client client;
 	private Game game;
 //	private MultiPlayerMenu mpmenu;
 	private Board board;
@@ -29,12 +31,10 @@ public class BoardGUI implements ActionListener {
 	private JPanel p2;
 
 	
-	public BoardGUI(JFrame frame, Game game) {
-
+	public BoardGUI(JFrame frame, Client client) {
 		this.frame = frame;
 		c = frame.getContentPane();
-		this.game = game;
-		board = game.getBoard();
+		this.client = client;
 	}
 	
 	public void buildBoardGUI() {
@@ -58,7 +58,7 @@ public class BoardGUI implements ActionListener {
 		
 		for(int r = 0; r < board.HEIGHT; r++) {
 			for(int c = 0; c < board.WIDTH; c++) {
-				fields[board.matrixToIndex(r, c)].setBounds(c * 125, r * (710/6 - 3), 125, 710/6 - 3);
+				fields[(r * Board.WIDTH) + c].setBounds(c * 125, r * (710/6 - 3), 125, 710/6 - 3);
 			}
 		}
 	}

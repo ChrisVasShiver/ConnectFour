@@ -19,6 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultCaret;
 
 import netwerk.Client;
@@ -26,7 +28,7 @@ import main.Game;
 import main.HumanPlayer;
 import main.Mark;
 
-public class MultiPlayerMenu implements ActionListener, ItemListener {
+public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentListener {
 	private static int SPACING = 4;
 	
 	private static int WIDTH = 320;
@@ -107,10 +109,13 @@ public class MultiPlayerMenu implements ActionListener, ItemListener {
 		
 		userTField = new JTextField();
 		userTField.setBackground(Color.LIGHT_GRAY);
+		userTField.getDocument().addDocumentListener(this);
 		ipTField= new JTextField();
 		ipTField.setBackground(Color.LIGHT_GRAY);
+		ipTField.getDocument().addDocumentListener(this);
 		portTField = new JTextField();
 		portTField.setBackground(Color.LIGHT_GRAY);
+		portTField.getDocument().addDocumentListener(this);
 		
 		AICheckBox = new JCheckBox("Use");
 		AICheckBox.setBorderPainted(false);
@@ -123,6 +128,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener {
 		connectButton = new JButton("Connect");
 		connectButton.addActionListener(this);
 		connectButton.setBorderPainted(false);
+		connectButton.setEnabled(false);
 		connectButton.setFont(menuFont);
 		connectButton.setForeground(Color.RED);
 		
@@ -192,7 +198,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener {
 		String IPadressstr = ipTField.getText();
 		InetAddress ipadress;
 		String name;
-		 
+		
 		try {
 			port = Integer.parseInt(portTField.getText());
 		} catch (NumberFormatException e) {
@@ -222,13 +228,14 @@ public class MultiPlayerMenu implements ActionListener, ItemListener {
 			 addMessage("<Error: Making Connection failed!>");
 		 }
 	}
-	
+		
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == connectButton) {
 			c.removeAll();
 			connect();
-			new BoardGUI(frame, client.getGame()).buildBoardGUI();
+			boardGUI = new BoardGUI(frame, client);
+			boardGUI.buildBoardGUI();
 			c.repaint();
 		} else if(event.getSource() == backButton) {
 			c.removeAll();
@@ -247,5 +254,29 @@ public class MultiPlayerMenu implements ActionListener, ItemListener {
 			}
 		}
 		
+	}
+
+	@Override
+	public void changedUpdate(DocumentEvent event) {
+		updatedTF();
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent e) {
+		updatedTF();
+		
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent e) {
+		updatedTF();
+	}
+	
+	public void updatedTF() {
+		if(userTField.getText().equals("") || portTField.getText().equals("") || ipTField.getText().equals("")) {
+			connectButton.setEnabled(false);
+		} else {
+			connectButton.setEnabled(true);
+		}
 	}
 }
