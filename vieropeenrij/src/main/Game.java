@@ -31,7 +31,21 @@ public class Game {
 	private boolean running = false;
 	
 	
-	
+	/**
+	 * Creates a new Game class. It also creates a new instance of board and rules.
+	 * @param p0 the first player to be inserted into the game.
+	 * @param p1 the second player to be inserted into the game.
+	 */
+	/*@
+	 	requires p0 != null;
+	 	requires p1 != null;
+	 	ensures getBoard() == new Board();
+	 	ensures getRules() == new Rules(getBoard());
+	 	ensures getPlayers().length == 2;
+	 	ensures getPlayers()[0] == p0;
+	 	ensures getPlayers()[1]== p1;
+	 	ensures getCurrentPlayerIndex() == 0;
+	 */
 	public Game(Player p0, Player p1) {
 		board = new Board();
 		rules = new Rules(board);
@@ -41,23 +55,63 @@ public class Game {
 		currentP = 0;
 	}
 	
+	/**
+	 * Returns the board.
+	 * @return the board
+	 */
+	/*@
+	 	ensures \result != null;
+	 	pure;
+	 */
 	public Board getBoard() {
 		return board;
 	}
 	
+	/**
+	 * Returns the rules of the game.
+	 * @return the rules
+	 */
+	/*@
+	 	ensures \result != null;
+	 	pure;
+	 */
 	public Rules getRules() {
 		return rules;
 	}
 	
+	/**
+	 * Returns the index of the currentplayer from the players array.
+	 * @return an integer of the current player. Returns either 0 or 1.
+	 */
+	/*@
+	 	ensures \result == 0 || \result == 1;
+	 	pure;
+	 */
 	 public int getCurrentPlayerIndex() {
 	 	return currentP;
 	 }
 
+	 /**
+	  * Get the String of the currentplayers name.
+	  * @return returns the currentplayers name.
+	  */
+	 /*@
+	  	ensures \result != null;
+	  	ensures \result == getPlayers()[getCurrentPlayerIndex()].getName();
+	  */
 	public String getCurrentPlayer(){
 		return players[currentP].getName();
 
 	}
 	
+	/**
+	 * Get the String of the player whose turn is next.
+	 * @return returns the name of the player of the next turn.
+	 */
+	/*@
+	 	ensures \result != null;
+	 	ensures \result == getPlayers()[getCurrentPlayerIndex()+1].getName();
+	 */
 	public String getNextPlayer(){
 		int temp = currentP + 1 % 2;
 		return players[temp].getName();
@@ -72,6 +126,9 @@ public class Game {
 		}
 	}
 	
+	/*@
+	 	pure;
+	 */
 	public Player[] getPlayers() {
 		return players;
 	}

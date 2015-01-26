@@ -21,6 +21,7 @@ public abstract class Player {
 	
 	/*@
 	 	ensures \result != null;
+	 	pure;
 	 */
 	public String getName() {
 		return theName;
