@@ -69,7 +69,7 @@ public class Board {
 	}
 	
 	/**
-	 * Converts a index into a matrix
+	 * Converts an index into a matrix
 	 * @param i the index number of the field
 	 * @return an array of integers of length 2 with the first integer beeing the row of the maxtrix and the second integer the colum of the matrix.
 	 */

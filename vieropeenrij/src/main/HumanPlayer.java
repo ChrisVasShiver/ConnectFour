@@ -9,10 +9,28 @@ import java.util.Scanner;
  */
 public class HumanPlayer extends Player {
 
+	/**
+	 * Creates an instance of HumanPlayer.
+	 * @param name the given name of the player.
+	 * @param mark the given mark of the player.
+	 */
+	/*@
+	 requires name != null;
+	 requires mark == Mark.YELLOW || mark == Mark.RED;
+	 ensures getName() == name;
+	 ensures getMark() == mark;
+	 */
 	public HumanPlayer(String name, Mark mark) {
 		super(name, mark);
+		assert name != null;
+		assert mark == Mark.YELLOW || mark == Mark.RED;
 	}
 
+	/*
+	 * @ (non-Javadoc)
+	 * 
+	 * @see main.Player#determineMove(main.Board)
+	 */
 	@Override
 	public int determineMove(Board board) {
 		String message = "Enter your move";
@@ -32,6 +50,14 @@ public class HumanPlayer extends Player {
 		return value;
 	}
 	
+	/**
+	 * Reads a move from the input. Only used in the TUI.
+	 * @param message the input.
+	 * @return the move.
+	 */
+	/*@
+	 requires message != null;
+	 */
 	public int readInteger(String message) {
 		boolean isInteger = false;
 		int value = 0;
