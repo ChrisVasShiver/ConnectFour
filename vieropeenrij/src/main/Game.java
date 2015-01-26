@@ -1,5 +1,6 @@
 package main;
 
+import java.util.Observable;
 import java.util.Scanner;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Scanner;
  * @author C. Visscher and D. Ye
  * 
  */
-public class Game {
+public class Game extends Observable {
 
 	/*@
 	 invariant MAXPLAYER == 2; invariant YES == "yes"; invariant NO == "no";
@@ -201,6 +202,7 @@ public class Game {
 		while (!rules.getGameOver()) {
 			rules.isGameOver(players[getCurrentPlayerIndex()].getMark(),
 					players[getCurrentPlayerIndex()].doMove(board));
+			setChanged();
 			currentP = (currentP + 1) % MAXPLAYER;
 			update();
 		}
