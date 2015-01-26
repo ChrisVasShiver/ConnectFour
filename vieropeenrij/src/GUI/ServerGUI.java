@@ -122,7 +122,6 @@ public class ServerGUI extends JFrame implements ActionListener{
 	
 	public void startServer() {
 		int port = 0;
-		int max = 0;
 		
 		try {
 		port = Integer.parseInt(portTField.getText());

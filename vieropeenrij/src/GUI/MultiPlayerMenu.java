@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -19,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.text.DefaultCaret;
 
+import netwerk.Client;
 import main.Game;
 import main.HumanPlayer;
 import main.Mark;
@@ -55,6 +58,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener {
 	private Container c;
 	private JFrame frame;
 	private BoardGUI boardGUI;
+	private Client client;
 	
 	private JButton connectButton;
 	private JButton backButton;
@@ -122,7 +126,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener {
 		connectButton.setFont(menuFont);
 		connectButton.setForeground(Color.RED);
 		
-		String[] possibleAI = {"Random Strategy", "Smart Strategy"};
+		String[] possibleAI = {"Random Strategy"};
 		AIComboBox = new JComboBox<String>(possibleAI);
 		Font comboBoxFont = new Font("Ariel", Font.BOLD, AIComboBox.getFont().getSize() + 1);
 		AIComboBox.setEnabled(false);
@@ -177,6 +181,49 @@ public class MultiPlayerMenu implements ActionListener, ItemListener {
 		AICheckBox.setBounds((int)AIComboBox.getBounds().getMaxX() + SPACING * ClientGUI.SCALE, (int)portLabel.getBounds().getMaxY() + SPACING * ClientGUI.SCALE, checkBoxSize.width, checkBoxSize.height);
 		
 		messageBox.setBounds(SPACING * ClientGUI.SCALE, (int)AIComboBox.getBounds().getMaxY() + SPACING * ClientGUI.SCALE, messageBoxSize.width, messageBoxSize.height);
+	}
+	
+	public void addMessage(String message) {
+		messageBox.append(message + "\n");
+	}
+	
+	public void connect() {
+		int port = 0;
+		String IPadressstr = ipTField.getText();
+		InetAddress ipadress;
+		String name;
+		 
+		try {
+			port = Integer.parseInt(portTField.getText());
+		} catch (NumberFormatException e) {
+			addMessage("<Error: Invalid port:" + port + "!>");
+			return;
+		}
+		
+		if(AICheckBox.isSelected()) {
+			String AIname;
+			switch((String)AIComboBox.getSelectedItem()) {
+				case "Random Strategy" : AIname = "Random";
+					break;
+				default:
+					AIname = "Random";
+				
+			}
+			name = "AI_" + AIname + "_" + userTField.getText();
+		} else {
+			name = "";
+		}
+		 
+		 try {
+			 ipadress = InetAddress.getByName(IPadressstr);
+			 
+
+			 client = new Client(ipadress, port, name);
+	
+			 
+		 } catch(UnknownHostException e) {
+			 addMessage("<Error: Making Connection failed!>");
+		 }
 	}
 	
 	@Override
