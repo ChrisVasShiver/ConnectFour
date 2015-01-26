@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 
 import main.Board;
 import main.Game;
+import main.Mark;
 
 public class BoardGUI implements ActionListener {
 	
@@ -29,6 +30,7 @@ public class BoardGUI implements ActionListener {
 
 	
 	public BoardGUI(JFrame frame, Game game) {
+
 		this.frame = frame;
 		c = frame.getContentPane();
 		this.game = game;
@@ -36,29 +38,33 @@ public class BoardGUI implements ActionListener {
 	}
 	
 	public void buildBoardGUI() {
-		
-		boardPanel = new JPanel(new GridLayout(board.HEIGHT, board.WIDTH));
+		boardPanel = new JPanel();
 		boardPanel.setBackground(Color.BLACK);
-		p2 = new JPanel(new FlowLayout()); 
+		p2 = new JPanel(); 
 		p2.setBackground(Color.DARK_GRAY);
 		
 		for(int i = 0; i < Board.MAXFIELDS; i++) {
-			fields[i] = new JButton();
+			fields[i] = new JButton(Mark.EMPTY.toString());
 			fields[i].setBackground(Color.WHITE);
+			fields[i].addActionListener(this);
 			boardPanel.add(fields[i]);
 		}
 		
 		c.add(boardPanel);
 		c.add(p2);
 		
-		boardPanel.setBounds(0, 0, 960, 700);
-		p2.setBounds((int)boardPanel.getBounds().getMaxX(), 0, 320, 710);
+		boardPanel.setBounds(0, 0, 875, 700);
+		p2.setBounds((int)boardPanel.getBounds().getMaxX(), 0, 405, 710);
+		
+		for(int r = 0; r < board.HEIGHT; r++) {
+			for(int c = 0; c < board.WIDTH; c++) {
+				fields[board.matrixToIndex(r, c)].setBounds(c * 125, r * (710/6 - 3), 125, 710/6 - 3);
+			}
+		}
 	}
 	
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void actionPerformed(ActionEvent event) {	
 	}
 }

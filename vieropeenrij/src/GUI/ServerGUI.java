@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.BindException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -14,6 +15,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.text.DefaultCaret;
+
+import netwerk.Server;
 
 public class ServerGUI extends JFrame implements ActionListener{
 	private static final long serialVersionUID = 1L;
@@ -45,6 +48,8 @@ public class ServerGUI extends JFrame implements ActionListener{
 	private JButton stopButton;
 	private JTextArea messageBox;
 	
+	private Server server;
+	
 	public ServerGUI() {
 		buildGUI();		
 	}
@@ -61,7 +66,7 @@ public class ServerGUI extends JFrame implements ActionListener{
 		setTitle("ConnectFour Server");
 		setSize(dimension);
 		
-		ipLabel = new JLabel("Internet Adress:  ");
+		ipLabel = new JLabel("Host Adress:  ");
 		portLabel = new JLabel("Port: ");
 		
 		ipTField= new JTextField(getIPAddress());
@@ -111,16 +116,44 @@ public class ServerGUI extends JFrame implements ActionListener{
 		}
 	}
 	
+	public void addMessage(String message) {
+		messageBox.append(message + "\n");
+	}
+	
+	public void startServer() {
+		int port = 0;
+		int max = 0;
+		
+		try {
+		port = Integer.parseInt(portTField.getText());
+		} catch (NumberFormatException e) {
+			addMessage("<Error: Invalid Port!>");
+			startButton.setEnabled(true);
+			stopButton.setEnabled(false);
+			portTField.setEnabled(true);
+			return;
+		}
+		
+		server = new Server(port);
+		server.start();
+		addMessage("<Listening on port: " + port + ">");
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if(event.getSource() == startButton) {
 			startButton.setEnabled(false);
+			portTField.setEnabled(false);
 			stopButton.setEnabled(true);
+			startServer();
+
 		}
 		
 		if(event.getSource() == stopButton) {
 			startButton.setEnabled(true);
 			stopButton.setEnabled(false);
+			portTField.setEnabled(true);
+			addMessage("<Server has been shutdown>");
 		}
 	}
 	
