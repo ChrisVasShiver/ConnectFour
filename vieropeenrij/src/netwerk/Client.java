@@ -30,7 +30,21 @@ public class Client extends Thread implements ProtocolControl,
 	private Player thisplayer;
 	private boolean clientRunning;
 
+	/**
+	 * Creates a new instance of the Client.
+	 * @param InetAddress the given InetAddress for the Client.
+	 * @param port the given port for the Client
+	 * @param name the given name for the Client.
+	 */
+	/*@
+	 requires InetAddress != null;
+	 requires port > 0 && port <= 65535;
+	 requires name != null;
+	 */
 	public Client(InetAddress InetAddress, int port, String name) {
+		assert InetAddress != null;
+		assert port > 0 && port <= 65535;
+		assert name != null;
 		this.port = port;
 		this.name = name;
 		try {
@@ -68,11 +82,21 @@ public class Client extends Thread implements ProtocolControl,
 		}
 	}
 
+	/**
+	 * Handle all the commands incoming from the clienthandler from the server. Depending on the beginning of the String, a different method will be called.
+	 * @param command the string originating from the clienthandler/server. 
+	 */
+	/*@
+	 requires command != null;
+	 */
 	public void handleCommands(String command) {
 		String[] commandSplit = command.split(msgSeperator);
 
 		switch (commandSplit[0]) {
 
+		/**
+		 * Receives the board from the server. Adjust the board to the given String of marks.
+		 */
 		case sendBoard:
 			Mark mark = null;
 			for (int i = 1; 1 <= i && i < 42; i++) {
@@ -88,6 +112,9 @@ public class Client extends Thread implements ProtocolControl,
 				game.getBoard().setField(i - 1, mark);
 			}
 
+			/**
+			 * Receive an acceptrequest from the server. Set the player's mark to the given mark.
+			 */
 		case acceptRequest:
 			if (commandSplit[1].equals(yellow)) {
 				thisplayer.setMark(Mark.YELLOW);
@@ -97,6 +124,9 @@ public class Client extends Thread implements ProtocolControl,
 			}
 			break;
 
+			/**
+			 * Starts the game.
+			 */
 		case startGame:
 			Player opponent = null;
 			if (commandSplit[1].equals(this.name)) {
@@ -112,10 +142,16 @@ public class Client extends Thread implements ProtocolControl,
 			game.setCurrentPlayer(commandSplit[0]);
 			break;
 
+			/**
+			 * Receive the result from the Server when a move is done by either this player or the opponent.
+			 */
 		case moveResult:
 			game.getBoard().setField(Integer.parseInt(commandSplit[1]),
 					game.getPlayers()[game.getCurrentPlayerIndex()].getMark());
 
+			/**
+			 * Receive the player whose turn is next and set it to the currentplayer.
+			 */
 		case turn:
 			if (game.getNextPlayer().equals(commandSplit[1])) {
 				game.setCurrentPlayer(commandSplit[1]);
@@ -130,8 +166,8 @@ public class Client extends Thread implements ProtocolControl,
 			break;
 
 		// TODO
-		// case sendLeaderboard:
-		// break;
+		case sendLeaderboard:
+			break;
 
 		case invalidUsername:
 			System.out.println("ERROR: Username is invalid.");
@@ -154,14 +190,6 @@ public class Client extends Thread implements ProtocolControl,
 			System.out.println("ERROR: Please wait your turn.");
 			break;
 		}
-	}
-
-	/*
-	 * getBoard moet opgevraagd worden na elke zet en aan het begin van het spel
-	 */
-	public Board getBoard() {
-		return game.getBoard();
-
 	}
 
 	public void joinRequest(String clientname) {
@@ -209,16 +237,6 @@ public class Client extends Thread implements ProtocolControl,
 	}
 	
 
-	public void getGameBoard() {
-		try {
-			out.write(getBoard);
-			out.newLine();
-			out.flush();
-		} catch (IOException e) {
-
-		}
-	}
-
 	public void closeClient() {
 		try {
 			socket.close();
@@ -229,11 +247,26 @@ public class Client extends Thread implements ProtocolControl,
 		}
 	}
 
-	public boolean getClientRunning(){
-		return clientRunning;
-	}
 	public void sendMessage(String msg) {
 
+	}
+
+	public boolean getClientRunning() {
+		return clientRunning;
+	}
+
+	public void getGameBoard() {
+		try {
+			out.write(getBoard);
+			out.newLine();
+			out.flush();
+		} catch (IOException e) {
+
+		}
+	}
+
+	public Game getGame() {
+		return game;
 	}
 
 	public void getLeaderBoard() {
