@@ -24,16 +24,21 @@ public class Server extends Thread implements ProtocolControl,
 		this.port = port;
 		threads = new ArrayList<ClientHandler>();
 		clientqueue = new ArrayList<ClientHandler>();
-		
+
 	}
 
 	@Override
 	public void run() {
-		try {
-			ServerSocket serversocket = new ServerSocket(port);
-		} catch (IOException e) {
-			e.printStackTrace();
+		while (true) {
+			try {
+				ServerSocket serversocket = new ServerSocket(port);
+				ClientHandler clienthandler = new ClientHandler(serversocket);
+				clienthandler.setGameID(games.size());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+
 	}
 
 	public void handleCommands(String command, ClientHandler clienthandler) {
@@ -138,6 +143,6 @@ public class Server extends Thread implements ProtocolControl,
 	}
 
 	public void sendLeaderboard() {
-		
+
 	}
 }
