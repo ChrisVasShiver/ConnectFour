@@ -211,16 +211,13 @@ public class MultiPlayerMenu implements ActionListener, ItemListener {
 			}
 			name = "AI_" + AIname + "_" + userTField.getText();
 		} else {
-			name = "";
+			name = "Player_" + userTField.getHeight();
 		}
 		 
 		 try {
 			 ipadress = InetAddress.getByName(IPadressstr);
-			 
-
 			 client = new Client(ipadress, port, name);
-	
-			 
+			 client.start();
 		 } catch(UnknownHostException e) {
 			 addMessage("<Error: Making Connection failed!>");
 		 }
@@ -230,8 +227,8 @@ public class MultiPlayerMenu implements ActionListener, ItemListener {
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == connectButton) {
 			c.removeAll();
-			Game game = new Game(new HumanPlayer("Carolijn", Mark.RED), new HumanPlayer("Christiaan" ,Mark.YELLOW));
-			new BoardGUI(frame, game).buildBoardGUI();
+			connect();
+			new BoardGUI(frame, client.getGame()).buildBoardGUI();
 			c.repaint();
 		} else if(event.getSource() == backButton) {
 			c.removeAll();

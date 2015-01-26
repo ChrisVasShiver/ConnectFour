@@ -170,6 +170,10 @@ public class Client extends Thread implements ProtocolControl,
 	public String playerTurn() {
 		return game.getCurrentPlayer();
 	}
+	
+	public Game getGame() {
+		return game;
+	}
 
 	public void sendMessage(String msg) {
 

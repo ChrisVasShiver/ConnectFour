@@ -3,6 +3,7 @@ package netwerk;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class Server extends Thread implements ProtocolControl,
 	private List<ClientHandler> threads;
 	private List<ClientHandler> clientqueue;
 	private List<Game> games;
+	private boolean serverRunning = false;
 
 	public Server(int port) {
 		this.port = port;
@@ -33,19 +35,23 @@ public class Server extends Thread implements ProtocolControl,
 		// Start the server
 		try {
 			serversocket = new ServerSocket(port);
+			serverRunning = true;
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
+			serverRunning = false;
+			}
 
-		while (true) {
+		while (serverRunning) {
 			try {
 				Socket clientsocket = serversocket.accept();
 				ClientHandler clienthandler = new ClientHandler(clientsocket,
 						this);
 				clienthandler.setGameID(games.size());
 				threads.add(clienthandler);
-			} catch (IOException e) {
+			}  catch (SocketException e) {
+				break;
+			}  catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -206,6 +212,7 @@ public class Server extends Thread implements ProtocolControl,
 	// Closes the socket of the server, not allowing new connections.
 	public void stopConnections() {
 		try {
+			serverRunning = false;
 			serversocket.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

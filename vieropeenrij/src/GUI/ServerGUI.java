@@ -152,6 +152,7 @@ public class ServerGUI extends JFrame implements ActionListener{
 			startButton.setEnabled(true);
 			stopButton.setEnabled(false);
 			portTField.setEnabled(true);
+			server.stopConnections();
 			addMessage("<Server has been shutdown>");
 		}
 	}
