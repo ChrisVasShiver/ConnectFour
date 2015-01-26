@@ -54,7 +54,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentLi
 	private static int messageBoxWIDTH = ClientGUI.WIDTH - (2 * SPACING);
 	private static int messageBoxHEIGHT = ClientGUI.HEIGHT - (8 * SPACING) - (3 * labelHEIGHT) - comboBoxHEIGHT;
 	
-	private boolean connectionSucces = true;
+	private boolean connectionSucces;
 	
 	private MainMenu mainMenu;
 	private Container c;
@@ -200,7 +200,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentLi
 		String IPadressstr = ipTField.getText();
 		InetAddress ipadress;
 		String name;
-
+		connectionSucces = true;
 		
 		try {
 			port = Integer.parseInt(portTField.getText());
