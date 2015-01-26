@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,7 +16,7 @@ import main.Board;
 import main.Game;
 import main.Mark;
 
-public class BoardGUI implements ActionListener {
+public class BoardGUI {
 	
 	private Container c;
 	private Client client;
@@ -26,13 +28,16 @@ public class BoardGUI implements ActionListener {
 	private JButton[] fields = new JButton[board.MAXFIELDS];
 	private JPanel boardPanel;
 	private JPanel p2;
+	
+	private BoardController controller;
 
 	
 	public BoardGUI(JFrame frame, Client client) {
 		this.frame = frame;
 		c = frame.getContentPane();
-		this.client = client;
-		client.getBoard();
+		this.client = client;		
+		
+		controller = new BoardController();
 	}
 	
 	public void buildBoardGUI() {
@@ -44,7 +49,7 @@ public class BoardGUI implements ActionListener {
 		for(int i = 0; i < Board.MAXFIELDS; i++) {
 			fields[i] = new JButton(Mark.EMPTY.toString());
 			fields[i].setBackground(Color.WHITE);
-			fields[i].addActionListener(this);
+			fields[i].addActionListener(controller);
 			boardPanel.add(fields[i]);
 		}
 		
@@ -61,8 +66,27 @@ public class BoardGUI implements ActionListener {
 		}
 	}
 	
+	public class BoardController implements ActionListener, Observer {
+		
+		public BoardController() {
+			
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			for(int i = 0; i < Board.MAXFIELDS; i++) {
+				if(event.getSource() == fields[i]) {
+					client.doMove(i);
+				}
+			}
+			
+		}
 
-	@Override
-	public void actionPerformed(ActionEvent event) {	
+		@Override
+		public void update(Observable o, Object arg) {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 }
