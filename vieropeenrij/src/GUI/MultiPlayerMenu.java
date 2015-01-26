@@ -226,6 +226,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentLi
 			 client.start();
 		 } catch(UnknownHostException e) {
 			 addMessage("<Error: Making Connection failed!>");
+			 return;
 		 }
 	}
 		
