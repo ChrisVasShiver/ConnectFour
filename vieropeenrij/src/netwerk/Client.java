@@ -8,9 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
-import main.Board;
 import main.Game;
 import main.HumanPlayer;
 import main.Mark;
@@ -21,7 +19,14 @@ import netwerkprotocol.ProtocolControl;
 public class Client extends Thread implements ProtocolControl,
 		ProtocolConstants {
 
-	private int port;
+	/*@
+	 private invariant name.matches(charRegex);
+	 private invariant in != null;
+	 private invariant out != null;
+	 private invariant socket != null;
+	 private invariant game != null;
+	 private invariant thisplayer != null;
+	 */
 	private String name;
 	private BufferedReader in;
 	private BufferedWriter out;
@@ -29,7 +34,8 @@ public class Client extends Thread implements ProtocolControl,
 	private Game game;
 	private Player thisplayer;
 	private boolean clientRunning;
-
+	private String consoleMessage = null;
+	
 	/**
 	 * Creates a new instance of the Client.
 	 * @param InetAddress the given InetAddress for the Client.
@@ -45,7 +51,6 @@ public class Client extends Thread implements ProtocolControl,
 		assert InetAddress != null;
 		assert port > 0 && port <= 65535;
 		assert name != null;
-		this.port = port;
 		this.name = name;
 		try {
 			socket = new Socket(InetAddress, port);
@@ -63,6 +68,9 @@ public class Client extends Thread implements ProtocolControl,
 		}
 	}
 
+	/**
+	 * Read the commands from the clienthandler from the server.
+	 */
 	@Override
 	public void run() {
 		while (clientRunning) {
@@ -159,40 +167,61 @@ public class Client extends Thread implements ProtocolControl,
 			// return
 			// System.out.println("stuur naar de console dat dit niet werkt");
 			break;
-
+			
+			/**
+			 * End the game.
+			 */
 		case endGame:
 			game.endGame();
 			// verstuur nog naar console wie er heeft gewonnen
 			break;
 
-		// TODO
-		case sendLeaderboard:
-			break;
-
+			/**
+			 * Print in the client's console an error.
+			 */
 		case invalidUsername:
-			System.out.println("ERROR: Username is invalid.");
+			consoleMessage = invalidUsername;
 			break;
 
+			/**
+			 * Print in the client's console an error.
+			 */
 		case invalidMove:
-			System.out.println("ERROR: Move is invalid.");
+			consoleMessage = invalidMove;
 			break;
 
+			/**
+			 * Print in the client's console an error.
+			 */
 		case invalidCommand:
-			System.out.println("ERROR: Command is invalid.");
+			consoleMessage = invalidCommand;
 			break;
 
+			/**
+			 * Print in the client's console an error.
+			 */
 		case usernameInUse:
-			System.out
-					.println("ERROR: Username is in use, please use a different username.");
+			consoleMessage = usernameInUse;
 			break;
 
+			/**
+			 * Print in the client's console an error.
+			 */
 		case invalidUserTurn:
-			System.out.println("ERROR: Please wait your turn.");
+			consoleMessage = invalidUserTurn;
 			break;
 		}
 	}
 
+	/**
+	 * Send a request to the server to join.
+	 * @param clientname the name of the client.
+	 */
+	/*@
+	 requires clientname != null;
+	 */
 	public void joinRequest(String clientname) {
+		assert clientname != null;
 		try {
 			out.write(joinRequest + msgSeperator + clientname);
 			out.newLine();
@@ -204,11 +233,15 @@ public class Client extends Thread implements ProtocolControl,
 
 	}
 
-	/*
-	 * De client die aan de beurt is stuurt een “doMove” command gevolgd door
-	 * een spatie en dan de index waar hij zijn zet wil doen naar de server.
+	/**
+	 * The client sends its move to the server.
+	 * @param move the move of the client.
+	 */
+	/*@
+	 requires move >= 0 && move <= 41;
 	 */
 	public void doMove(int move) {
+		assert move >= 0 && move <= 41;
 		String doMove = Integer.toString(move);
 		try {
 			out.write(ProtocolControl.doMove + msgSeperator + doMove);
@@ -220,9 +253,8 @@ public class Client extends Thread implements ProtocolControl,
 		}
 	}
 
-	/*
-	 * opvragen wie aan de beurt is. Returned de naam van de client die aan de
-	 * beurt is.
+	/**
+	 * Ask the server whose turn it is.
 	 */
 	public void playerTurn() {
 		try {
@@ -236,7 +268,12 @@ public class Client extends Thread implements ProtocolControl,
 
 	}
 	
-
+	/**
+	 * Closes the client.
+	 */
+	/*@
+	 ensures getClientRunning() == false;
+	 */
 	public void closeClient() {
 		try {
 			socket.close();
@@ -247,14 +284,21 @@ public class Client extends Thread implements ProtocolControl,
 		}
 	}
 
-	public void sendMessage(String msg) {
-
-	}
-
+	/**
+	 * Get the status of the client. If it is initialized without any errors.
+	 * @return returns true if client is still running. Returns false if client is stopped.
+	 */
+	/*@
+	 ensures \result == true || \result == false;
+	 pure;
+	 */
 	public boolean getClientRunning() {
 		return clientRunning;
 	}
 
+	/**
+	 * Request the board from the server.
+	 */
 	public void getGameBoard() {
 		try {
 			out.write(getBoard);
@@ -265,8 +309,36 @@ public class Client extends Thread implements ProtocolControl,
 		}
 	}
 
+	/**
+	 * Get the game of the client.
+	 * @return returns the game.
+	 */
+	/*@
+	 ensures \result != null;
+	 */
 	public Game getGame() {
 		return game;
+	}
+	
+	/**
+	 * Get the console message for the client. And reset the consoleMessag variable to null.
+	 * @return returns the console message.
+	 */
+	public String getConsoleMessage(){
+		String message = consoleMessage;
+		consoleMessage = null;
+		return message;
+	}
+
+	/**
+	 * Send a chatmessage to the server.
+	 * @param msg the message
+	 */
+	/*@
+	 requires msg != null;
+	 */
+	public void sendMessage(String msg) {
+
 	}
 
 	public void getLeaderBoard() {
