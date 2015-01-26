@@ -69,23 +69,23 @@ public class Client extends Thread implements ProtocolControl,
 		case sendBoard:
 			Mark mark = null;
 			for (int i = 1; 1 <= i && i < 42; i++) {
-				if (commandSplit[i].equals(ProtocolConstants.yellow)) {
+				if (commandSplit[i].equals(yellow)) {
 					mark = Mark.YELLOW;
 				}
-				if (commandSplit[i].equals(ProtocolConstants.red)) {
+				if (commandSplit[i].equals(red)) {
 					mark = Mark.RED;
 				}
-				if (commandSplit[i].equals(ProtocolConstants.empty)) {
+				if (commandSplit[i].equals(empty)) {
 					mark = Mark.EMPTY;
 				}
 				game.getBoard().setField(i - 1, mark);
 			}
 
 		case acceptRequest:
-			if (commandSplit[1].equals(ProtocolConstants.yellow)) {
+			if (commandSplit[1].equals(yellow)) {
 				thisplayer.setMark(Mark.YELLOW);
 			}
-			if (commandSplit[1].equals(ProtocolConstants.red)) {
+			if (commandSplit[1].equals(red)) {
 				thisplayer.setMark(Mark.RED);
 			}
 			break;
@@ -106,37 +106,44 @@ public class Client extends Thread implements ProtocolControl,
 			break;
 
 		case moveResult:
-			
+			game.getBoard().setField(Integer.parseInt(commandSplit[1]),
+					game.getPlayers()[game.getCurrentPlayerIndex()].getMark());
+
 		case turn:
-			game.getCurrentPlayer();
+			if (game.getNextPlayer().equals(commandSplit[1])) {
+				game.setCurrentPlayer(commandSplit[1]);
+			}
+			// return
+			// System.out.println("stuur naar de console dat dit niet werkt");
 			break;
 
 		case endGame:
 			game.endGame();
+			// verstuur nog naar console wie er heeft gewonnen
 			break;
 
 		// TODO
 		// case sendLeaderboard:
 		// break;
 
-		case ProtocolConstants.invalidUsername:
+		case invalidUsername:
 			System.out.println("ERROR: Username is invalid.");
 			break;
 
-		case ProtocolConstants.invalidMove:
+		case invalidMove:
 			System.out.println("ERROR: Move is invalid.");
 			break;
 
-		case ProtocolConstants.invalidCommand:
+		case invalidCommand:
 			System.out.println("ERROR: Command is invalid.");
 			break;
 
-		case ProtocolConstants.usernameInUse:
+		case usernameInUse:
 			System.out
 					.println("ERROR: Username is in use, please use a different username.");
 			break;
 
-		case ProtocolConstants.invalidUserTurn:
+		case invalidUserTurn:
 			System.out.println("ERROR: Please wait your turn.");
 			break;
 		}
@@ -151,6 +158,14 @@ public class Client extends Thread implements ProtocolControl,
 	}
 
 	public void joinRequest(String clientname) {
+		try {
+			out.write(joinRequest + msgSeperator + clientname);
+			out.newLine();
+			out.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -158,21 +173,42 @@ public class Client extends Thread implements ProtocolControl,
 	 * De client die aan de beurt is stuurt een “doMove” command gevolgd door
 	 * een spatie en dan de index waar hij zijn zet wil doen naar de server.
 	 */
-	public String doMove(int move) {
+	public void doMove(int move) {
 		String doMove = Integer.toString(move);
-		return (ProtocolControl.doMove + ProtocolConstants.msgSeperator + doMove);
+		try {
+			out.write(ProtocolControl.doMove + msgSeperator + doMove);
+			out.newLine();
+			out.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/*
 	 * opvragen wie aan de beurt is. Returned de naam van de client die aan de
 	 * beurt is.
 	 */
-	public String playerTurn() {
-		return game.getCurrentPlayer();
+	public void playerTurn() {
+		try {
+			out.write(playerTurn);
+			out.newLine();
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		}
+
 	}
-	
-	public Game getGame() {
-		return game;
+
+	public void getGameBoard() {
+		try {
+			out.write(getBoard);
+			out.newLine();
+			out.flush();
+		} catch (IOException e) {
+
+		}
 	}
 
 	public void sendMessage(String msg) {
