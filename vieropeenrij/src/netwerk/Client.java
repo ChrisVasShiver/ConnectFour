@@ -5,10 +5,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import main.Board;
 import main.Game;
@@ -28,7 +26,6 @@ public class Client extends Thread implements ProtocolControl,
 	private Socket socket;
 	private Game game;
 	private Player thisplayer;
-	private boolean clientRunning;
 
 	public Client(InetAddress InetAddress, int port, String name) {
 		this.port = port;
@@ -39,22 +36,18 @@ public class Client extends Thread implements ProtocolControl,
 					socket.getInputStream()));
 			out = new BufferedWriter(new OutputStreamWriter(
 					socket.getOutputStream()));
-			clientRunning = true;
-		} catch (ConnectException e) {
+		} catch (IOException e) {
 			System.out.println("ERROR: could not create client on "
 					+ InetAddress + " and port " + port);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public void run() {
-		while (clientRunning) {
+		while (true) {
 			try {
 				if (in == null) {
-					closeClient();
+					// TODO
 				}
 
 				if (in.ready()) {
@@ -215,16 +208,6 @@ public class Client extends Thread implements ProtocolControl,
 			out.flush();
 		} catch (IOException e) {
 
-		}
-	}
-
-	public void closeClient() {
-		try {
-			socket.close();
-			clientRunning = false;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 
