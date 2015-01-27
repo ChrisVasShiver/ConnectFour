@@ -141,7 +141,7 @@ public class ServerGUI extends JFrame implements ActionListener{
 		}
 		
 		server = new Server(port);
-		server.start();
+		new Thread(server).start();
 		addMessage("<Listening on port: " + port + ">");
 	}
 	

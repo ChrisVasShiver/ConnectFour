@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 import main.Board;
 import main.Game;
@@ -15,8 +16,8 @@ import main.Player;
 import netwerkprotocol.ProtocolConstants;
 import netwerkprotocol.ProtocolControl;
 
-public class Server extends Thread implements ProtocolControl,
-		ProtocolConstants {
+public class Server extends Observable implements ProtocolControl,
+		ProtocolConstants, Runnable {
 
 	private int port;
 	private ServerSocket serversocket;
@@ -26,7 +27,6 @@ public class Server extends Thread implements ProtocolControl,
 	private boolean serverRunning = false;
 
 	public Server(int port) {
-		super("server");
 		this.port = port;
 		threads = new ArrayList<ClientHandler>();
 		clientqueue = new ArrayList<ClientHandler>();
@@ -119,7 +119,6 @@ public class Server extends Thread implements ProtocolControl,
 						&& game.getBoard().isEmptyField(move)) {
 					move = game.getBoard().dropMark(Mark.YELLOW, move);
 					game.getBoard().setField(move, Mark.YELLOW);
-					game.setNextPlayer();
 					for (ClientHandler clienthandlers : threads) {
 						if (clienthandler.getGameID() == clienthandlers
 								.getGameID()) {
@@ -127,6 +126,9 @@ public class Server extends Thread implements ProtocolControl,
 									clienthandler));
 						}
 					}
+					setChanged();
+					game.setNextPlayer();
+					notifyObservers("NEXT_PLAYER");
 				}
 				if (game.getCurrentPlayerIndex() == 1
 						&& game.getCurrentPlayer().equals(
@@ -134,7 +136,6 @@ public class Server extends Thread implements ProtocolControl,
 						&& game.getBoard().isEmptyField(move)) {
 					move = game.getBoard().dropMark(Mark.RED, move);
 					game.getBoard().setField(move, Mark.RED);
-					game.setNextPlayer();
 					for (ClientHandler clienthandlers : threads) {
 						if (clienthandler.getGameID() == clienthandlers
 								.getGameID()) {
@@ -142,6 +143,9 @@ public class Server extends Thread implements ProtocolControl,
 									clienthandler));
 						}
 					}
+					setChanged();
+					game.setNextPlayer();
+					notifyObservers("NEXT_PLAYER");
 				}
 				clienthandler.sendToClient(invalidMove);
 				if (games.get(clienthandler.getGameID()).getRules()

@@ -156,10 +156,10 @@ public class Game extends Observable {
 	 */
 	public void setCurrentPlayer(String name) {
 		assert name != null;
-		if (players[0].equals(name)) {
+		if (players[0].getName().equals(name)) {
 			currentP = 0;
 		}
-		if (players[1].equals(name)) {
+		if (players[1].getName().equals(name)) {
 			currentP = 1;
 		}
 	}

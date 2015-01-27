@@ -162,7 +162,7 @@ public class Client extends Observable implements ProtocolControl, Runnable,
 		case moveResult:
 			game.getBoard().setField(Integer.parseInt(commandSplit[1]),
 					game.getPlayers()[game.getCurrentPlayerIndex()].getMark());
-			game.setNextPlayer();
+			game.setCurrentPlayer(commandSplit[4]);
 			System.out.println("client moveResult: commandsplit " + commandSplit[4]);
 			System.out.println("client moveResult: getcurrentplayer " + game.getCurrentPlayer());
 			System.out.println(game.getCurrentPlayerIndex());
