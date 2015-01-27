@@ -296,6 +296,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener,
 				boolean temp = true;
 				while (client.getClientRunning() && temp) {
 					System.out.println(client.getGameRunning());
+
 					if (client.getGameRunning()) {
 						c.removeAll();
 						boardGUI = new BoardGUI(frame, client, this);

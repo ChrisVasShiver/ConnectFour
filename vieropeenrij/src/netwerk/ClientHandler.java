@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.net.SocketException;
 
 import netwerkprotocol.ProtocolConstants;
 
@@ -17,7 +18,7 @@ public class ClientHandler extends Thread {
 	private BufferedWriter out;
 	private Server server;
 	private String clientname;
-	
+
 	public ClientHandler(Socket socket, Server server) throws IOException {
 		super("clienthandler");
 		this.socket = socket;
@@ -47,8 +48,16 @@ public class ClientHandler extends Thread {
 				if (msg.equals("Stop")) {
 					break;
 				}
-			} catch (IOException e) {
 
+			} catch (Exception e) {
+				server.handleCommands("ConnectionLost", this);
+				/* SocketException = spel afgelopen! */
+				// server.broadcast(spelAfgelopen
+				// + msgDelim
+				// + server.getGame(this.GAMEID)
+				// .getWinnaar(server.getGame(GAMEID))
+				// .getPlayerName() + msgDelim
+				// + server.getGame(this.GAMEID).aanDeBeurt());
 			}
 		}
 	}
@@ -74,14 +83,14 @@ public class ClientHandler extends Thread {
 		this.gameID = gameID;
 	}
 
-	public String getClientName(){
+	public String getClientName() {
 		return clientname;
 	}
-	
-	public void setClientName(String clientname){
+
+	public void setClientName(String clientname) {
 		this.clientname = clientname;
 	}
-	
+
 	public void close() {
 		try {
 			socket.close();

@@ -98,6 +98,7 @@ public class Server extends Thread implements ProtocolControl,
 								clienthandler.getClientName())
 						&& game.getBoard().isEmptyField(move)) {
 					game.getBoard().setField(move, Mark.YELLOW);
+					game.setNextPlayer();
 					for (ClientHandler clienthandlers : threads) {
 						if (clienthandler.getGameID() == clienthandlers
 								.getGameID()) {
@@ -111,6 +112,7 @@ public class Server extends Thread implements ProtocolControl,
 								clienthandler.getClientName())
 						&& game.getBoard().isEmptyField(move)) {
 					game.getBoard().setField(move, Mark.RED);
+					game.setNextPlayer();
 					for (ClientHandler clienthandlers : threads) {
 						if (clienthandler.getGameID() == clienthandlers
 								.getGameID()) {
@@ -119,15 +121,15 @@ public class Server extends Thread implements ProtocolControl,
 						}
 					}
 				}
-			} catch (Exception e) {
 				clienthandler.sendToClient(invalidMove);
 				if (games.get(clienthandler.getGameID()).getRules()
 						.getGameOver()) {
 					game.setWinner(clienthandler.getClientName());
 					endGame(clienthandler.getGameID());
 				}
-				game.setNextPlayer();
 
+			} catch (Exception e) {
+				clienthandler.sendToClient(invalidMove);
 			}
 			break;
 
