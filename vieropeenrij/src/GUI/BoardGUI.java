@@ -111,7 +111,7 @@ public class BoardGUI {
 		
 		messageBox.setBounds(0, 0, messageBoxWIDTH, messageBoxHEIGHT);
 		scrollMessageBox.setBounds(0, 0, 400, 200);
-		backButton.setBounds(200, 350, buttonSize.width, buttonSize.height);
+		backButton.setBounds(200, (int)scrollMessageBox.getBounds().getMinY() + 100, buttonSize.width, buttonSize.height);
 		
 		c.add(boardPanel);
 		c.add(p2);
@@ -166,6 +166,11 @@ public class BoardGUI {
 					client.doMove(i);
 				}
 			}
+			if(event.getSource() == backButton) {
+				c.removeAll();
+				mpmenu.buildMPMenu();
+				c.repaint();
+			}
 			
 		}
 
@@ -177,7 +182,7 @@ public class BoardGUI {
 			switch(notify) {
 			case "UPDATE_BOARD" : updateBoard();
 			case "NEXT_PLAYER" : addMessage("It is " + game.getCurrentPlayer()  + "'s turn!");
-			case "SERVER_MESSAGE" : addMessage("hoi");
+			case "SERVER_MESSAGE" : addMessage(client.getConsoleMessage());
 			}
 		}
 		
