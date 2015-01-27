@@ -135,22 +135,28 @@ public class Client extends Thread implements ProtocolControl,
 			}
 			break;
 
-			/**
-			 * Starts the game.
-			 */
+		/**
+		 * Starts the game.
+		 */
 		case startGame:
 			System.out.println("Client, startgame case reached.");
-			Player opponent = null;
+			System.out.println("commandsplit1 = " + commandSplit[1]);
+			System.out.println("commandsplit2 = " + commandSplit[2]);
+			Player opponent;
 			if (commandSplit[1].equals(this.name)) {
 				thisplayer = new HumanPlayer(commandSplit[1], Mark.YELLOW);
 				opponent = new HumanPlayer(commandSplit[2], Mark.RED);
 				game = new Game(thisplayer, opponent);
+				System.out.println("Client, startgame if reached.");
 
 			} else {
 				thisplayer = new HumanPlayer(commandSplit[2], Mark.RED);
 				opponent = new HumanPlayer(commandSplit[1], Mark.YELLOW);
 				game = new Game(opponent, thisplayer);
+				System.out.println("Client, startgame else reached.");
+
 			}
+			
 			game.setCurrentPlayer(commandSplit[0]);
 			gameRunning = true;
 			break;
