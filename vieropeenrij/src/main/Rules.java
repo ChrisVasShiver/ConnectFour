@@ -148,13 +148,9 @@ public class Rules {
 	public boolean diagonalWin(Mark m, int index) {
 		assert m != null;
 		assert 0 <= index && index < Board.MAXFIELDS;
-		//loop_invariant 0 <= i && i < currentBoard.MAXFIEDS;
-		for (int i = 0; i < Board.MAXFIELDS; i++) {
-			if ((scanDiagonalLeftUp(m, index) + scanDiagonalRightDown(m, index) - 1 >= WINNERSBLOCK)
-					|| (scanDiagonalLeftDown(m, index)
-							+ scanDiagonalRightUp(m, index) - 1 >= WINNERSBLOCK)) {
+		if ((scanDiagonalLeftUp(m, index) + scanDiagonalRightDown(m, index) - 1 >= WINNERSBLOCK)|| 
+				(scanDiagonalLeftDown(m, index) + scanDiagonalRightUp(m, index) - 1 >= WINNERSBLOCK)) {
 				return true;
-			}
 		}
 		return false;
 	}
@@ -175,7 +171,7 @@ public class Rules {
 		assert m != null;
 		assert 0 < index && index < Board.MAXFIELDS;
 		int points = 0;
-		for (int i = index; i > 0; i -= 8) {
+		for (int i = index; i >= 0; i -= 8) {
 			if (i % 7 == 0 || i >= 1 && i <= 7) {
 				if (currentBoard.getField(i).equals(m) && points != 4) {
 					points++;
@@ -209,7 +205,7 @@ public class Rules {
 		assert m != null;
 		assert 0 < index && index < Board.MAXFIELDS;
 		int points = 0;
-		for (int i = index; i > 0; i += 6) {
+		for (int i = index; i < Board.MAXFIELDS; i += 6) {
 			if (i % 7 == 0 || i >= 35 && i <= 41) {
 				if (currentBoard.getField(i).equals(m) && points != 4) {
 					points++;
@@ -241,7 +237,7 @@ public class Rules {
 		assert m != null;
 		assert 0 <= index && index < Board.MAXFIELDS;
 		int points = 0;
-		for (int i = index; i > 0; i -= 6) {
+		for (int i = index; i >= 0; i -= 6) {
 			if (i >= 0 && i <= 6 || i == 13 || i == 20 || i == 27 ||  i == 34 || i == 41){
 				if (currentBoard.getField(i).equals(m) && points != 4) {
 					points++;
@@ -273,7 +269,7 @@ public class Rules {
 		assert m != null;
 		assert 0  <= index && index < Board.MAXFIELDS;
 		int points = 0;
-		for (int i = index; i > 0; i += 8) {
+		for (int i = index; i < Board.MAXFIELDS; i += 8) {
 			if (i >= 34 && i <= 41 || i == 6 || i == 13 || i == 20 || i == 27){
 				if (currentBoard.getField(i).equals(m) && points != 4) {
 					points++;
@@ -377,31 +373,4 @@ public class Rules {
 		gameover = false;
 		hasWinner = false;
 	}
-
-	public static void main(String[] args) {
-		Board board = new Board();
-		Rules rules = new Rules(board);
-
-		for (int i = 33; i > 0; i -= 8) {
-			board.setField(i, Mark.RED);
-		}
-		for(int i = 35; i > 0 ; i-=6){
-			board.setField(i, Mark.YELLOW);
-		}
-		for(int i = 36; i < 42; i++){
-			board.setField(i, Mark.RED);
-		}
-		for(int i = 0; i < 42; i+=7){
-			board.setField(i, Mark.YELLOW);
-		}
-		board.setField(41, Mark.RED);
-		System.out.println(board.toString());
-		System.out.println(rules.scanDiagonalLeftUp(Mark.RED, 41));
-		System.out.println(rules.scanDiagonalLeftDown(Mark.YELLOW, 5));
-		System.out.println("Scan horizontal " + rules.horizontalWin(Mark.RED, 38));
-		System.out.println(board.matrixToIndex(8, 0));
-		System.out.println("Scan vertical " + rules.verticalWin(Mark.YELLOW, 0));
-
-	}
-
 }
