@@ -277,7 +277,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener,
 		try {
 			ipadress = InetAddress.getByName(IPadressstr);
 			client = new Client(ipadress, port, name);
-			client.start();
+			new Thread(client).start();
 			client.joinRequest(name);
 		} catch (UnknownHostException e) {
 			addMessage("<Error: Making Connection failed!>");

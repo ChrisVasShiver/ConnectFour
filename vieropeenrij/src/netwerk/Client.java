@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Observable;
 
 import main.Game;
 import main.HumanPlayer;
@@ -16,7 +17,7 @@ import main.Player;
 import netwerkprotocol.ProtocolConstants;
 import netwerkprotocol.ProtocolControl;
 
-public class Client extends Thread implements ProtocolControl,
+public class Client extends Observable implements ProtocolControl, Runnable,
 		ProtocolConstants {
 
 	/*@
@@ -49,7 +50,6 @@ public class Client extends Thread implements ProtocolControl,
 	 requires name != null;
 	 */
 	public Client(InetAddress InetAddress, int port, String name) {
-		super("client");
 		assert InetAddress != null;
 		assert port > 0 && port <= 65535;
 		assert name != null;
@@ -162,8 +162,6 @@ public class Client extends Thread implements ProtocolControl,
 		case moveResult:
 			game.getBoard().setField(Integer.parseInt(commandSplit[1]),
 					game.getPlayers()[game.getCurrentPlayerIndex()].getMark());
-
-//			game.setCurrentPlayer(commandSplit[4]);
 			game.setNextPlayer();
 			System.out.println("client moveResult: commandsplit " + commandSplit[4]);
 			System.out.println("client moveResult: getcurrentplayer " + game.getCurrentPlayer());
@@ -185,7 +183,7 @@ public class Client extends Thread implements ProtocolControl,
 			 */
 		case endGame:
 			game.endGame();
-			// verstuur nog naar console wie er heeft gewonnen
+			closeClient();
 			break;
 
 			/**
@@ -337,13 +335,18 @@ public class Client extends Thread implements ProtocolControl,
 		return gameRunning;
 	}
 	/**
-	 * Get the console message for the client. And reset the consoleMessag variable to null.
-	 * @return returns the console message.
+	 * Set the console message for the client.
 	 */
+	public void setConsoleMessage(String message){
+		setChanged();
+		consoleMessage = message;
+		notifyObservers("SERVER_MESSAGE");
+	}
+	
 	public String getConsoleMessage(){
-		String message = consoleMessage;
+		String temp = consoleMessage;
 		consoleMessage = null;
-		return message;
+		return temp;
 	}
 
 	/**

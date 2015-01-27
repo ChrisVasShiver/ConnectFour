@@ -119,13 +119,32 @@ public class BoardGUI {
 			board.addObserver(this);
 		}
 		
-		
 		public void updateBoard() {
-			board = game.getBoard();
-			c.removeAll();
-			buildBoardGUI();
-			c.repaint();
-		}
+            board = game.getBoard();
+            boardPanel.removeAll();
+            for(int i = 0; i < Board.MAXFIELDS; i++) {
+                    fields[i] = new JButton();
+                    if (board.getField(i) == Mark.YELLOW) {
+                            fields[i].setBackground(Color.YELLOW);
+                            fields[i].setText(Mark.YELLOW.toString());
+                    } else if (board.getField(i) == Mark.RED) {
+                            fields[i].setBackground(Color.RED);
+                            fields[i].setText(Mark.RED.toString());
+                    } else {
+                            fields[i].setBackground(Color.WHITE);
+                            fields[i].setText(Mark.EMPTY.toString());
+                    }
+                    fields[i].addActionListener(controller);
+                    boardPanel.add(fields[i]);
+            }
+
+            for(int r = 0; r < board.HEIGHT; r++) {
+                    for(int c = 0; c < board.WIDTH; c++) {
+                            fields[(r * Board.WIDTH) + c].setBounds(c * 125, r * (710/6 - 3), 125, 710/6 - 3);
+                    }
+            }
+            boardPanel.repaint();
+    }
 		
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -145,6 +164,7 @@ public class BoardGUI {
 			switch(notify) {
 			case "UPDATE_BOARD" : updateBoard();
 			case "NEXT_PLAYER" : addMessage("It is " + game.getCurrentPlayer()  + "'s turn!");
+			case "SERVER_MESSAGE" : addMessage("hoi");
 			}
 		}
 		

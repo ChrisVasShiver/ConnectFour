@@ -76,9 +76,29 @@ public class Server extends Thread implements ProtocolControl,
 
 		case joinRequest:
 			clienthandler.setClientName(commandSplit[1]);
-			if (clienthandler.getClientName() != null
-					&& clienthandler.getClientName().matches(charRegex)
-					&& !clienthandler.getClientName().contains(" ")) {
+			boolean error = false;
+			try {
+				for (ClientHandler clienthandlers : threads) {
+					if (clienthandlers.getClientName().equals(
+							clienthandler.getClientName())) {
+						error = true;
+						throw new Exception();
+					}
+				}
+			} catch (Exception e) {
+				clienthandler.sendToClient(usernameInUse);
+			}
+
+			try {
+				if (!clienthandler.getClientName().matches(charRegex)
+						|| clienthandler.getClientName().contains(" ")) {
+					error = true;
+					throw new Exception();
+				}
+			} catch (Exception e) {
+				clienthandler.sendToClient(invalidUsername);
+			}
+			if (clienthandler.getClientName() != null && !error) {
 				addHandler(clienthandler);
 				if (clientqueue.size() == 2) {
 					for (ClientHandler handlers : clientqueue) {
@@ -97,6 +117,7 @@ public class Server extends Thread implements ProtocolControl,
 						&& game.getCurrentPlayer().equals(
 								clienthandler.getClientName())
 						&& game.getBoard().isEmptyField(move)) {
+					move = game.getBoard().dropMark(Mark.YELLOW, move);
 					game.getBoard().setField(move, Mark.YELLOW);
 					game.setNextPlayer();
 					for (ClientHandler clienthandlers : threads) {
@@ -111,6 +132,7 @@ public class Server extends Thread implements ProtocolControl,
 						&& game.getCurrentPlayer().equals(
 								clienthandler.getClientName())
 						&& game.getBoard().isEmptyField(move)) {
+					move = game.getBoard().dropMark(Mark.RED, move);
 					game.getBoard().setField(move, Mark.RED);
 					game.setNextPlayer();
 					for (ClientHandler clienthandlers : threads) {
@@ -127,7 +149,7 @@ public class Server extends Thread implements ProtocolControl,
 					game.setWinner(clienthandler.getClientName());
 					endGame(clienthandler.getGameID());
 				}
-
+				else throw new Exception();
 			} catch (Exception e) {
 				clienthandler.sendToClient(invalidMove);
 			}
@@ -137,6 +159,9 @@ public class Server extends Thread implements ProtocolControl,
 			clienthandler.sendToClient(games.get(clienthandler.getGameID())
 					.getCurrentPlayer());
 			break;
+
+		case "Stop":
+			removeClient(clienthandler);
 
 		case sendMessage:
 
@@ -253,6 +278,12 @@ public class Server extends Thread implements ProtocolControl,
 		}
 		// Remove the game from the list of games.
 		games.remove(gameID);
+	}
+
+	public void removeClient(ClientHandler clienthandler) {
+		for (ClientHandler clienthandlers : threads)
+			clienthandlers.sendToClient(connectionlost);
+		endGame(clienthandler.getGameID());
 	}
 
 	public void sendLeaderboard() {
