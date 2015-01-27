@@ -74,6 +74,14 @@ public class ClientHandler extends Thread {
 		this.gameID = gameID;
 	}
 
+	public String getClientName(){
+		return clientname;
+	}
+	
+	public void setClientName(String clientname){
+		this.clientname = clientname;
+	}
+	
 	public void close() {
 		try {
 			socket.close();

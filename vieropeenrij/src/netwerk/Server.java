@@ -75,13 +75,19 @@ public class Server extends Thread implements ProtocolControl,
 //			break;
 
 		case joinRequest:
-			if (clienthandler.getName() != null
-					&& clienthandler.getName().matches(charRegex)
-					&& !clienthandler.getName().contains(" ")) {
+			System.out.println("joinRequest case reached");
+			clienthandler.setClientName(commandSplit[1]);
+			System.out.println("Server, case joinrequest " + clienthandler.getClientName());
+			if (clienthandler.getClientName() != null
+					&& clienthandler.getClientName().matches(charRegex)
+					&& !clienthandler.getClientName().contains(" ")) {
 				addHandler(clienthandler);
 				System.out.println("Server, passed addHandler(clienthandler)");
 				if (clientqueue.size() == 2) {
-					clienthandler.sendToClient(startGame());
+					for (ClientHandler handlers : clientqueue) {
+						handlers.sendToClient(startGame());
+					}
+					clientqueue.clear();
 				}
 			}
 			break;
@@ -157,9 +163,8 @@ public class Server extends Thread implements ProtocolControl,
 	// Start a game when there are 2 clients in the queue.
 	public String startGame() {
 		String result = startGame + msgSeperator
-				+ clientqueue.get(0).toString() + msgSeperator
-				+ clientqueue.get(1).toString();
-		clientqueue.clear();
+				+ clientqueue.get(0).getClientName() + msgSeperator
+				+ clientqueue.get(1).getClientName();
 		return result;
 	}
 

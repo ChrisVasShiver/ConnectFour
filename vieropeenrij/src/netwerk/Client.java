@@ -35,6 +35,7 @@ public class Client extends Thread implements ProtocolControl,
 	private Player thisplayer;
 	private boolean clientRunning;
 	private String consoleMessage = null;
+	private boolean gameRunning = false;
 	
 	/**
 	 * Creates a new instance of the Client.
@@ -138,6 +139,7 @@ public class Client extends Thread implements ProtocolControl,
 			 * Starts the game.
 			 */
 		case startGame:
+			System.out.println("Client, startgame case reached.");
 			Player opponent = null;
 			if (commandSplit[1].equals(this.name)) {
 				thisplayer = new HumanPlayer(commandSplit[1], Mark.YELLOW);
@@ -150,6 +152,7 @@ public class Client extends Thread implements ProtocolControl,
 				game = new Game(opponent, thisplayer);
 			}
 			game.setCurrentPlayer(commandSplit[0]);
+			gameRunning = true;
 			break;
 
 			/**
@@ -280,6 +283,7 @@ public class Client extends Thread implements ProtocolControl,
 		try {
 			socket.close();
 			clientRunning = false;
+			gameRunning = false;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -322,6 +326,9 @@ public class Client extends Thread implements ProtocolControl,
 		return game;
 	}
 	
+	public boolean getGameRunning(){
+		return gameRunning;
+	}
 	/**
 	 * Get the console message for the client. And reset the consoleMessag variable to null.
 	 * @return returns the console message.

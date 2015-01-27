@@ -248,13 +248,21 @@ public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentLi
 			addMessage("<Message: Trying to connect, please wait!>");
 			connectButton.setEnabled(false);
 			connect();
+			System.out.println(connectionSucces);
 			if (connectionSucces && client.getClientRunning()) {
 				c.removeAll();
-				while (client.getGame() != null) {
-					boardGUI = new BoardGUI(frame, client, this);
-					boardGUI.buildBoardGUI();
-					c.repaint();
+				while (client.getClientRunning()) {
+					if (!client.getGameRunning()) {
+						boardGUI = new BoardGUI(frame, client, this);
+						boardGUI.buildBoardGUI();
+						c.repaint();
+					}
 				}
+//				while (client.getGame() != null) {
+//					boardGUI = new BoardGUI(frame, client, this);
+//					boardGUI.buildBoardGUI();
+//					c.repaint();
+//				}
 			} else {
 				addMessage("<Error: Making Connection failed!>");
 				connectButton.setEnabled(true);
