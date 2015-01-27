@@ -112,17 +112,30 @@ public class BoardGUI {
 			}
 			
 		}
+		
+		public void updateBoard() {
+			Board updateBoard = game.getBoard();
+			for(int i = 0; i < Board.MAXFIELDS; i++) {
+				if (updateBoard.getField(i) == Mark.YELLOW) {
+					fields[i].setBackground(Color.YELLOW);
+					fields[i].setText(Mark.YELLOW.toString());
+				} else if (updateBoard.getField(i) == Mark.RED) {
+					fields[i].setBackground(Color.RED);
+					fields[i].setText(Mark.RED.toString());
+				} else {
+					fields[i].setBackground(Color.WHITE);
+					fields[i].setText(Mark.EMPTY.toString());
+				}
+			}
+			c.invalidate();
+		}
 
 		@Override
 		public void update(Observable o, Object arg) {
 			String notify = (String)arg;
 			switch(notify) {
-			case "MOVEDONE":
+			case "UPDATE_BOARD" : updateBoard();
 			}
-		}
-		
-		public void guiGameOver() {
-			
 		}
 	}
 }
