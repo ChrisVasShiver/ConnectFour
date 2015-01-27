@@ -24,15 +24,16 @@ public class Server extends Thread implements ProtocolControl,
 	private boolean serverRunning = false;
 
 	public Server(int port) {
+		super("server");
 		this.port = port;
 		threads = new ArrayList<ClientHandler>();
 		clientqueue = new ArrayList<ClientHandler>();
-
+		games = new ArrayList<Game>();
 	}
 
 	@Override
 	public void run() {
-		// Start the server
+		// Create a new server socket.
 		try {
 			serversocket = new ServerSocket(port);
 			serverRunning = true;
@@ -42,14 +43,16 @@ public class Server extends Thread implements ProtocolControl,
 			serverRunning = false;
 			}
 
+		// Allow new connections if serverRunning == true.
 		while (serverRunning) {
 			try {
+				// Create niet clienthandler.
 				Socket clientsocket = serversocket.accept();
 				ClientHandler clienthandler = new ClientHandler(clientsocket,
 						this);
-				clienthandler.setGameID(games.size()+1);
-				threads.add(clienthandler);
-			}  catch (SocketException e) {
+				clienthandler.setGameID(games.size());
+				addHandler(clienthandler);
+			} catch (SocketException e) {
 				break;
 			}  catch (IOException e) {
 				e.printStackTrace();
@@ -113,6 +116,7 @@ public class Server extends Thread implements ProtocolControl,
 	public void addHandler(ClientHandler clienthandler) {
 		clientqueue.add(clienthandler);
 		threads.add(clienthandler);
+		clienthandler.start();
 		clienthandler.sendToClient(acceptRequest());
 	}
 
@@ -205,6 +209,28 @@ public class Server extends Thread implements ProtocolControl,
 		games.remove(gameID);
 	}
 
+	
+	/**
+	 * Stuur een msg naar de clients.
+	 * @param msg message that is send
+	 */
+	/*@
+	  requires msg != null;
+	 */
+	public void broadcast(String msg) {
+		/* Voldoe aan de preconditie */
+		assert msg != null;
+		
+		/* Berichten toevoegen */
+		if(this.isAlive()) {
+
+			/* Stuur het bericht naar alle handlers verbonden aan de server */
+			for(ClientHandler handler : threads) {
+				handler.sendToClient(msg);
+			}
+		}
+	}
+	
 	public void sendLeaderboard() {
 
 	}

@@ -48,6 +48,7 @@ public class Client extends Thread implements ProtocolControl,
 	 requires name != null;
 	 */
 	public Client(InetAddress InetAddress, int port, String name) {
+		super("client");
 		assert InetAddress != null;
 		assert port > 0 && port <= 65535;
 		assert name != null;
@@ -81,6 +82,7 @@ public class Client extends Thread implements ProtocolControl,
 
 				if (in.ready()) {
 					String command = in.readLine();
+					System.out.println(command);
 					handleCommands(command);
 				}
 			} catch (IOException e) {
@@ -125,7 +127,7 @@ public class Client extends Thread implements ProtocolControl,
 			 */
 		case acceptRequest:
 			if (commandSplit[1].equals(yellow)) {
-				thisplayer.setMark(Mark.YELLOW);
+				thisplayer = new HumanPlayer(name, Mark.YELLOW);
 			}
 			if (commandSplit[1].equals(red)) {
 				thisplayer.setMark(Mark.RED);

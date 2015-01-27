@@ -227,13 +227,14 @@ public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentLi
 			}
 			name = "AI_" + AIname + "_" + userTField.getText();
 		} else {
-			name = "Player_" + userTField.getHeight();
+			name = userTField.getText();
 		}
 		 
 		 try {
 			 ipadress = InetAddress.getByName(IPadressstr);
 			 client = new Client(ipadress, port, name);
 			 client.start();
+			 client.joinRequest(name);
 		 } catch(UnknownHostException e) {
 			 addMessage("<Error: Making Connection failed!>");
 			 connectionSucces = false;
@@ -247,16 +248,18 @@ public class MultiPlayerMenu implements ActionListener, ItemListener, DocumentLi
 			addMessage("<Message: Trying to connect, please wait!>");
 			connectButton.setEnabled(false);
 			connect();
-			if(connectionSucces && client.getClientRunning()) {
- 			c.removeAll();
-			boardGUI = new BoardGUI(frame, client, this);
-			boardGUI.buildBoardGUI();
-			c.repaint();
+			if (connectionSucces && client.getClientRunning()) {
+				c.removeAll();
+				while (client.getGame() != null) {
+					boardGUI = new BoardGUI(frame, client, this);
+					boardGUI.buildBoardGUI();
+					c.repaint();
+				}
 			} else {
 				addMessage("<Error: Making Connection failed!>");
 				connectButton.setEnabled(true);
 			}
-		} else if(event.getSource() == backButton) {
+		} else if (event.getSource() == backButton) {
 			c.removeAll();
 			mainMenu.buildMenu();
 			c.repaint();

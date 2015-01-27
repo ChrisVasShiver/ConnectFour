@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+import netwerkprotocol.ProtocolConstants;
+
 public class ClientHandler extends Thread {
 
 	private int gameID;
@@ -14,8 +16,10 @@ public class ClientHandler extends Thread {
 	private BufferedReader in;
 	private BufferedWriter out;
 	private Server server;
-
+	private String clientname;
+	
 	public ClientHandler(Socket socket, Server server) throws IOException {
+		super("clienthandler");
 		this.socket = socket;
 		this.server = server;
 		Thread clienthandler = new Thread(this);
@@ -27,18 +31,27 @@ public class ClientHandler extends Thread {
 
 	// Send to server
 	public void run() {
-		String msg;
-		try {
-			msg = in.readLine();
-			while (msg != null) {
+		while (true) {
+			try {
+				/* Lees het bericht vanaf de input stream */
+				String msg = in.readLine();
+				System.out.println("CH msg to server" + msg);
+
+				if (msg == null || msg.equals(null)) {
+					msg = "Stop";
+				}
+
+				/* Handle de commands op de server */
+				System.out.println(server.toString());
 				server.handleCommands(msg, this);
-				msg = in.readLine();
+
+				if (msg.equals("Stop")) {
+					break;
+				}
+			} catch (IOException e) {
+
 			}
-			close();
-		} catch (IOException e) {
-
 		}
-
 	}
 
 	// Send to client
