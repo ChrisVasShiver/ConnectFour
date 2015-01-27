@@ -190,35 +190,35 @@ public class Client extends Observable implements ProtocolControl, Runnable,
 			 * Print in the client's console an error.
 			 */
 		case invalidUsername:
-			consoleMessage = invalidUsername;
+			setConsoleMessage(invalidUsername);
 			break;
 
 			/**
 			 * Print in the client's console an error.
 			 */
 		case invalidMove:
-			consoleMessage = invalidMove;
+			setConsoleMessage(invalidMove);
 			break;
 
 			/**
 			 * Print in the client's console an error.
 			 */
 		case invalidCommand:
-			consoleMessage = invalidCommand;
+			setConsoleMessage(invalidCommand);
 			break;
 
 			/**
 			 * Print in the client's console an error.
 			 */
 		case usernameInUse:
-			consoleMessage = usernameInUse;
+			setConsoleMessage(usernameInUse);
 			break;
 
 			/**
 			 * Print in the client's console an error.
 			 */
 		case invalidUserTurn:
-			consoleMessage = invalidUserTurn;
+			setConsoleMessage(invalidUserTurn);
 			break;
 		}
 	}
