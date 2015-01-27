@@ -76,30 +76,22 @@ public class Server extends Thread implements ProtocolControl,
 
 		case joinRequest:
 			clienthandler.setClientName(commandSplit[1]);
-			try {
-				if (clienthandler.getClientName() != null
-						&& clienthandler.getClientName().matches(charRegex)
-						&& !clienthandler.getClientName().contains(" ")) {
-					try {
-						for (ClientHandler clienthandlers : threads){
-							if (clienthandlers.getName().equals(clienthandler.getClientName())){
-								addHandler(clienthandler);
-							}
-						}
-					} catch (Exception e){
-						clienthandler.sendToClient(usernameInUse);
-					}
-					if (clientqueue.size() == 2) {
-						for (ClientHandler handlers : clientqueue) {
-							handlers.sendToClient(startGame());
-						}
-						clientqueue.clear();
+			if (clienthandler.getClientName() != null
+					&& clienthandler.getClientName().matches(charRegex)
+					&& !clienthandler.getClientName().contains(" ")) {
+				for (ClientHandler clienthandlers : threads){
+					if (clienthandlers.getName().equals(clienthandler.getClientName())){
+						addHandler(clienthandler);
 					}
 				}
-			} catch (Exception e) {
-				clienthandler.sendToClient(invalidUsername);
 			}
-			break;
+			if (clientqueue.size() == 2) {
+				for (ClientHandler handlers : clientqueue) {
+					handlers.sendToClient(startGame());
+				}
+				clientqueue.clear();
+			}
+		break;
 
 		case doMove:
 			Game game = games.get(clienthandler.getGameID());

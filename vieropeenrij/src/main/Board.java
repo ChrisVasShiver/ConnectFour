@@ -7,7 +7,7 @@ import java.util.Observable;
  * @author C. Visscher and D. Ye
  * 
  */
-public class Board extends Observable{
+public class Board {
 	
 	/*@
 	 	invariant WIDTH == 7;
@@ -153,11 +153,9 @@ public class Board extends Observable{
 	 	ensures getField(i) == m;
 	 */
 	public void setField(int i, Mark m) {
-		setChanged();
 		assert 0 <= i && i < MAXFIELDS;
 		assert m == Mark.EMPTY || m == Mark.RED || m == Mark.YELLOW;
 		fields[i] = m;
-		notifyObservers("UPDATE_BOARD");
 	}
 	
 	/**
