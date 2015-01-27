@@ -9,7 +9,9 @@ import java.util.List;
 
 import main.Board;
 import main.Game;
+import main.HumanPlayer;
 import main.Mark;
+import main.Player;
 import netwerkprotocol.ProtocolConstants;
 import netwerkprotocol.ProtocolControl;
 
@@ -63,21 +65,19 @@ public class Server extends Thread implements ProtocolControl,
 	// Handle all the incoming commands from the client.
 	public void handleCommands(String command, ClientHandler clienthandler) {
 		String[] commandSplit = command.split(msgSeperator);
-		Game game = null;
 		System.out.println("Server, CH gameID = " + clienthandler.getGameID());
-//		if (games.get(clienthandler.getGameID()).equals(null)) {
-//			game = games.get(clienthandler.getGameID());
-//		}
+		
 		switch (commandSplit[0]) {
 
-//		case getBoard:
-//			clienthandler.sendToClient(sendBoard(game));
-//			break;
+		case getBoard:
+			clienthandler.sendToClient(sendBoard(games.get(clienthandler.getGameID())));
+			break;
 
 		case joinRequest:
 			System.out.println("joinRequest case reached");
 			clienthandler.setClientName(commandSplit[1]);
-			System.out.println("Server, case joinrequest " + clienthandler.getClientName());
+			System.out.println("Server, case joinrequest "
+					+ clienthandler.getClientName());
 			if (clienthandler.getClientName() != null
 					&& clienthandler.getClientName().matches(charRegex)
 					&& !clienthandler.getClientName().contains(" ")) {
@@ -92,27 +92,27 @@ public class Server extends Thread implements ProtocolControl,
 			}
 			break;
 
-//		case doMove:
-//			if (game.getCurrentPlayerIndex() == 0) {
-//				game.getBoard().setField(Integer.parseInt(commandSplit[1]),
-//						Mark.YELLOW);
-//			}
-//			if (game.getCurrentPlayerIndex() == 1) {
-//				game.getBoard().setField(Integer.parseInt(commandSplit[1]),
-//						Mark.RED);
-//			}
-//			if (!game.getRules().getGameOver()) {
-//				clienthandler.sendToClient(moveResult(
-//						Integer.parseInt(commandSplit[1]), clienthandler));
-//			}
-//			if (game.getRules().getGameOver()) {
-//				endGame(clienthandler.getGameID());
-//			}
-//			break;
-//
-//		case playerTurn:
-//			clienthandler.sendToClient(game.getCurrentPlayer());
-//			break;
+		case doMove:
+			if (games.get(clienthandler.getGameID()).getCurrentPlayerIndex() == 0) {
+				games.get(clienthandler.getGameID()).getBoard().setField(Integer.parseInt(commandSplit[1]),
+						Mark.YELLOW);
+			}
+			if (games.get(clienthandler.getGameID()).getCurrentPlayerIndex() == 1) {
+				games.get(clienthandler.getGameID()).getBoard().setField(Integer.parseInt(commandSplit[1]),
+						Mark.RED);
+			}
+			if (!games.get(clienthandler.getGameID()).getRules().getGameOver()) {
+				clienthandler.sendToClient(moveResult(
+						Integer.parseInt(commandSplit[1]), clienthandler));
+			}
+			if (games.get(clienthandler.getGameID()).getRules().getGameOver()) {
+				endGame(clienthandler.getGameID());
+			}
+			break;
+
+		case playerTurn:
+			clienthandler.sendToClient(games.get(clienthandler.getGameID()).getCurrentPlayer());
+			break;
 
 		case sendMessage:
 
@@ -162,9 +162,12 @@ public class Server extends Thread implements ProtocolControl,
 
 	// Start a game when there are 2 clients in the queue.
 	public String startGame() {
+		Player p1 = new HumanPlayer(clientqueue.get(0).getName(), Mark.YELLOW);
+		Player p2 = new HumanPlayer(clientqueue.get(1).getName(), Mark.RED);
 		String result = startGame + msgSeperator
 				+ clientqueue.get(0).getClientName() + msgSeperator
 				+ clientqueue.get(1).getClientName();
+		games.add(new Game(p1, p2));
 		return result;
 	}
 

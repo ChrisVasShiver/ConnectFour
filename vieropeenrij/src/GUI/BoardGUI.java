@@ -50,6 +50,7 @@ public class BoardGUI {
 		this.client = client;		
 		game = client.getGame();
 		board = game.getBoard();
+		System.out.println(board.toString());
 		
 		this.mpmenu = mpmenu;
 		
