@@ -34,7 +34,6 @@ public class ClientHandler extends Thread {
 		while (true) {
 			try {
 				/* Lees het bericht vanaf de input stream */
-				System.out.println("CH, reached in.readline, in run");
 				String msg = in.readLine();
 				System.out.println("CH msg to server " + msg);
 
@@ -57,6 +56,7 @@ public class ClientHandler extends Thread {
 	// Send to client
 	public void sendToClient(String msg) {
 		try {
+			System.out.println("CH reached sendToClient, " + msg);
 			out.write(msg);
 			out.newLine();
 			out.flush();

@@ -66,23 +66,20 @@ public class Server extends Thread implements ProtocolControl,
 	public void handleCommands(String command, ClientHandler clienthandler) {
 		String[] commandSplit = command.split(msgSeperator);
 		System.out.println("Server, CH gameID = " + clienthandler.getGameID());
-		
+
 		switch (commandSplit[0]) {
 
 		case getBoard:
-			clienthandler.sendToClient(sendBoard(games.get(clienthandler.getGameID())));
+			clienthandler.sendToClient(sendBoard(games.get(clienthandler
+					.getGameID())));
 			break;
 
 		case joinRequest:
-			System.out.println("joinRequest case reached");
 			clienthandler.setClientName(commandSplit[1]);
-			System.out.println("Server, case joinrequest "
-					+ clienthandler.getClientName());
 			if (clienthandler.getClientName() != null
 					&& clienthandler.getClientName().matches(charRegex)
 					&& !clienthandler.getClientName().contains(" ")) {
 				addHandler(clienthandler);
-				System.out.println("Server, passed addHandler(clienthandler)");
 				if (clientqueue.size() == 2) {
 					for (ClientHandler handlers : clientqueue) {
 						handlers.sendToClient(startGame());
@@ -93,25 +90,39 @@ public class Server extends Thread implements ProtocolControl,
 			break;
 
 		case doMove:
-			if (games.get(clienthandler.getGameID()).getCurrentPlayerIndex() == 0) {
-				games.get(clienthandler.getGameID()).getBoard().setField(Integer.parseInt(commandSplit[1]),
-						Mark.YELLOW);
+			Game game = games.get(clienthandler.getGameID());
+			int move = Integer.parseInt(commandSplit[1]);
+			try{
+			if (game.getCurrentPlayerIndex() == 0 && game.getCurrentPlayer().equals(clienthandler.getClientName()) && game.getBoard().isEmptyField(move)) {
+				game.getBoard().setField(move, Mark.YELLOW);
+				for (ClientHandler clienthandlers : threads){
+					if (clienthandler.getGameID() == clienthandlers.getGameID()){
+						clienthandlers.sendToClient(moveResult(move, clienthandler));
+						}
+					}
 			}
-			if (games.get(clienthandler.getGameID()).getCurrentPlayerIndex() == 1) {
-				games.get(clienthandler.getGameID()).getBoard().setField(Integer.parseInt(commandSplit[1]),
-						Mark.RED);
-			}
-			if (!games.get(clienthandler.getGameID()).getRules().getGameOver()) {
-				clienthandler.sendToClient(moveResult(
-						Integer.parseInt(commandSplit[1]), clienthandler));
-			}
+			if (game.getCurrentPlayerIndex() == 1 && game.getCurrentPlayer().equals(clienthandler.getClientName()) && game.getBoard().isEmptyField(move)) {
+				game.getBoard().setField(move, Mark.RED);
+				for (ClientHandler clienthandlers : threads){
+					if (clienthandler.getGameID() == clienthandlers.getGameID()){
+						clienthandlers.sendToClient(moveResult(move, clienthandler));
+							}
+						}
+					}
 			if (games.get(clienthandler.getGameID()).getRules().getGameOver()) {
 				endGame(clienthandler.getGameID());
+					}
+			game.setNextPlayer();
+
+				}
+			catch (Exception e) {
+				clienthandler.sendToClient(invalidMove);
 			}
 			break;
 
 		case playerTurn:
-			clienthandler.sendToClient(games.get(clienthandler.getGameID()).getCurrentPlayer());
+			clienthandler.sendToClient(games.get(clienthandler.getGameID())
+					.getCurrentPlayer());
 			break;
 
 		case sendMessage:
@@ -162,12 +173,18 @@ public class Server extends Thread implements ProtocolControl,
 
 	// Start a game when there are 2 clients in the queue.
 	public String startGame() {
-		Player p1 = new HumanPlayer(clientqueue.get(0).getName(), Mark.YELLOW);
-		Player p2 = new HumanPlayer(clientqueue.get(1).getName(), Mark.RED);
+		System.out.println("startgame" + clientqueue.get(0).getClientName());
+		System.out.println("startgame" + clientqueue.get(1).getClientName());
+
+		Player p1 = new HumanPlayer(clientqueue.get(0).getClientName(),
+				Mark.YELLOW);
+		Player p2 = new HumanPlayer(clientqueue.get(1).getClientName(),
+				Mark.RED);
 		String result = startGame + msgSeperator
 				+ clientqueue.get(0).getClientName() + msgSeperator
 				+ clientqueue.get(1).getClientName();
 		games.add(new Game(p1, p2));
+
 		return result;
 	}
 
@@ -177,14 +194,12 @@ public class Server extends Thread implements ProtocolControl,
 	 */
 	public String moveResult(int move, ClientHandler clienthandler) {
 		Game game = games.get(clienthandler.getGameID());
-		boolean validMove = game.getRules().isValidMove(move)
-				&& game.getBoard().isEmptyField(move);
-		if (validMove) {
-			game.setCurrentPlayer(game.getNextPlayer());
-		}
+		System.out.println(game.getCurrentPlayerIndex());
+		System.out.println(game.getNextPlayer());
+		System.out.println(game.getCurrentPlayerIndex());
 		return moveResult + msgSeperator + move + msgSeperator
-				+ game.getCurrentPlayer() + msgSeperator + validMove
-				+ msgSeperator + game.getCurrentPlayer();
+				+ game.getCurrentPlayer() + msgSeperator + true + msgSeperator
+				+ game.getNextPlayer();
 	}
 
 	public String turn(ClientHandler clienthandler) {
@@ -219,29 +234,6 @@ public class Server extends Thread implements ProtocolControl,
 		}
 		// Remove the game from the list of games.
 		games.remove(gameID);
-	}
-
-	/**
-	 * Stuur een msg naar de clients.
-	 * 
-	 * @param msg
-	 *            message that is send
-	 */
-	/*
-	 * @ requires msg != null;
-	 */
-	public void broadcast(String msg) {
-		/* Voldoe aan de preconditie */
-		assert msg != null;
-
-		/* Berichten toevoegen */
-		if (this.isAlive()) {
-
-			/* Stuur het bericht naar alle handlers verbonden aan de server */
-			for (ClientHandler handler : threads) {
-				handler.sendToClient(msg);
-			}
-		}
 	}
 
 	public void sendLeaderboard() {

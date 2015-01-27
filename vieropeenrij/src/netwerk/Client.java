@@ -139,25 +139,20 @@ public class Client extends Thread implements ProtocolControl,
 		 * Starts the game.
 		 */
 		case startGame:
-			System.out.println("Client, startgame case reached.");
-			System.out.println("commandsplit1 = " + commandSplit[1]);
-			System.out.println("commandsplit2 = " + commandSplit[2]);
 			Player opponent;
 			if (commandSplit[1].equals(this.name)) {
 				thisplayer = new HumanPlayer(commandSplit[1], Mark.YELLOW);
 				opponent = new HumanPlayer(commandSplit[2], Mark.RED);
 				game = new Game(thisplayer, opponent);
-				System.out.println("Client, startgame if reached.");
 
 			} else {
 				thisplayer = new HumanPlayer(commandSplit[2], Mark.RED);
 				opponent = new HumanPlayer(commandSplit[1], Mark.YELLOW);
 				game = new Game(opponent, thisplayer);
-				System.out.println("Client, startgame else reached.");
 
 			}
 			
-			game.setCurrentPlayer(commandSplit[0]);
+			game.setCurrentPlayer(commandSplit[1]);
 			gameRunning = true;
 			break;
 
@@ -167,6 +162,12 @@ public class Client extends Thread implements ProtocolControl,
 		case moveResult:
 			game.getBoard().setField(Integer.parseInt(commandSplit[1]),
 					game.getPlayers()[game.getCurrentPlayerIndex()].getMark());
+
+//			game.setCurrentPlayer(commandSplit[4]);
+			game.setNextPlayer();
+			System.out.println("client moveResult: commandsplit " + commandSplit[4]);
+			System.out.println("client moveResult: getcurrentplayer " + game.getCurrentPlayer());
+			System.out.println(game.getCurrentPlayerIndex());
 
 			/**
 			 * Receive the player whose turn is next and set it to the currentplayer.

@@ -116,7 +116,7 @@ public class Game extends Observable {
 	 ensures \result == getPlayers()[getCurrentPlayerIndex()+1].getName();
 	 */
 	public String getNextPlayer() {
-		int temp = currentP + 1 % 2;
+		int temp = (currentP + 1) % 2;
 		return players[temp].getName();
 	}
 
@@ -140,6 +140,9 @@ public class Game extends Observable {
 		if (players[1].equals(name)) {
 			currentP = 1;
 		}
+	}
+	public void setNextPlayer(){
+		currentP = (currentP + 1) % MAXPLAYER;
 	}
 
 	/**
