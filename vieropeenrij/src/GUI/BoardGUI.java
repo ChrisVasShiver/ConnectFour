@@ -28,6 +28,9 @@ public class BoardGUI {
 	private static int messageBoxHEIGHT = 200;
 	private static int scrollBarWIDTH = 4;
 	
+	private static int buttonWIDTH = 32;
+	private static int buttonHEIGHT = (buttonWIDTH / 16 * 9) / 2;
+	
 	private Container c;
 	private Client client;
 	private Game game;
@@ -35,11 +38,13 @@ public class BoardGUI {
 	private Board board;
 	private JFrame frame;
 	
+	private JButton backButton;
 	private JButton[] fields = new JButton[board.MAXFIELDS];
 	private JPanel boardPanel;
 	private JPanel p2;
 	private JTextArea messageBox;
 	private JScrollPane scrollMessageBox;
+	
 	
 	private BoardController controller;
 	
@@ -58,12 +63,13 @@ public class BoardGUI {
 	
 	public void buildBoardGUI() {
 		Dimension scrollBarSize = new Dimension(scrollBarWIDTH * ClientGUI.SCALE ,messageBoxHEIGHT * ClientGUI.SCALE);
-		
+		Dimension buttonSize = new Dimension(buttonWIDTH * ClientGUI.SCALE,
+				buttonHEIGHT * ClientGUI.SCALE);
 		
 		boardPanel = new JPanel();
 		boardPanel.setBackground(Color.BLACK);
 		p2 = new JPanel(); 
-		p2.setBackground(Color.DARK_GRAY);
+		p2.setBackground(Color.BLACK);
 		
 		for(int i = 0; i < Board.MAXFIELDS; i++) {
 			fields[i] = new JButton();
@@ -95,10 +101,17 @@ public class BoardGUI {
 		scrollMessageBox.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollMessageBox.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
+		backButton = new JButton("Back to Menu");
+		backButton.addActionListener(controller);
+		backButton.setBorderPainted(false);
+		backButton.setForeground(Color.RED);
+		
 		p2.add(scrollMessageBox);
+		p2.add(backButton);
 		
 		messageBox.setBounds(0, 0, messageBoxWIDTH, messageBoxHEIGHT);
 		scrollMessageBox.setBounds(0, 0, 400, 200);
+		backButton.setBounds(200, 350, buttonSize.width, buttonSize.height);
 		
 		c.add(boardPanel);
 		c.add(p2);
