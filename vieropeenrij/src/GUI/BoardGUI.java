@@ -66,10 +66,21 @@ public class BoardGUI {
 		p2.setBackground(Color.DARK_GRAY);
 		
 		for(int i = 0; i < Board.MAXFIELDS; i++) {
-			fields[i] = new JButton(Mark.EMPTY.toString());
-			fields[i].setBackground(Color.WHITE);
+			fields[i] = new JButton();
+			if (board.getField(i) == Mark.YELLOW) {
+				fields[i].setBackground(Color.YELLOW);
+				fields[i].setText(Mark.YELLOW.toString());
+			} else if (board.getField(i) == Mark.RED) {
+				fields[i].setBackground(Color.RED);
+				fields[i].setText(Mark.RED.toString());
+			} else {
+				fields[i].setBackground(Color.WHITE);
+				fields[i].setText(Mark.EMPTY.toString());
+			}
 			fields[i].addActionListener(controller);
 			boardPanel.add(fields[i]);
+		}
+		for(int i = 0; i < Board.MAXFIELDS; i++) {
 		}
 		
 		for(int r = 0; r < board.HEIGHT; r++) {
@@ -97,28 +108,23 @@ public class BoardGUI {
 		
 	}
 	
+	public void addMessage(String message) {
+		messageBox.append(message + "\n");
+	}
+	
 	public class BoardController implements ActionListener, Observer {
 		
 		public BoardController() {
+			game.addObserver(this);
 			board.addObserver(this);
 		}
 		
 		
 		public void updateBoard() {
-			Board updateBoard = game.getBoard();
-			for(int i = 0; i < Board.MAXFIELDS; i++) {
-				if (updateBoard.getField(i) == Mark.YELLOW) {
-					fields[i].setBackground(Color.YELLOW);
-					fields[i].setText(Mark.YELLOW.toString());
-				} else if (updateBoard.getField(i) == Mark.RED) {
-					fields[i].setBackground(Color.RED);
-					fields[i].setText(Mark.RED.toString());
-				} else {
-					fields[i].setBackground(Color.WHITE);
-					fields[i].setText(Mark.EMPTY.toString());
-				}
-			}
-			c.invalidate();
+			board = game.getBoard();
+			c.removeAll();
+			buildBoardGUI();
+			c.repaint();
 		}
 		
 		@Override
@@ -138,6 +144,7 @@ public class BoardGUI {
 			String notify = (String)arg;
 			switch(notify) {
 			case "UPDATE_BOARD" : updateBoard();
+			case "NEXT_PLAYER" : addMessage("It is " + game.getCurrentPlayer()  + "'s turn!");
 			}
 		}
 		
