@@ -7,14 +7,16 @@ import main.Rules;
 
 import org.junit.Before;
 import org.junit.Test;
-
+/**
+ * A test for the board Class
+ * @author C. Visscher and D. Ye
+ *
+ */
 public class TestBoard {
 	private Board board;
-	private Rules rules;
 	@Before
 	public void setUp() {
 		board = new Board();
-		rules = new Rules(board);
 	}
 
 	@Test
@@ -28,7 +30,7 @@ public class TestBoard {
 	public void testCopyBoard() {
 		Board testBoard = board.copyBoard();
 		for (int i = 0; i < Board.MAXFIELDS; i++) {
-			assertEquals("She if the copied board is the same", true, board.getField(i) == testBoard.getField(i));
+			assertEquals("See if the copied board is the same", true, board.getField(i) == testBoard.getField(i));
 		}
 	}
 	

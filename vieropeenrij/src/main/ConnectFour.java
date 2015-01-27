@@ -1,6 +1,7 @@
 	package main;
 
-import strategy.RandomStrategy;
+import GUI.ClientGUI;
+import GUI.ServerGUI;
 
 /**
  * 
@@ -9,7 +10,8 @@ import strategy.RandomStrategy;
  */
 public class ConnectFour {
 	public static void main(String[] args) {
-		Game game = new Game(new HumanPlayer("Carolijn", Mark.RED), new HumanPlayer("Christiaan" ,Mark.YELLOW));
-		game.start();
+		new ClientGUI();
+		new ClientGUI();
+		new ServerGUI();
 	}
 }

@@ -11,7 +11,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-
+/**
+ * GUI for the Credits Menu;
+ * @author C. Visscher and D. Ye
+ * @version 25-01-2015
+ */
 public class CreditsMenu implements ActionListener {
 	private static int SPACING = 4;
 	

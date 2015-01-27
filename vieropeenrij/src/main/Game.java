@@ -4,7 +4,7 @@ import java.util.Observable;
 import java.util.Scanner;
 
 /**
- * 
+ * The Game Class for the game, it manages the Connect Four game.
  * @author C. Visscher and D. Ye
  * 
  */

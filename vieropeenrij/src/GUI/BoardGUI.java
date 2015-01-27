@@ -18,7 +18,11 @@ import netwerk.Client;
 import main.Board;
 import main.Game;
 import main.Mark;
-
+/**
+ * The GUI that represents the board
+ * @author C. Visscher and D. Ye
+ * 
+ */
 public class BoardGUI {
 	private static int messageBoxWIDTH = 400;
 	private static int messageBoxHEIGHT = 200;

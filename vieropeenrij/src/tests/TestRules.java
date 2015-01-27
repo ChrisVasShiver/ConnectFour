@@ -7,7 +7,11 @@ import main.Rules;
 
 import org.junit.Before;
 import org.junit.Test;
-
+/**
+ * A test for the rules class
+ * @author C. Visscher and D. Ye
+ *
+ */
 public class TestRules {
 	private Board board;
 	private Rules rules;

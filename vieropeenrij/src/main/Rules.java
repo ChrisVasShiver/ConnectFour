@@ -1,7 +1,7 @@
 package main;
 
 /**
- * 
+ * The rules for the ConnectFour Game
  * @author C. Visscher and D. Ye
  *
  */

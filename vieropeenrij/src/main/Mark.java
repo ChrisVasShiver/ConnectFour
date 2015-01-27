@@ -1,7 +1,7 @@
 package main;
 
 /**
- * 
+ * The marks a field get set to in a board.
  * @author C. Visscher and D. Ye
  * 
  */

@@ -5,7 +5,11 @@ import java.awt.Container;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
-
+/**
+ * The Window(JFrame) from the client;
+ * @author C. Visscher and D. Ye
+ * @version 25-01-2015
+ */
 public class ClientGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
