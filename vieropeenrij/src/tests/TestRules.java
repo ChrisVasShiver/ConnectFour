@@ -62,7 +62,7 @@ public class TestRules {
 	@Test
 	public void testVerticalWin() {
 		for (int h = 0; h < Board.MAXFIELDS; h++) {
-			assertEquals("testHorizontal win is false for a empty field", false, rules.verticalWin(Mark.RED, h));
+			assertEquals("test vertial win is false for a empty field", false, rules.verticalWin(Mark.RED, h));
 		}
 		
 		for (int i = 0; i < Board.MAXFIELDS; i++) {
@@ -76,7 +76,7 @@ public class TestRules {
 			board.setField(board.matrixToIndex(3, col1), Mark.YELLOW);
 		}
 		for (int j = 0; j < 21; j++) {
-			assertEquals("testHorizontal win is false if it is broken 4 in a row", false, rules.verticalWin(Mark.RED, j));
+			assertEquals("test vetical win is false if it is broken 4 in a row", false, rules.verticalWin(Mark.RED, j));
 		}
 		
 		
@@ -84,34 +84,43 @@ public class TestRules {
 			board.setField(k, Mark.YELLOW);
 		}
 		for (int l = 0; l < 21; l++) {
-			assertEquals("testHorizontal win is true for a full yellow field", true, rules.verticalWin(Mark.YELLOW, l));
+			assertEquals("test vertical win is true for a full yellow field", true, rules.verticalWin(Mark.YELLOW, l));
 		}
 		
 		for (int col2 = 0; col2 < Board.WIDTH; col2++) {
 			board.setField(board.matrixToIndex(3, col2), Mark.RED);
 		}
 		for (int m = 0; m < 21; m++) {
-			assertEquals("testHorizontal win is false if it is broken 4 in a row", false, rules.verticalWin(Mark.YELLOW, m));
+			assertEquals("test vertical win is false if it is broken 4 in a row", false, rules.verticalWin(Mark.YELLOW, m));
 		}
 	}
 	
 	@Test
 	public void testScanDiagonalLeftUp() {
+		for(int i = 0; i < Board.MAXFIELDS; i++) {
+			assertEquals("Test empty field", 0, rules.scanDiagonalLeftUp(Mark.RED, i));
+		}
 	}
 	
 	@Test
 	public void testScanDiagonalLeftDown() {
-		
+		for(int i = 0; i < Board.MAXFIELDS; i++) {
+			assertEquals("Test empty field", 0, rules.scanDiagonalLeftDown(Mark.RED, i));
+		}
 	}
 	
 	@Test
 	public void testScanDiagonalRightUp() {
-		
+		for(int i = 0; i < Board.MAXFIELDS; i++) {
+			assertEquals("Test empty field", 0, rules.scanDiagonalRightUp(Mark.RED, i));
+		}
 	}
 	
 	@Test
 	public void testScanDiagonalRightDown() {
-		
+		for(int i = 0; i < Board.MAXFIELDS; i++) {
+			assertEquals("Test empty field", 0, rules.scanDiagonalRightDown(Mark.RED, i));
+		}
 	}
 	
 	@Test

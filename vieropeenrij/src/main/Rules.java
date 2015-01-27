@@ -179,13 +179,15 @@ public class Rules {
 			if (i % 7 == 0 || i >= 1 && i <= 7) {
 				if (currentBoard.getField(i).equals(m) && points != 4) {
 					points++;
-				}
+				} else {
 				break;
+				}
 			} else {
 				if (currentBoard.getField(i).equals(m) && points != 4) {
 					points++;
-				} else
+				} else {
 					break;
+				}
 			}
 		}
 		return points;
