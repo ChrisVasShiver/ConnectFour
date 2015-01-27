@@ -53,7 +53,7 @@ public class Rules {
 	public boolean isBoardFull() {
 		//@ loop_invariant 0 <= i && i < Board.MAXFIELDS;
 		for (int i = 0; i < Board.MAXFIELDS; i++) {
-			if (!currentBoard.isEmptyField(i)) {
+			if (currentBoard.isEmptyField(i)) {
 				return false;
 			}
 		}
@@ -117,17 +117,20 @@ public class Rules {
 		assert m != null;
 		assert 0 <= index && index < Board.MAXFIELDS;
 		int col = currentBoard.indexToMatrix(index)[1];
+		int startingRow = currentBoard.indexToMatrix(index)[0];
 		int countMark = 0;
-		for (int row = 0; 0 <= row && row < Board.HEIGHT; row += 7) {
-			if (currentBoard.getField(currentBoard.matrixToIndex(row, col))
-					.equals(m) && countMark != WINNERSBLOCK) {
+		for (int row = startingRow; row < Board.HEIGHT; row++) {
+			if (currentBoard.getField(currentBoard.matrixToIndex(row, col)).equals(m)) {
 				countMark++;
+			} else {
+				break;
 			}
 		}
 		if (countMark >= WINNERSBLOCK) {
 			return true;
+		} else {
+			return false;
 		}
-		return false;
 	}
 
 	/**
