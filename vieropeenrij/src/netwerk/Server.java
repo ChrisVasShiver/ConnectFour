@@ -79,56 +79,49 @@ public class Server extends Thread implements ProtocolControl,
 			if (clienthandler.getClientName() != null
 					&& clienthandler.getClientName().matches(charRegex)
 					&& !clienthandler.getClientName().contains(" ")) {
-				addHandler(clienthandler);
-				if (clientqueue.size() == 2) {
-					for (ClientHandler handlers : clientqueue) {
-						handlers.sendToClient(startGame());
+				for (ClientHandler clienthandlers : threads){
+					if (clienthandlers.getName().equals(clienthandler.getClientName())){
+						addHandler(clienthandler);
 					}
-					clientqueue.clear();
 				}
 			}
-			break;
+			if (clientqueue.size() == 2) {
+				for (ClientHandler handlers : clientqueue) {
+					handlers.sendToClient(startGame());
+				}
+				clientqueue.clear();
+			}
+		break;
 
 		case doMove:
 			Game game = games.get(clienthandler.getGameID());
 			int move = Integer.parseInt(commandSplit[1]);
-			try {
-				if (game.getCurrentPlayerIndex() == 0
-						&& game.getCurrentPlayer().equals(
-								clienthandler.getClientName())
-						&& game.getBoard().isEmptyField(move)) {
-					game.getBoard().setField(move, Mark.YELLOW);
-					for (ClientHandler clienthandlers : threads) {
-						if (clienthandler.getGameID() == clienthandlers
-								.getGameID()) {
-							clienthandlers.sendToClient(moveResult(move,
-									clienthandler));
+			try{
+			if (game.getCurrentPlayerIndex() == 0 && game.getCurrentPlayer().equals(clienthandler.getClientName()) && game.getBoard().isEmptyField(move)) {
+				game.getBoard().setField(move, Mark.YELLOW);
+				for (ClientHandler clienthandlers : threads){
+					if (clienthandler.getGameID() == clienthandlers.getGameID()){
+						clienthandlers.sendToClient(moveResult(move, clienthandler));
 						}
 					}
-				}
-				if (game.getCurrentPlayerIndex() == 1
-						&& game.getCurrentPlayer().equals(
-								clienthandler.getClientName())
-						&& game.getBoard().isEmptyField(move)) {
-					game.getBoard().setField(move, Mark.RED);
-					for (ClientHandler clienthandlers : threads) {
-						if (clienthandler.getGameID() == clienthandlers
-								.getGameID()) {
-							clienthandlers.sendToClient(moveResult(move,
-									clienthandler));
-						}
-					}
-				}
-			} catch (Exception e) {
-				clienthandler.sendToClient(invalidMove);
-				if (games.get(clienthandler.getGameID()).getRules()
-						.getGameOver()) {
-					game.setWinner(clienthandler.getClientName());
-					endGame(clienthandler.getGameID());
-				}
-				game.setNextPlayer();
-
 			}
+			if (game.getCurrentPlayerIndex() == 1 && game.getCurrentPlayer().equals(clienthandler.getClientName()) && game.getBoard().isEmptyField(move)) {
+				game.getBoard().setField(move, Mark.RED);
+				for (ClientHandler clienthandlers : threads){
+					if (clienthandler.getGameID() == clienthandlers.getGameID()){
+						clienthandlers.sendToClient(moveResult(move, clienthandler));
+							}
+						}
+					}
+			} catch (Exception e){
+				clienthandler.sendToClient(invalidMove);
+			if (games.get(clienthandler.getGameID()).getRules().getGameOver()) {
+				game.setWinner(clienthandler.getClientName());
+				endGame(clienthandler.getGameID());
+					}
+			game.setNextPlayer();
+
+				}
 			break;
 
 		case playerTurn:
@@ -240,8 +233,7 @@ public class Server extends Thread implements ProtocolControl,
 		for (ClientHandler clienthandler : threads) {
 			if (clienthandler.getGameID() == gameID) {
 				clienthandler.sendToClient(gameIsOver(clienthandler));
-				if (games.get(clienthandler.getGameID()).getWinner()
-						.equals(clienthandler.getClientName())) {
+				if (games.get(clienthandler.getGameID()).getWinner().equals(clienthandler.getClientName())){
 					clienthandler.sendToClient(winner);
 				}
 				// Removes the clienthandler from the list of connected threads

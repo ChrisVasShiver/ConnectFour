@@ -100,7 +100,7 @@ public class BoardGUI {
 	public class BoardController implements ActionListener, Observer {
 		
 		public BoardController() {
-//			game.addObserver(this);
+			game.addObserver(this);
 		}
 		
 		@Override
