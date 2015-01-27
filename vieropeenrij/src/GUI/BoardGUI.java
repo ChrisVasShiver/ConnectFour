@@ -133,9 +133,11 @@ public class BoardGUI {
 
 		@Override
 		public void update(Observable o, Object arg) {
+			assert o != null;
+			assert arg != null;
 			String notify = (String)arg;
 			switch(notify) {
-			case "UPDATE_BOARD" :
+			case "UPDATE_BOARD" : updateBoard();
 			}
 		}
 		
