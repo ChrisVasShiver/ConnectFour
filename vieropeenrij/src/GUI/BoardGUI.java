@@ -111,7 +111,7 @@ public class BoardGUI {
 		
 		messageBox.setBounds(0, 0, messageBoxWIDTH, messageBoxHEIGHT);
 		scrollMessageBox.setBounds(0, 0, 400, 200);
-		backButton.setBounds(200, (int)scrollMessageBox.getBounds().getMinY() + 100, buttonSize.width, buttonSize.height);
+		backButton.setBounds((405 - buttonSize.width) / 2 , 710 / 2, buttonSize.width, buttonSize.height);
 		
 		c.add(boardPanel);
 		c.add(p2);
@@ -168,6 +168,7 @@ public class BoardGUI {
 			}
 			if(event.getSource() == backButton) {
 				c.removeAll();
+				client.closeClient();
 				mpmenu.buildMPMenu();
 				c.repaint();
 			}
