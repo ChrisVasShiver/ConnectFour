@@ -34,15 +34,15 @@ public class ClientHandler extends Thread {
 		while (true) {
 			try {
 				/* Lees het bericht vanaf de input stream */
+				System.out.println("CH, reached in.readline, in run");
 				String msg = in.readLine();
-				System.out.println("CH msg to server" + msg);
+				System.out.println("CH msg to server " + msg);
 
 				if (msg == null || msg.equals(null)) {
 					msg = "Stop";
 				}
 
 				/* Handle de commands op de server */
-				System.out.println(server.toString());
 				server.handleCommands(msg, this);
 
 				if (msg.equals("Stop")) {

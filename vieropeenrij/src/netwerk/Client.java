@@ -82,7 +82,7 @@ public class Client extends Thread implements ProtocolControl,
 
 				if (in.ready()) {
 					String command = in.readLine();
-					System.out.println(command);
+					System.out.println("Client, run method, " + command);
 					handleCommands(command);
 				}
 			} catch (IOException e) {
@@ -130,7 +130,7 @@ public class Client extends Thread implements ProtocolControl,
 				thisplayer = new HumanPlayer(name, Mark.YELLOW);
 			}
 			if (commandSplit[1].equals(red)) {
-				thisplayer.setMark(Mark.RED);
+				thisplayer = new HumanPlayer(name, Mark.RED);
 			}
 			break;
 
