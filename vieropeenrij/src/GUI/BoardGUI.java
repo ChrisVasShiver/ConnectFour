@@ -37,12 +37,7 @@ public class BoardGUI {
 	private JTextArea messageBox;
 	private JScrollPane scrollMessageBox;
 	
-	
 	private BoardController controller;
-	
-
-
-	
 	
 	public BoardGUI(JFrame frame, Client client, MultiPlayerMenu mpmenu) {
 		this.frame = frame;
@@ -116,8 +111,10 @@ public class BoardGUI {
 
 		@Override
 		public void update(Observable o, Object arg) {
-			// TODO Auto-generated method stub
-			
+			String notify = (String)arg;
+			switch(notify) {
+			case "MOVEDONE":
+			}
 		}
 		
 		public void guiGameOver() {

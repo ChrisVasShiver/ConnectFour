@@ -200,10 +200,11 @@ public class Game extends Observable {
 	 */
 	public void gameLoop() {
 		while (!rules.getGameOver()) {
+			setChanged();
 			rules.isGameOver(players[getCurrentPlayerIndex()].getMark(),
 					players[getCurrentPlayerIndex()].doMove(board));
-			setChanged();
 			currentP = (currentP + 1) % MAXPLAYER;
+			notifyObservers("MOVEDONE");
 			update();
 		}
 		endGame();
