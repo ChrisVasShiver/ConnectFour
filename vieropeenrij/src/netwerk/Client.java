@@ -168,7 +168,7 @@ public class Client extends Thread implements ProtocolControl,
 			System.out.println("client moveResult: commandsplit " + commandSplit[4]);
 			System.out.println("client moveResult: getcurrentplayer " + game.getCurrentPlayer());
 			System.out.println(game.getCurrentPlayerIndex());
-
+			
 			/**
 			 * Receive the player whose turn is next and set it to the currentplayer.
 			 */

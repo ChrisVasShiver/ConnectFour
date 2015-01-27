@@ -76,16 +76,28 @@ public class Server extends Thread implements ProtocolControl,
 
 		case joinRequest:
 			clienthandler.setClientName(commandSplit[1]);
-			if (clienthandler.getClientName() != null
-					&& clienthandler.getClientName().matches(charRegex)
-					&& !clienthandler.getClientName().contains(" ")) {
-				addHandler(clienthandler);
-				if (clientqueue.size() == 2) {
-					for (ClientHandler handlers : clientqueue) {
-						handlers.sendToClient(startGame());
+			try {
+				if (clienthandler.getClientName() != null
+						&& clienthandler.getClientName().matches(charRegex)
+						&& !clienthandler.getClientName().contains(" ")) {
+					try {
+						for (ClientHandler clienthandlers : threads){
+							if (clienthandlers.getName().equals(clienthandler.getClientName())){
+								addHandler(clienthandler);
+							}
+						}
+					} catch (Exception e){
+						clienthandler.sendToClient(usernameInUse);
 					}
-					clientqueue.clear();
+					if (clientqueue.size() == 2) {
+						for (ClientHandler handlers : clientqueue) {
+							handlers.sendToClient(startGame());
+						}
+						clientqueue.clear();
+					}
 				}
+			} catch (Exception e) {
+				clienthandler.sendToClient(invalidUsername);
 			}
 			break;
 
@@ -109,15 +121,15 @@ public class Server extends Thread implements ProtocolControl,
 							}
 						}
 					}
+			} catch (Exception e){
+				clienthandler.sendToClient(invalidMove);
 			if (games.get(clienthandler.getGameID()).getRules().getGameOver()) {
+				game.setWinner(clienthandler.getClientName());
 				endGame(clienthandler.getGameID());
 					}
 			game.setNextPlayer();
 
 				}
-			catch (Exception e) {
-				clienthandler.sendToClient(invalidMove);
-			}
 			break;
 
 		case playerTurn:
@@ -219,6 +231,7 @@ public class Server extends Thread implements ProtocolControl,
 		if (game.getRules().getGameOver() && !game.getRules().getHasWinner()) {
 			result = "Tied game";
 			reason = "Board is full";
+			clienthandler.sendToClient(draw);
 		}
 		return endGame + msgSeperator + result + msgSeperator + reason;
 	}
@@ -228,8 +241,12 @@ public class Server extends Thread implements ProtocolControl,
 		for (ClientHandler clienthandler : threads) {
 			if (clienthandler.getGameID() == gameID) {
 				clienthandler.sendToClient(gameIsOver(clienthandler));
+				if (games.get(clienthandler.getGameID()).getWinner().equals(clienthandler.getClientName())){
+					clienthandler.sendToClient(winner);
+				}
 				// Removes the clienthandler from the list of connected threads
 				threads.remove(clienthandler);
+
 			}
 		}
 		// Remove the game from the list of games.

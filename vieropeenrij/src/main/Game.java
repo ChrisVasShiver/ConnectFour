@@ -1,6 +1,5 @@
 package main;
 
-import java.util.Observable;
 import java.util.Scanner;
 
 /**
@@ -8,7 +7,7 @@ import java.util.Scanner;
  * @author C. Visscher and D. Ye
  * 
  */
-public class Game extends Observable {
+public class Game {
 
 	/*@
 	 invariant MAXPLAYER == 2; invariant YES == "yes"; invariant NO == "no";
@@ -26,6 +25,7 @@ public class Game extends Observable {
 	private Player[] players;
 	private int currentP;
 	private boolean running = false;
+	private String winner;
 
 	/**
 	 * Creates a new Game class. It also creates a new instance of board and
@@ -119,6 +119,27 @@ public class Game extends Observable {
 		int temp = (currentP + 1) % 2;
 		return players[temp].getName();
 	}
+	
+	/**
+	 * Get the winner of the game.
+	 * @return the winner.
+	 */
+	public String getWinner(){
+		return winner;
+	}
+	
+	/**
+	 * Sets the String of the winner.
+	 * @param winner the winner
+	 */
+	/*@
+	 requires winner != null;
+	 ensures getWinner() == winner;
+	 */
+	public void setWinner(String winner){
+		assert winner != null;
+		this.winner = winner;
+	}
 
 	/**
 	 * Change the currentplayer to the given name, only if the given name in the
@@ -203,11 +224,9 @@ public class Game extends Observable {
 	 */
 	public void gameLoop() {
 		while (!rules.getGameOver()) {
-			setChanged();
 			rules.isGameOver(players[getCurrentPlayerIndex()].getMark(),
 					players[getCurrentPlayerIndex()].doMove(board));
 			currentP = (currentP + 1) % MAXPLAYER;
-			notifyObservers("MOVEDONE");
 			update();
 		}
 		endGame();
