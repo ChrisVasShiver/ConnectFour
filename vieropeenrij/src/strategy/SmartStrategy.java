@@ -26,6 +26,7 @@ public class SmartStrategy implements Strategy{
 			if (testMoveBoard.getField(i) == Mark.EMPTY) {
 				testMoveBoard.setField(i, m);
 			}
+			testRules.isGameOver(m, i);
 			if (testRules.getHasWinner()) {
 				return i;
 			}
@@ -37,6 +38,7 @@ public class SmartStrategy implements Strategy{
 			if (testMoveBoard.getField(j) == Mark.EMPTY) {
 				testMoveBoard.setField(j, m.opponent());
 			}
+			testRules.isGameOver(m.opponent(), j);
 			if (testRules.getHasWinner()) {
 				return j;
 			}
