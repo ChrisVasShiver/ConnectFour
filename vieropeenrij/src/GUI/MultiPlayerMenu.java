@@ -143,7 +143,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener,
 		connectButton.setFont(menuFont);
 		connectButton.setForeground(Color.RED);
 
-		String[] possibleAI = { "Random Strategy" };
+		String[] possibleAI = { "Random Strategy", "Smart Strategy" };
 		AIComboBox = new JComboBox<String>(possibleAI);
 		Font comboBoxFont = new Font("Ariel", Font.BOLD, AIComboBox.getFont()
 				.getSize() + 1);
@@ -265,9 +265,11 @@ public class MultiPlayerMenu implements ActionListener, ItemListener,
 			case "Random Strategy":
 				AIname = "Random";
 				break;
+			case "Smart Strategy" :
+				AIname = "Smart";
 			default:
 				AIname = "Random";
-
+				break;
 			}
 			name = "AI_" + AIname + "_" + userTField.getText();
 		} else {
