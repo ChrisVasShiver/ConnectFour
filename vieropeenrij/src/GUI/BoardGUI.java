@@ -164,8 +164,17 @@ public class BoardGUI {
 		}
 		
 		public void updateBoard() {
+			Dimension labelSize = new Dimension(labelWIDTH * ClientGUI.SCALE,
+					labelHEIGHT * ClientGUI.SCALE);
+			Dimension scrollBarSize = new Dimension(scrollBarWIDTH * ClientGUI.SCALE ,messageBoxHEIGHT * ClientGUI.SCALE);
+			Dimension buttonSize = new Dimension(buttonWIDTH * ClientGUI.SCALE,
+					buttonHEIGHT * ClientGUI.SCALE);
+			
+			
             board = game.getBoard();
             boardPanel.removeAll();
+            p2.removeAll();
+            //Boardpanel repaint
             for(int i = 0; i < Board.MAXFIELDS; i++) {
                     fields[i] = new JButton();
                     if (board.getField(i) == Mark.YELLOW) {
@@ -188,12 +197,32 @@ public class BoardGUI {
                             fields[(r * Board.WIDTH) + c].setBounds(c * 125, r * (710/6 - 3), 125, 710/6 - 3);
                     }
             }
+            //p2 repaint
+            rematchButton.setEnabled(false);
+            
+            messageBox.setBounds(0, 0, messageBoxWIDTH, messageBoxHEIGHT);
+    		scrollMessageBox.setBounds(0, 0, 400, 200);
+    		rematchButton.setBounds((405 - buttonSize.width) / 2 , 710 / 2, buttonSize.width, buttonSize.height);
+    		playerName.setBounds((405 - labelSize.width) /2, (int)rematchButton.getBounds().getMinY() - labelSize.height, labelSize.width, labelSize.height);
+    		backButton.setBounds((405 - buttonSize.width) / 2, (int)rematchButton.getBounds().getMinY() + buttonSize.height + ClientGUI.SCALE * SPACING, buttonSize.width, buttonSize.height);
+            
+            
             boardPanel.repaint();
+            p2.repaint();
 		}
 		
 		public void gameOverGUI() {
+			Dimension labelSize = new Dimension(labelWIDTH * ClientGUI.SCALE,
+					labelHEIGHT * ClientGUI.SCALE);
+			Dimension scrollBarSize = new Dimension(scrollBarWIDTH * ClientGUI.SCALE ,messageBoxHEIGHT * ClientGUI.SCALE);
+			Dimension buttonSize = new Dimension(buttonWIDTH * ClientGUI.SCALE,
+					buttonHEIGHT * ClientGUI.SCALE);
+			
+			
             board = game.getBoard();
             boardPanel.removeAll();
+            p2.removeAll();
+            
             for(int i = 0; i < Board.MAXFIELDS; i++) {
                     fields[i] = new JButton();
                     if (board.getField(i) == Mark.YELLOW) {
@@ -216,23 +245,35 @@ public class BoardGUI {
                             fields[(r * Board.WIDTH) + c].setBounds(c * 125, r * (710/6 - 3), 125, 710/6 - 3);
                     }
             }
+            
+            rematchButton.setEnabled(true);
+            
+            messageBox.setBounds(0, 0, messageBoxWIDTH, messageBoxHEIGHT);
+    		scrollMessageBox.setBounds(0, 0, 400, 200);
+    		rematchButton.setBounds((405 - buttonSize.width) / 2 , 710 / 2, buttonSize.width, buttonSize.height);
+    		playerName.setBounds((405 - labelSize.width) /2, (int)rematchButton.getBounds().getMinY() - labelSize.height, labelSize.width, labelSize.height);
+    		backButton.setBounds((405 - buttonSize.width) / 2, (int)rematchButton.getBounds().getMinY() + buttonSize.height + ClientGUI.SCALE * SPACING, buttonSize.width, buttonSize.height);
+            
             boardPanel.repaint();
+            p2.repaint();
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			for(int i = 0; i < Board.MAXFIELDS; i++) {
+			for (int i = 0; i < Board.MAXFIELDS; i++) {
 				if(event.getSource() == fields[i]) {
 					client.doMove(i);
 				}
 			}
-			if(event.getSource() == backButton) {
+			if (event.getSource() == backButton) {
 				c.removeAll();
 				client.closeClient();
 				mpmenu.buildMPMenu();
 				c.repaint();
 			}
-			
+			if (event.getSource() == rematchButton) {
+				updateBoard();
+			}
 		}
 
 		@Override
