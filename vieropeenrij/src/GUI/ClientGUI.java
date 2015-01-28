@@ -3,6 +3,8 @@ package GUI;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 
 import javax.swing.JFrame;
 /**
@@ -10,7 +12,7 @@ import javax.swing.JFrame;
  * @author C. Visscher and D. Ye
  * @version 25-01-2015
  */
-public class ClientGUI extends JFrame {
+public class ClientGUI extends JFrame implements WindowStateListener {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -41,6 +43,7 @@ public class ClientGUI extends JFrame {
 		
 		menu.buildMenu();
 		
+		addWindowStateListener(this);
 		c.setBackground(Color.BLACK);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
@@ -51,5 +54,15 @@ public class ClientGUI extends JFrame {
 	
 	public static void main(String[] args) {
 		new ClientGUI();
+	}
+
+	@Override
+	public void windowStateChanged(WindowEvent e) {
+		System.out.println((e.getNewState() == NORMAL));
+		if(e.getNewState() == NORMAL) {
+			System.out.println("reached");
+			revalidate();
+		}
+		
 	}
 }
