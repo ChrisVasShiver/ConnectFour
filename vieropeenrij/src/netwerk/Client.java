@@ -243,12 +243,12 @@ public class Client implements ProtocolControl, Runnable, ProtocolConstants {
 				if (game.getCurrentPlayerIndex() == 0
 						&& game.getCurrentPlayer().equals("Easy")) {
 					doMove(game.getBoard().dropMark(Mark.YELLOW,
-							thisplayer.determineMove(game.getBoard())));
+							thisplayer.determineMove(game)));
 				}
 				if (game.getCurrentPlayerIndex() == 1
 						&& game.getCurrentPlayer().equals("Easy")) {
 					doMove(game.getBoard().dropMark(Mark.RED,
-							thisplayer.determineMove(game.getBoard())));
+							thisplayer.determineMove(game)));
 				}
 				System.out.println("ai has done a move");
 			}
