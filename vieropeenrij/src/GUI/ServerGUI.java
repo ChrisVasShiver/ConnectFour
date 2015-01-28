@@ -184,7 +184,9 @@ public class ServerGUI extends JFrame{
 			switch(notify) {
 			case "SERVER_CREATED" : addMessage("<Listening on port: " + port + ">"); break;
 			case "PORT_IN_USE" : addMessage("<ERROR: Port is already in use!>"); break;
-			case "UNKOWN_SERVER_ERROR" : addMessage("<ERROR: Unkown Server error!>"); break;
+			case "UNKOWN_SERVER_ERROR" : addMessage("<ERROR: Unknown Server error!>"); break;
+			case "SOCKET_SERVER_ERROR" : addMessage("<ERROR: Socket Server error!>"); break;
+
 			}
 		}
 			

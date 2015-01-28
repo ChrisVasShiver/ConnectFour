@@ -263,12 +263,12 @@ public class Game extends Observable {
 	 * Prints out the result of the game when the game has ended.
 	 */
 	public void endGame() {
-		if (rules.getHasWinner()) {
+		if (!rules.getHasWinner()) {
 			int winner = Math.abs((currentP - 1));
 			System.out.println(winner);
 			System.out.println("The Winner is: " + players[winner].getName()
 					+ "!!!\n");
-		} if(!rules.getHasWinner()) {
+		} if(rules.getHasWinner()) {
 			System.out.println("It is a Draw!\n");
 		}
 	}

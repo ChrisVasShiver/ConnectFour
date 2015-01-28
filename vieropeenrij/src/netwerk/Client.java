@@ -69,8 +69,9 @@ public class Client extends Observable implements ProtocolControl, Runnable,
 			System.out.println("ERROR: could not create client on "
 					+ InetAddress + " and port " + port);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			setChanged();
+			setConsoleMessage(unknownerror);
+			notifyObservers("SERVER_MESSAGE");
 		}
 	}
 
@@ -82,6 +83,9 @@ public class Client extends Observable implements ProtocolControl, Runnable,
 		while (clientRunning) {
 			try {
 				if (in == null) {
+					out.write("Stop");
+					out.newLine();
+					out.flush();
 					closeClient();
 				}
 
@@ -91,8 +95,9 @@ public class Client extends Observable implements ProtocolControl, Runnable,
 					handleCommands(command);
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				setChanged();
+				setConsoleMessage(unknownerror);
+				notifyObservers("SERVER_MESSAGE");
 			}
 		}
 	}
@@ -258,7 +263,6 @@ public class Client extends Observable implements ProtocolControl, Runnable,
 		case endGame:
 			setChanged();
 			game.endGame();
-			closeClient();
 			notifyObservers("SERVER_MESSAGE");
 			break;
 
@@ -304,6 +308,13 @@ public class Client extends Observable implements ProtocolControl, Runnable,
 		case draw:
 			setConsoleMessage("Draw game");
 			break;
+		
+		case rematchConfirm:
+			game.reset();			
+			break;
+		
+		case "Stop":
+			closeClient();
 		}
 	}
 	/**

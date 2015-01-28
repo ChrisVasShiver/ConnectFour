@@ -6,7 +6,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 
 import main.Board;
@@ -18,7 +20,7 @@ import netwerkprotocol.ProtocolConstants;
 import netwerkprotocol.ProtocolControl;
 
 public class Server extends Observable implements ProtocolControl,
-		ProtocolConstants, Runnable {
+ProtocolConstants, Runnable {
 
 	private int port;
 	private ServerSocket serversocket;
@@ -48,7 +50,6 @@ public class Server extends Observable implements ProtocolControl,
 			notifyObservers("PORT_IN_USE");
 		} catch (IOException e1) {
 			setChanged();
-			e1.printStackTrace();
 			serverRunning = false;
 			notifyObservers("UNKNOW_SERVER_ERROR");
 		}
@@ -62,9 +63,13 @@ public class Server extends Observable implements ProtocolControl,
 						this);
 				clienthandler.setGameID(games.size());
 			} catch (SocketException e) {
-				break;
+				setChanged();
+				notifyObservers("SOCKET_SERVER_ERROR");
+				stopConnections();
 			} catch (IOException e) {
-				e.printStackTrace();
+				setChanged();
+				notifyObservers("UNKNOWN_SERVER_ERROR");
+				stopConnections();
 			}
 		}
 
@@ -136,9 +141,9 @@ public class Server extends Observable implements ProtocolControl,
 				}
 				if (validmove && game.getCurrentPlayer().equals(clienthandler.getClientName())){
 					if (game.getCurrentPlayerIndex() == 0) {
-								move = game.getBoard().dropMark(Mark.YELLOW, move);
-								game.getBoard().setField(move, Mark.YELLOW);
-								game.getRules().isGameOver(Mark.YELLOW, move);
+						move = game.getBoard().dropMark(Mark.YELLOW, move);
+						game.getBoard().setField(move, Mark.YELLOW);
+						game.getRules().isGameOver(Mark.YELLOW, move);
 					} else {
 						move = game.getBoard().dropMark(Mark.RED, move);
 						game.getBoard().setField(move, Mark.RED);
@@ -163,16 +168,14 @@ public class Server extends Observable implements ProtocolControl,
 					.getCurrentPlayer());
 			break;
 
-		case "ConnectionLost":
-			removeClient(clienthandler);
-			
 		case "Stop":
 			removeClient(clienthandler);
 
-		case sendMessage:
-
-		case getLeaderboard:
-
+		case rematch:
+			for (ClientHandler clienthandlers : threads){
+			games.get(clienthandlers.getGameID()).reset();
+			}
+			addRematch(clienthandler);
 		}
 
 	}
@@ -279,13 +282,13 @@ public class Server extends Observable implements ProtocolControl,
 		}
 	}
 
+	/**
+	 * Remove a client
+	 * @param clienthandler removes this clienthandler.
+	 */
 	public void removeClient(ClientHandler clienthandler) {
 		games.remove(clienthandler.getGameID());
 		threads.remove(clienthandler);
-	}
-
-	public void sendLeaderboard() {
-
 	}
 
 	// Closes the socket of the server, not allowing new connections.
@@ -294,9 +297,29 @@ public class Server extends Observable implements ProtocolControl,
 			serverRunning = false;
 			serversocket.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			setChanged();
+			notifyObservers("UNKNOWN_SERVER_ERROR");
 		}
-
+	}
+	
+	public void addRematch(ClientHandler clienthandler){
+		Map<Integer, ArrayList<String>> rematchMap = new HashMap<Integer, ArrayList<String>>();
+		ArrayList<String> ar = new ArrayList<String>();
+		ar.add(clienthandler.getClientName());
+		rematchMap.put(clienthandler.getGameID(), ar);
+		
+		for(int i = 0; i < rematchMap.size(); i++){
+			if (rematchMap.get(i).size() == 2){
+				startRematch(i);
+			}
+		}
+	}
+	
+	public void startRematch(int gameID){
+		for (ClientHandler clienthandlers : threads){
+			if (clienthandlers.getGameID() == gameID){
+				clienthandlers.sendToClient(rematchConfirm);
+			}
+		}
 	}
 }
