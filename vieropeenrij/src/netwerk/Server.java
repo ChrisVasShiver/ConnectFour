@@ -21,6 +21,11 @@ import netwerkprotocol.ProtocolControl;
 
 public class Server extends Observable implements ProtocolControl,
 ProtocolConstants, Runnable {
+	
+	/*@
+	 private invariant port > 0 && port <= 65535;
+	 private invariant serversocket != null;
+	 */
 
 	private int port;
 	private ServerSocket serversocket;
@@ -29,6 +34,10 @@ ProtocolConstants, Runnable {
 	private List<Game> games;
 	private boolean serverRunning = false;
 
+	/**
+	 * Creates the server with the given port.
+	 * @param port
+	 */
 	public Server(int port) {
 		this.port = port;
 		threads = new ArrayList<ClientHandler>();

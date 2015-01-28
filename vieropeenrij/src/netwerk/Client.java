@@ -263,7 +263,7 @@ public class Client extends Observable implements ProtocolControl, Runnable,
 		case endGame:
 			setChanged();
 			game.endGame();
-			notifyObservers("SERVER_MESSAGE");
+			notifyObservers("END_GAME");
 			break;
 
 		/**
@@ -310,7 +310,11 @@ public class Client extends Observable implements ProtocolControl, Runnable,
 			break;
 		
 		case rematchConfirm:
+			setChanged();
 			game.reset();			
+			notifyObservers("GAME_RESTARTED");
+			setChanged();
+			notifyObservers("UPDATE_BOARD");
 			break;
 		
 		case "Stop":
