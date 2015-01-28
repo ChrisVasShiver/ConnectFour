@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.util.Observable;
 
 import strategy.RandomStrategy;
+import strategy.SmartStrategy;
 import strategy.Strategy;
 import main.ComputerPlayer;
 import main.Game;
@@ -165,7 +166,7 @@ public class Client implements ProtocolControl, Runnable, ProtocolConstants {
 				// Check the first playername from the server command.
 				if (aiSplit[0].equals("AI") && i == 1 && name.equals(commandSplit[1])) {
 					System.out.println("AISPLIT 1");
-					Strategy strategy = new RandomStrategy();
+					Strategy strategy = new SmartStrategy();
 					thisplayer = new ComputerPlayer(Mark.YELLOW, strategy);
 					opponent = new HumanPlayer(commandSplit[2], Mark.RED);
 					game = new Game(thisplayer, opponent);

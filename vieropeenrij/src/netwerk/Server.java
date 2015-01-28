@@ -18,7 +18,7 @@ import netwerkprotocol.ProtocolConstants;
 import netwerkprotocol.ProtocolControl;
 
 public class Server extends Observable implements ProtocolControl,
-ProtocolConstants, Runnable {
+		ProtocolConstants, Runnable {
 
 	private int port;
 	private ServerSocket serversocket;
@@ -126,8 +126,12 @@ ProtocolConstants, Runnable {
 			boolean isvalidmove = (game.getBoard().isEmptyField(move) && game
 					.getRules().isValidMove(move));
 			System.out.println("current index" + game.getCurrentPlayerIndex());
-			System.out.println("getnextplayer" + game.getNextPlayer());			// try {
-			if (!game.getRules().getGameOver() && isvalidmove) {
+			System.out.println("getnextplayer" + game.getNextPlayer()); // try {
+			if (!game.getRules().getGameOver()
+					&& isvalidmove
+					&& game.getCurrentPlayer().equals(
+							clienthandler.getClientName())
+					|| game.getCurrentPlayer().equals("Easy")) {
 				if (game.getCurrentPlayer().equals(
 						clienthandler.getClientName())
 						&& isvalidmove) {
@@ -154,10 +158,14 @@ ProtocolConstants, Runnable {
 					setChanged();
 					game.setNextPlayer();
 					notifyObservers("NEXT_PLAYER");
-					System.out.println("after setnext in domove current index" + game.getCurrentPlayerIndex());
-					System.out.println("getnextplayer" + game.getNextPlayer());	
+					System.out.println("after setnext in domove current index"
+							+ game.getCurrentPlayerIndex());
+					System.out.println("getnextplayer" + game.getNextPlayer());
 				}
-			} if (isvalidmove && !game.getNextPlayer().equals(clienthandler.getClientName())) {
+			}
+			if (isvalidmove
+					&& !game.getNextPlayer().equals(
+							clienthandler.getClientName())) {
 				setChanged();
 				System.out.println("doMove, invaliduserturn : ");
 				clienthandler.sendToClient(invalidUserTurn);
@@ -167,12 +175,10 @@ ProtocolConstants, Runnable {
 				setChanged();
 				System.out.println("doMove, invalidmove : ");
 				clienthandler.sendToClient(invalidMove);
-//				clienthandler.sendToClient(moveResult(move,
-//						clienthandler));
+				clienthandler.sendToClient(moveResult(move, clienthandler));
 				notifyObservers("SERVER_MESSAGE");
 
 			}
-
 
 			// if (game.getCurrentPlayerIndex() == 0
 			// && game.getCurrentPlayer().equals(
