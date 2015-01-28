@@ -180,49 +180,50 @@ public class Server extends Observable implements ProtocolControl,
 
 			}
 
-			// if (game.getCurrentPlayerIndex() == 0
-			// && game.getCurrentPlayer().equals(
-			// clienthandler.getClientName())
-			// && game.getBoard().isEmptyField(move)) {
-			// move = game.getBoard().dropMark(Mark.YELLOW, move);
-			// game.getBoard().setField(move, Mark.YELLOW);
-			// for (ClientHandler clienthandlers : threads) {
-			// if (clienthandler.getGameID() == clienthandlers
-			// .getGameID()) {
-			// clienthandlers.sendToClient(moveResult(move,
-			// clienthandler));
-			// }
-			// }
-			// setChanged();
-			// game.setNextPlayer();
-			// notifyObservers("NEXT_PLAYER");
-			// }
-			// if (game.getCurrentPlayerIndex() == 1
-			// && game.getCurrentPlayer().equals(
-			// clienthandler.getClientName())
-			// && game.getBoard().isEmptyField(move)) {
-			// move = game.getBoard().dropMark(Mark.RED, move);
-			// game.getBoard().setField(move, Mark.RED);
-			// for (ClientHandler clienthandlers : threads) {
-			// if (clienthandler.getGameID() == clienthandlers
-			// .getGameID()) {
-			// clienthandlers.sendToClient(moveResult(move,
-			// clienthandler));
-			// }
-			// }
-			// setChanged();
-			// game.setNextPlayer();
-			// notifyObservers("NEXT_PLAYER");
-			// }
-			// if (games.get(clienthandler.getGameID()).getRules()
-			// .getGameOver()) {
-			// game.setWinner(clienthandler.getClientName());
-			// endGame(clienthandler.getGameID());
-			// } else
-			// throw new Exception();
-			// } catch (Exception e) {
-			// clienthandler.sendToClient(invalidMove);
-			// }
+			try {
+				if (game.getCurrentPlayerIndex() == 0
+						&& game.getCurrentPlayer().equals(
+								clienthandler.getClientName())
+						&& game.getBoard().isEmptyField(move)) {
+					move = game.getBoard().dropMark(Mark.YELLOW, move);
+					game.getBoard().setField(move, Mark.YELLOW);
+					for (ClientHandler clienthandlers : threads) {
+						if (clienthandler.getGameID() == clienthandlers
+								.getGameID()) {
+							clienthandlers.sendToClient(moveResult(move,
+									clienthandler));
+						}
+					}
+					setChanged();
+					game.setNextPlayer();
+					notifyObservers("NEXT_PLAYER");
+				}
+				if (game.getCurrentPlayerIndex() == 1
+						&& game.getCurrentPlayer().equals(
+								clienthandler.getClientName())
+						&& game.getBoard().isEmptyField(move)) {
+					move = game.getBoard().dropMark(Mark.RED, move);
+					game.getBoard().setField(move, Mark.RED);
+					for (ClientHandler clienthandlers : threads) {
+						if (clienthandler.getGameID() == clienthandlers
+								.getGameID()) {
+							clienthandlers.sendToClient(moveResult(move,
+									clienthandler));
+						}
+					}
+					setChanged();
+					game.setNextPlayer();
+					notifyObservers("NEXT_PLAYER");
+				}
+				if (games.get(clienthandler.getGameID()).getRules()
+						.getGameOver()) {
+					game.setWinner(clienthandler.getClientName());
+					endGame(clienthandler.getGameID());
+				} else
+					throw new Exception();
+			} catch (Exception e) {
+				clienthandler.sendToClient(invalidMove);
+			}
 			break;
 
 		case playerTurn:
