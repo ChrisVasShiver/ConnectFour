@@ -17,7 +17,7 @@ import main.Player;
 import netwerkprotocol.ProtocolConstants;
 import netwerkprotocol.ProtocolControl;
 
-public class Client extends Observable implements ProtocolControl, Runnable,
+public class Client implements ProtocolControl, Runnable,
 		ProtocolConstants {
 
 	/*@
@@ -165,7 +165,6 @@ public class Client extends Observable implements ProtocolControl, Runnable,
 			game.setCurrentPlayer(commandSplit[4]);
 			System.out.println("client moveResult: commandsplit " + commandSplit[4]);
 			System.out.println("client moveResult: getcurrentplayer " + game.getCurrentPlayer());
-			System.out.println(game.getCurrentPlayerIndex());
 			
 			/**
 			 * Receive the player whose turn is next and set it to the currentplayer.
@@ -338,9 +337,8 @@ public class Client extends Observable implements ProtocolControl, Runnable,
 	 * Set the console message for the client.
 	 */
 	public void setConsoleMessage(String message){
-		setChanged();
 		consoleMessage = message;
-		notifyObservers("SERVER_MESSAGE");
+		System.out.println(consoleMessage);
 	}
 	
 	public String getConsoleMessage(){

@@ -65,7 +65,6 @@ public class Server extends Observable implements ProtocolControl,
 	// Handle all the incoming commands from the client.
 	public void handleCommands(String command, ClientHandler clienthandler) {
 		String[] commandSplit = command.split(msgSeperator);
-		System.out.println("Server, CH gameID = " + clienthandler.getGameID());
 
 		switch (commandSplit[0]) {
 
@@ -86,7 +85,9 @@ public class Server extends Observable implements ProtocolControl,
 					}
 				}
 			} catch (Exception e) {
+				setChanged();
 				clienthandler.sendToClient(usernameInUse);
+				notifyObservers("SERVER_MESSAGE");
 			}
 
 			try {
@@ -96,7 +97,9 @@ public class Server extends Observable implements ProtocolControl,
 					throw new Exception();
 				}
 			} catch (Exception e) {
+				setChanged();
 				clienthandler.sendToClient(invalidUsername);
+				notifyObservers("SERVER_MESSAGE");
 			}
 			if (clienthandler.getClientName() != null && !error) {
 				addHandler(clienthandler);
@@ -112,13 +115,23 @@ public class Server extends Observable implements ProtocolControl,
 		case doMove:
 			Game game = games.get(clienthandler.getGameID());
 			int move = Integer.parseInt(commandSplit[1]);
-			try {
-				if (game.getCurrentPlayerIndex() == 0
-						&& game.getCurrentPlayer().equals(
-								clienthandler.getClientName())
-						&& game.getBoard().isEmptyField(move)) {
-					move = game.getBoard().dropMark(Mark.YELLOW, move);
-					game.getBoard().setField(move, Mark.YELLOW);
+			boolean isvalidmove = (game.getBoard().isEmptyField(move) && game
+					.getRules().isValidMove(move));
+			System.out.println("current index" + game.getCurrentPlayerIndex());
+			System.out.println("getnextplayer" + game.getNextPlayer());			// try {
+			if (!game.getRules().getGameOver() && isvalidmove) {
+				if (game.getCurrentPlayer().equals(
+						clienthandler.getClientName())
+						&& isvalidmove) {
+					if (game.getCurrentPlayerIndex() == 0) {
+						move = game.getBoard().dropMark(Mark.YELLOW, move);
+						game.getBoard().setField(move, Mark.YELLOW);
+						game.getRules().isGameOver(Mark.YELLOW, move);
+					} else {
+						move = game.getBoard().dropMark(Mark.RED, move);
+						game.getBoard().setField(move, Mark.RED);
+						game.getRules().isGameOver(Mark.RED, move);
+					}
 					for (ClientHandler clienthandlers : threads) {
 						if (clienthandler.getGameID() == clienthandlers
 								.getGameID()) {
@@ -126,37 +139,74 @@ public class Server extends Observable implements ProtocolControl,
 									clienthandler));
 						}
 					}
-					setChanged();
-					game.setNextPlayer();
-					notifyObservers("NEXT_PLAYER");
-				}
-				if (game.getCurrentPlayerIndex() == 1
-						&& game.getCurrentPlayer().equals(
-								clienthandler.getClientName())
-						&& game.getBoard().isEmptyField(move)) {
-					move = game.getBoard().dropMark(Mark.RED, move);
-					game.getBoard().setField(move, Mark.RED);
-					for (ClientHandler clienthandlers : threads) {
-						if (clienthandler.getGameID() == clienthandlers
-								.getGameID()) {
-							clienthandlers.sendToClient(moveResult(move,
-									clienthandler));
-						}
+					if (game.getRules().getGameOver()) {
+						game.setWinner(clienthandler.getClientName());
+						endGame(clienthandler.getGameID());
 					}
 					setChanged();
 					game.setNextPlayer();
 					notifyObservers("NEXT_PLAYER");
 				}
-				clienthandler.sendToClient(invalidMove);
-				if (games.get(clienthandler.getGameID()).getRules()
-						.getGameOver()) {
-					game.setWinner(clienthandler.getClientName());
-					endGame(clienthandler.getGameID());
-				}
-				else throw new Exception();
-			} catch (Exception e) {
-				clienthandler.sendToClient(invalidMove);
+			} if (isvalidmove && !game.getNextPlayer().equals(clienthandler.getClientName())) {
+				setChanged();
+				System.out.println("doMove, invaliduserturn : ");
+			!!!	clienthandler.sendToClient(invalidUserTurn);
+				notifyObservers("SERVER_MESSAGE");
 			}
+			if (!isvalidmove) {
+				setChanged();
+				System.out.println("doMove, invalidmove : ");
+				clienthandler.sendToClient(invalidMove);
+				!!!clienthandler.sendToClient(moveResult(move,
+						clienthandler));
+				notifyObservers("SERVER_MESSAGE");
+				
+			}
+			
+
+			// if (game.getCurrentPlayerIndex() == 0
+			// && game.getCurrentPlayer().equals(
+			// clienthandler.getClientName())
+			// && game.getBoard().isEmptyField(move)) {
+			// move = game.getBoard().dropMark(Mark.YELLOW, move);
+			// game.getBoard().setField(move, Mark.YELLOW);
+			// for (ClientHandler clienthandlers : threads) {
+			// if (clienthandler.getGameID() == clienthandlers
+			// .getGameID()) {
+			// clienthandlers.sendToClient(moveResult(move,
+			// clienthandler));
+			// }
+			// }
+			// setChanged();
+			// game.setNextPlayer();
+			// notifyObservers("NEXT_PLAYER");
+			// }
+			// if (game.getCurrentPlayerIndex() == 1
+			// && game.getCurrentPlayer().equals(
+			// clienthandler.getClientName())
+			// && game.getBoard().isEmptyField(move)) {
+			// move = game.getBoard().dropMark(Mark.RED, move);
+			// game.getBoard().setField(move, Mark.RED);
+			// for (ClientHandler clienthandlers : threads) {
+			// if (clienthandler.getGameID() == clienthandlers
+			// .getGameID()) {
+			// clienthandlers.sendToClient(moveResult(move,
+			// clienthandler));
+			// }
+			// }
+			// setChanged();
+			// game.setNextPlayer();
+			// notifyObservers("NEXT_PLAYER");
+			// }
+			// if (games.get(clienthandler.getGameID()).getRules()
+			// .getGameOver()) {
+			// game.setWinner(clienthandler.getClientName());
+			// endGame(clienthandler.getGameID());
+			// } else
+			// throw new Exception();
+			// } catch (Exception e) {
+			// clienthandler.sendToClient(invalidMove);
+			// }
 			break;
 
 		case playerTurn:
@@ -236,9 +286,6 @@ public class Server extends Observable implements ProtocolControl,
 	 */
 	public String moveResult(int move, ClientHandler clienthandler) {
 		Game game = games.get(clienthandler.getGameID());
-		System.out.println(game.getCurrentPlayerIndex());
-		System.out.println(game.getNextPlayer());
-		System.out.println(game.getCurrentPlayerIndex());
 		return moveResult + msgSeperator + move + msgSeperator
 				+ game.getCurrentPlayer() + msgSeperator + true + msgSeperator
 				+ game.getNextPlayer();
@@ -246,7 +293,6 @@ public class Server extends Observable implements ProtocolControl,
 
 	public String turn(ClientHandler clienthandler) {
 		return games.get(clienthandler.getGameID()).getCurrentPlayer();
-
 	}
 
 	// Send a message to the client with the reason why the game is over.
@@ -255,7 +301,7 @@ public class Server extends Observable implements ProtocolControl,
 		String reason = null;
 		Game game = games.get(clienthandler.getGameID());
 		if (game.getRules().getHasWinner()) {
-			result = game.getCurrentPlayer() + "has won.";
+			result = "Player" + game.getCurrentPlayer() + " has won.";
 			reason = "A player has won";
 		}
 		if (game.getRules().getGameOver() && !game.getRules().getHasWinner()) {
@@ -270,11 +316,14 @@ public class Server extends Observable implements ProtocolControl,
 		// Send message to the clients playing in the game.
 		for (ClientHandler clienthandler : threads) {
 			if (clienthandler.getGameID() == gameID) {
-				clienthandler.sendToClient(gameIsOver(clienthandler));
 				if (games.get(clienthandler.getGameID()).getWinner()
 						.equals(clienthandler.getClientName())) {
+					setChanged();
 					clienthandler.sendToClient(winner);
+					notifyObservers("SERVER_MESSAGE");
 				}
+				clienthandler.sendToClient(gameIsOver(clienthandler));
+				clienthandler.close();
 				// Removes the clienthandler from the list of connected threads
 				threads.remove(clienthandler);
 
@@ -285,9 +334,7 @@ public class Server extends Observable implements ProtocolControl,
 	}
 
 	public void removeClient(ClientHandler clienthandler) {
-		for (ClientHandler clienthandlers : threads)
-			clienthandlers.sendToClient(connectionlost);
-		endGame(clienthandler.getGameID());
+		threads.remove(clienthandler);
 	}
 
 	public void sendLeaderboard() {
