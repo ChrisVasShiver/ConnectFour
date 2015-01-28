@@ -1,6 +1,6 @@
 package strategy;
 
-import main.Board;
+import main.Game;
 import main.Mark;
 
 /**
@@ -10,5 +10,5 @@ import main.Mark;
  */
 public interface Strategy {
 	public String getName();
-	public int determineMove(Board board, Mark m);
+	public int determineMove(Game game, Mark m);
 }

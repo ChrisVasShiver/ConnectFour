@@ -71,10 +71,10 @@ public abstract class Player {
 	 * @return returns the integer of the move.
 	 */
 	/*@
-	 requires board != null;
+	 requires game != null;
 	 pure;
 	 */
-	public abstract int determineMove(Board board);
+	public abstract int determineMove(Game game);
 	
 	/**
 	 * Make a move on the given board and return the move.
@@ -82,12 +82,12 @@ public abstract class Player {
 	 * @return returns the integer of the move.
 	 */
 	/*@
-	 requires board != null;
-	 ensures \result == determineMove(board);
+	 requires game != null;
+	 ensures \result == determineMove(game);
 	 */
-	public int doMove(Board board) {
-		int move = determineMove(board);
-		board.setField(move, theMark);
+	public int doMove(Game game) {
+		int move = determineMove(game);
+		game.getBoard().setField(move, theMark);
 		return move;
 	}
 }

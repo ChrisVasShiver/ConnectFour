@@ -181,9 +181,9 @@ public class BoardGUI {
 			assert arg != null;
 			String notify = (String)arg;
 			switch(notify) {
-			case "UPDATE_BOARD" : updateBoard();
-			case "NEXT_PLAYER" : addMessage("It is " + game.getCurrentPlayer()  + "'s turn!");
-			case "SERVER_MESSAGE" : addMessage(client.getConsoleMessage());
+			case "UPDATE_BOARD" : updateBoard(); break;
+			case "NEXT_PLAYER" : addMessage("It is " + game.getCurrentPlayer()  + "'s turn!"); break;
+			case "SERVER_MESSAGE" : addMessage(client.getConsoleMessage()); break;
 			}
 		}
 	}

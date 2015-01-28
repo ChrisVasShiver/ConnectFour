@@ -228,7 +228,7 @@ public class Game extends Observable {
 	public void gameLoop() {
 		while (!rules.getGameOver()) {
 			rules.isGameOver(players[getCurrentPlayerIndex()].getMark(),
-					players[getCurrentPlayerIndex()].doMove(board));
+					players[getCurrentPlayerIndex()].doMove(this));
 			currentP = (currentP + 1) % MAXPLAYER;
 			update();
 		}

@@ -32,20 +32,20 @@ public class HumanPlayer extends Player {
 	 * @see main.Player#determineMove(main.Board)
 	 */
 	@Override
-	public int determineMove(Board board) {
+	public int determineMove(Game game) {
 		String message = "Enter your move";
 		int value = readInteger(message);
 		boolean isExistingField = false;
-		isExistingField = board.isExistingField(value);
+		isExistingField = game.getBoard().isExistingField(value);
 		while(!isExistingField) {
 			System.out.println("You enterd a wrong move");
-			value = determineMove(board);
-			isExistingField = board.isExistingField(value);
+			value = determineMove(game);
+			isExistingField = game.getBoard().isExistingField(value);
 		}
-		value = board.dropMark(getMark(), value);
+		value = game.getBoard().dropMark(getMark(), value);
 		if(value == -1) {
 			System.out.println("the colum is already full, try another move");
-			value = determineMove(board);
+			value = determineMove(game);
 		}
 		return value;
 	}

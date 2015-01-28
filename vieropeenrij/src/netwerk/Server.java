@@ -1,6 +1,7 @@
 package netwerk;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -37,12 +38,19 @@ ProtocolConstants, Runnable {
 	public void run() {
 		// Create a new server socket.
 		try {
+			setChanged();
 			serversocket = new ServerSocket(port);
 			serverRunning = true;
+			notifyObservers("SERVER_CREATED");
+		} catch (BindException e) {
+			setChanged();
+			serverRunning = false;
+			notifyObservers("PORT_IN_USE");
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			setChanged();
 			e1.printStackTrace();
 			serverRunning = false;
+			notifyObservers("UNKNOW_SERVER_ERROR");
 		}
 
 		// Allow new connections if serverRunning == true.

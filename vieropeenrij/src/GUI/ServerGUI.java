@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,7 +18,7 @@ import javax.swing.JTextArea;
 
 import netwerk.Server;
 
-public class ServerGUI extends JFrame implements ActionListener{
+public class ServerGUI extends JFrame{
 	private static final long serialVersionUID = 1L;
 
 	private static int SCALE = 4;
@@ -50,11 +52,15 @@ public class ServerGUI extends JFrame implements ActionListener{
 	private JScrollPane scrollMessageBox;
 	
 	private Server server;
-
+	private ServerController controller;
+	
+	private int port;
 
 	
 	public ServerGUI() {
+		controller = new ServerController();
 		buildGUI();		
+		port = 0;
 	}
 	
 	public void buildGUI() {
@@ -78,10 +84,10 @@ public class ServerGUI extends JFrame implements ActionListener{
 		portTField = new JTextField();
 		
 		startButton = new JButton("Start server");
-		startButton.addActionListener(this);
+		startButton.addActionListener(controller);
 		stopButton = new JButton("Stop Server");
 		stopButton.setEnabled(false);
-		stopButton.addActionListener(this);
+		stopButton.addActionListener(controller);
 		
 		messageBox = new JTextArea();
 		messageBox.setEditable(false);
@@ -128,10 +134,8 @@ public class ServerGUI extends JFrame implements ActionListener{
 	}
 	
 	public void startServer() {
-		int port = 0;
-		
 		try {
-		port = Integer.parseInt(portTField.getText());
+			port = Integer.parseInt(portTField.getText());
 		} catch (NumberFormatException e) {
 			addMessage("<Error: Invalid Port!>");
 			startButton.setEnabled(true);
@@ -141,32 +145,48 @@ public class ServerGUI extends JFrame implements ActionListener{
 		}
 		
 		server = new Server(port);
+		server.addObserver(controller);
 		new Thread(server).start();
-		addMessage("<Listening on port: " + port + ">");
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		if(event.getSource() == startButton) {
-			startButton.setEnabled(false);
-			portTField.setEnabled(false);
-			stopButton.setEnabled(true);
-			startServer();
-
-		}
-		
-		if(event.getSource() == stopButton) {
-			startButton.setEnabled(true);
-			stopButton.setEnabled(false);
-			portTField.setEnabled(true);
-			server.stopConnections();
-			addMessage("<Server has been shutdown>");
-		}
-	}
 	
 	public static void main(String[] args) {
 		new ServerGUI();
 	}
+	
+	public class ServerController implements Observer, ActionListener {
+		public ServerController() {
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			if(event.getSource() == startButton) {
+				startButton.setEnabled(false);
+				portTField.setEnabled(false);
+				stopButton.setEnabled(true);
+				startServer();
 
-
+			}
+			
+			if(event.getSource() == stopButton) {
+				startButton.setEnabled(true);
+				stopButton.setEnabled(false);
+				portTField.setEnabled(true);
+				server.stopConnections();
+				addMessage("<Server has been shutdown>");
+			}
+		}
+		@Override
+		public void update(Observable o, Object arg) {
+			assert o != null;
+			assert arg != null;
+			String notify = (String)arg;
+			switch(notify) {
+			case "SERVER_CREATED" : addMessage("<Listening on port: " + port + ">"); break;
+			case "PORT_IN_USE" : addMessage("<ERROR: Port is already in use!>"); break;
+			case "UNKOWN_SERVER_ERROR" : addMessage("<ERROR: Unkown Server error!>"); break;
+			}
+		}
+			
+	}
 }
