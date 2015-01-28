@@ -10,6 +10,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Observable;
 
+import strategy.RandomStrategy;
+import strategy.Strategy;
+import main.ComputerPlayer;
 import main.Game;
 import main.HumanPlayer;
 import main.Mark;
@@ -17,16 +20,12 @@ import main.Player;
 import netwerkprotocol.ProtocolConstants;
 import netwerkprotocol.ProtocolControl;
 
-public class Client implements ProtocolControl, Runnable,
-		ProtocolConstants {
+public class Client implements ProtocolControl, Runnable, ProtocolConstants {
 
-	/*@
-	 private invariant name.matches(charRegex);
-	 private invariant in != null;
-	 private invariant out != null;
-	 private invariant socket != null;
-	 private invariant game != null;
-	 private invariant thisplayer != null;
+	/*
+	 * @ private invariant name.matches(charRegex); private invariant in !=
+	 * null; private invariant out != null; private invariant socket != null;
+	 * private invariant game != null; private invariant thisplayer != null;
 	 */
 	private String name;
 	private BufferedReader in;
@@ -37,17 +36,20 @@ public class Client implements ProtocolControl, Runnable,
 	private boolean clientRunning;
 	private String consoleMessage = null;
 	private boolean gameRunning = false;
-	
+
 	/**
 	 * Creates a new instance of the Client.
-	 * @param InetAddress the given InetAddress for the Client.
-	 * @param port the given port for the Client
-	 * @param name the given name for the Client.
+	 * 
+	 * @param InetAddress
+	 *            the given InetAddress for the Client.
+	 * @param port
+	 *            the given port for the Client
+	 * @param name
+	 *            the given name for the Client.
 	 */
-	/*@
-	 requires InetAddress != null;
-	 requires port > 0 && port <= 65535;
-	 requires name != null;
+	/*
+	 * @ requires InetAddress != null; requires port > 0 && port <= 65535;
+	 * requires name != null;
 	 */
 	public Client(InetAddress InetAddress, int port, String name) {
 		assert InetAddress != null;
@@ -94,11 +96,15 @@ public class Client implements ProtocolControl, Runnable,
 	}
 
 	/**
-	 * Handle all the commands incoming from the clienthandler from the server. Depending on the beginning of the String, a different method will be called.
-	 * @param command the string originating from the clienthandler/server. 
+	 * Handle all the commands incoming from the clienthandler from the server.
+	 * Depending on the beginning of the String, a different method will be
+	 * called.
+	 * 
+	 * @param command
+	 *            the string originating from the clienthandler/server.
 	 */
-	/*@
-	 requires command != null;
+	/*
+	 * @ requires command != null;
 	 */
 	public void handleCommands(String command) {
 		String[] commandSplit = command.split(msgSeperator);
@@ -106,7 +112,8 @@ public class Client implements ProtocolControl, Runnable,
 		switch (commandSplit[0]) {
 
 		/**
-		 * Receives the board from the server. Adjust the board to the given String of marks.
+		 * Receives the board from the server. Adjust the board to the given
+		 * String of marks.
 		 */
 		case sendBoard:
 			Mark mark = null;
@@ -124,7 +131,8 @@ public class Client implements ProtocolControl, Runnable,
 			}
 
 			/**
-			 * Receive an acceptrequest from the server. Set the player's mark to the given mark.
+			 * Receive an acceptrequest from the server. Set the player's mark
+			 * to the given mark.
 			 */
 		case acceptRequest:
 			if (commandSplit[1].equals(yellow)) {
@@ -140,82 +148,139 @@ public class Client implements ProtocolControl, Runnable,
 		 */
 		case startGame:
 			Player opponent;
-			if (commandSplit[1].equals(this.name)) {
-				thisplayer = new HumanPlayer(commandSplit[1], Mark.YELLOW);
-				opponent = new HumanPlayer(commandSplit[2], Mark.RED);
-				game = new Game(thisplayer, opponent);
 
-			} else {
-				thisplayer = new HumanPlayer(commandSplit[2], Mark.RED);
-				opponent = new HumanPlayer(commandSplit[1], Mark.YELLOW);
-				game = new Game(opponent, thisplayer);
+			/**
+			 * Checks the startGame message from server for an AI player, send
+			 * by our client. Server will send two strings with the player
+			 * names. If one of the names starts with AI, seperated with "_"
+			 * then the client needs to start a game with a ComputerPlayer. For
+			 * example AI_Player, then the client will start a game with a
+			 * ComputerPlayer.
+			 */
 
+			// Checks the command from the server if one of the players starts
+			// with the name AI.
+			for (int i = 1; i <= 2; i++) {
+				String[] aiSplit = commandSplit[i].split("_");
+				// Check the first playername from the server command.
+				if (aiSplit[0].equals("AI") && i == 1) {
+					Strategy strategy = new RandomStrategy();
+					thisplayer = new ComputerPlayer(Mark.YELLOW, strategy);
+					opponent = new HumanPlayer(commandSplit[2], Mark.RED);
+					game = new Game(thisplayer, opponent);
+					// If thisplayer, instanceof ComputerPlayer, is the first
+					// player to start. Send the first move.
+					doMove(game.getBoard().dropMark(Mark.YELLOW,
+							thisplayer.determineMove(game.getBoard())));
+					break;
+				}
+				// Check the second playername from the server command.
+				if (aiSplit[0].equals("AI") && i == 2) {
+					Strategy strategy = new RandomStrategy();
+					thisplayer = new ComputerPlayer(Mark.RED, strategy);
+					opponent = new HumanPlayer(commandSplit[1], Mark.YELLOW);
+					game = new Game(opponent, thisplayer);
+					break;
+				}
+				// If the playernames do not start with "AI", make a normal game
+				// with 2 HumanPlayers.
+				if (thisplayer instanceof HumanPlayer && i == 2) {
+					if (commandSplit[1].equals(this.name)) {
+						thisplayer = new HumanPlayer(commandSplit[1],
+								Mark.YELLOW);
+						opponent = new HumanPlayer(commandSplit[2], Mark.RED);
+						game = new Game(thisplayer, opponent);
+
+					} else {
+						thisplayer = new HumanPlayer(commandSplit[2], Mark.RED);
+						opponent = new HumanPlayer(commandSplit[1], Mark.YELLOW);
+						game = new Game(opponent, thisplayer);
+
+					}
+				}
 			}
-			
 			game.setCurrentPlayer(commandSplit[1]);
 			gameRunning = true;
 			break;
 
-			/**
-			 * Receive the result from the Server when a move is done by either this player or the opponent.
-			 */
+		/**
+		 * Receive the result from the Server when a move is done by either this
+		 * player or the opponent.
+		 */
 		case moveResult:
+			// Set the move received from the server on the board.
 			game.getBoard().setField(Integer.parseInt(commandSplit[1]),
 					game.getPlayers()[game.getCurrentPlayerIndex()].getMark());
 			game.setCurrentPlayer(commandSplit[4]);
-			System.out.println("client moveResult: commandsplit " + commandSplit[4]);
-			System.out.println("client moveResult: getcurrentplayer " + game.getCurrentPlayer());
-			
+
+			// If currentplayer is thisplayer and an AI, make automatically a
+			// move.
+			if (game.getPlayers()[game.getCurrentPlayerIndex()] instanceof ComputerPlayer
+					&& game.getPlayers()[game.getCurrentPlayerIndex()]
+							.getName().equals(thisplayer.getName())) {
+				if (game.getCurrentPlayerIndex() == 0) {
+					doMove(game.getBoard().dropMark(Mark.YELLOW,
+							thisplayer.determineMove(game.getBoard())));
+				} else {
+					doMove(game.getBoard().dropMark(Mark.RED,
+							thisplayer.determineMove(game.getBoard())));
+				}
+				System.out.println("ai move");
+			}
+			System.out.println("client moveResult: commandsplit "
+					+ commandSplit[4]);
+			System.out.println("client moveResult: getcurrentplayer "
+					+ game.getCurrentPlayer());
+
 			/**
-			 * Receive the player whose turn is next and set it to the currentplayer.
+			 * Receive the player whose turn is next and set it to the
+			 * currentplayer.
 			 */
 		case turn:
 			if (game.getNextPlayer().equals(commandSplit[1])) {
 				game.setCurrentPlayer(commandSplit[1]);
 			}
-			// return
-			// System.out.println("stuur naar de console dat dit niet werkt");
 			break;
-			
-			/**
-			 * End the game.
-			 */
+
+		/**
+		 * End the game.
+		 */
 		case endGame:
 			game.endGame();
 			closeClient();
 			break;
 
-			/**
-			 * Print in the client's console an error.
-			 */
+		/**
+		 * Print in the client's console an error.
+		 */
 		case invalidUsername:
 			setConsoleMessage(invalidUsername);
 			break;
 
-			/**
-			 * Print in the client's console an error.
-			 */
+		/**
+		 * Print in the client's console an error.
+		 */
 		case invalidMove:
 			setConsoleMessage(invalidMove);
 			break;
 
-			/**
-			 * Print in the client's console an error.
-			 */
+		/**
+		 * Print in the client's console an error.
+		 */
 		case invalidCommand:
 			setConsoleMessage(invalidCommand);
 			break;
 
-			/**
-			 * Print in the client's console an error.
-			 */
+		/**
+		 * Print in the client's console an error.
+		 */
 		case usernameInUse:
 			setConsoleMessage(usernameInUse);
 			break;
 
-			/**
-			 * Print in the client's console an error.
-			 */
+		/**
+		 * Print in the client's console an error.
+		 */
 		case invalidUserTurn:
 			setConsoleMessage(invalidUserTurn);
 			break;
@@ -224,10 +289,12 @@ public class Client implements ProtocolControl, Runnable,
 
 	/**
 	 * Send a request to the server to join.
-	 * @param clientname the name of the client.
+	 * 
+	 * @param clientname
+	 *            the name of the client.
 	 */
-	/*@
-	 requires clientname != null;
+	/*
+	 * @ requires clientname != null;
 	 */
 	public void joinRequest(String clientname) {
 		assert clientname != null;
@@ -244,10 +311,12 @@ public class Client implements ProtocolControl, Runnable,
 
 	/**
 	 * The client sends its move to the server.
-	 * @param move the move of the client.
+	 * 
+	 * @param move
+	 *            the move of the client.
 	 */
-	/*@
-	 requires move >= 0 && move <= 41;
+	/*
+	 * @ requires move >= 0 && move <= 41;
 	 */
 	public void doMove(int move) {
 		assert move >= 0 && move <= 41;
@@ -276,12 +345,12 @@ public class Client implements ProtocolControl, Runnable,
 		}
 
 	}
-	
+
 	/**
 	 * Closes the client.
 	 */
-	/*@
-	 ensures getClientRunning() == false;
+	/*
+	 * @ ensures getClientRunning() == false;
 	 */
 	public void closeClient() {
 		try {
@@ -296,11 +365,12 @@ public class Client implements ProtocolControl, Runnable,
 
 	/**
 	 * Get the status of the client. If it is initialized without any errors.
-	 * @return returns true if client is still running. Returns false if client is stopped.
+	 * 
+	 * @return returns true if client is still running. Returns false if client
+	 *         is stopped.
 	 */
-	/*@
-	 ensures \result == true || \result == false;
-	 pure;
+	/*
+	 * @ ensures \result == true || \result == false; pure;
 	 */
 	public boolean getClientRunning() {
 		return clientRunning;
@@ -321,27 +391,29 @@ public class Client implements ProtocolControl, Runnable,
 
 	/**
 	 * Get the game of the client.
+	 * 
 	 * @return returns the game.
 	 */
-	/*@
-	 ensures \result != null;
+	/*
+	 * @ ensures \result != null;
 	 */
 	public Game getGame() {
 		return game;
 	}
-	
-	public boolean getGameRunning(){
+
+	public boolean getGameRunning() {
 		return gameRunning;
 	}
+
 	/**
 	 * Set the console message for the client.
 	 */
-	public void setConsoleMessage(String message){
+	public void setConsoleMessage(String message) {
 		consoleMessage = message;
 		System.out.println(consoleMessage);
 	}
-	
-	public String getConsoleMessage(){
+
+	public String getConsoleMessage() {
 		String temp = consoleMessage;
 		consoleMessage = null;
 		return temp;
@@ -349,10 +421,12 @@ public class Client implements ProtocolControl, Runnable,
 
 	/**
 	 * Send a chatmessage to the server.
-	 * @param msg the message
+	 * 
+	 * @param msg
+	 *            the message
 	 */
-	/*@
-	 requires msg != null;
+	/*
+	 * @ requires msg != null;
 	 */
 	public void sendMessage(String msg) {
 

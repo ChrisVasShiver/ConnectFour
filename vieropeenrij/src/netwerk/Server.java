@@ -17,7 +17,7 @@ import netwerkprotocol.ProtocolConstants;
 import netwerkprotocol.ProtocolControl;
 
 public class Server extends Observable implements ProtocolControl,
-		ProtocolConstants, Runnable {
+ProtocolConstants, Runnable {
 
 	private int port;
 	private ServerSocket serversocket;
@@ -146,23 +146,25 @@ public class Server extends Observable implements ProtocolControl,
 					setChanged();
 					game.setNextPlayer();
 					notifyObservers("NEXT_PLAYER");
+					System.out.println("after setnext in domove current index" + game.getCurrentPlayerIndex());
+					System.out.println("getnextplayer" + game.getNextPlayer());	
 				}
 			} if (isvalidmove && !game.getNextPlayer().equals(clienthandler.getClientName())) {
 				setChanged();
 				System.out.println("doMove, invaliduserturn : ");
-			!!!	clienthandler.sendToClient(invalidUserTurn);
+				clienthandler.sendToClient(invalidUserTurn);
 				notifyObservers("SERVER_MESSAGE");
 			}
 			if (!isvalidmove) {
 				setChanged();
 				System.out.println("doMove, invalidmove : ");
 				clienthandler.sendToClient(invalidMove);
-				!!!clienthandler.sendToClient(moveResult(move,
-						clienthandler));
+//				clienthandler.sendToClient(moveResult(move,
+//						clienthandler));
 				notifyObservers("SERVER_MESSAGE");
-				
+
 			}
-			
+
 
 			// if (game.getCurrentPlayerIndex() == 0
 			// && game.getCurrentPlayer().equals(
