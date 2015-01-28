@@ -5,7 +5,7 @@ package netwerkprotocol;
  * Aanpassingen door:
  * @author Martijn Gemmink
  * @author Bas Hendrikse
- * @version 1.1 (20-01-2015)
+ * @version 1.2.1 (25-01-2015)
  * 
  *  
  * Delimeter beschrijving:
@@ -106,6 +106,14 @@ public interface ProtocolControl {
     String sendMessage = "sendMessage";
     
     /**
+     * Extension - Chatbox
+     * Richting: [Server] -> [Client]
+     * @param name - de naam van de client die het bericht verstuurd
+     * @param message - het bericht dat naar alle spelers verbonden aan de server wordt verstuurd
+     */
+    String broadcastMessage = "broadcastMessage";
+    
+    /**
 	 * Extension - Leaderboard
      * Client vraagt het leaderboard op.
 	 * Richting: [Client] -> [Server]
@@ -118,4 +126,18 @@ public interface ProtocolControl {
 	 * Richting: [Server] -> [Client]
 	 */
     String sendLeaderboard = "sendLeaderboard";
+    
+    /**
+     * Een rematch request van de client, als beide clients een rematch request hebben gestuurd, reset de game.
+     * Richting: [Client] -> [Server]
+     */
+    String rematch = "rematch";
+    
+    /**
+     * Een bevestiging van de server dat de twee spelers nog een keer willen spelen.
+     * De server stuurt, als hij van beide Clients een rematch command binnen krijgt rematchConfirm, hierna zal de game van de server resetten en de games van de Clients, zodat ze beide in dezelfde staat zijn.
+     * Richting: [Server] -> [Client]
+     */
+    String rematchConfirm = "rematchConfirm";
+    
 }

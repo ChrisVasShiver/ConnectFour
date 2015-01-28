@@ -149,6 +149,7 @@ public class BoardGUI {
 		public BoardController() {
 			game.addObserver(this);
 			board.addObserver(this);
+			client.addObserver(this);
 		}
 		
 		public void updateBoard() {

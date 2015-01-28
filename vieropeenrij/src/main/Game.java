@@ -268,7 +268,7 @@ public class Game extends Observable {
 			System.out.println(winner);
 			System.out.println("The Winner is: " + players[winner].getName()
 					+ "!!!\n");
-		} else {
+		} if(!rules.getHasWinner()) {
 			System.out.println("It is a Draw!\n");
 		}
 	}

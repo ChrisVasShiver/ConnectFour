@@ -21,7 +21,8 @@ import main.Player;
 import netwerkprotocol.ProtocolConstants;
 import netwerkprotocol.ProtocolControl;
 
-public class Client extends Observable implements ProtocolControl, Runnable, ProtocolConstants {
+public class Client extends Observable implements ProtocolControl, Runnable,
+		ProtocolConstants {
 
 	/*
 	 * @ private invariant name.matches(charRegex); private invariant in !=
@@ -164,7 +165,8 @@ public class Client extends Observable implements ProtocolControl, Runnable, Pro
 			for (int i = 1; i <= 2; i++) {
 				String[] aiSplit = commandSplit[i].split("_");
 				// Check the first playername from the server command.
-				if (aiSplit[0].equals("AI") && i == 1 && name.equals(commandSplit[1])) {
+				if (aiSplit[0].equals("AI") && i == 1
+						&& name.equals(commandSplit[1])) {
 					Strategy strategy = new RandomStrategy();
 					thisplayer = new ComputerPlayer(Mark.YELLOW, strategy);
 					opponent = new HumanPlayer(commandSplit[2], Mark.RED);
@@ -200,6 +202,8 @@ public class Client extends Observable implements ProtocolControl, Runnable, Pro
 			}
 			game.setCurrentPlayer(commandSplit[1]);
 			gameRunning = true;
+			setChanged();
+			notifyObservers("NEXT_PLAYER");
 			break;
 
 		/**
@@ -210,30 +214,18 @@ public class Client extends Observable implements ProtocolControl, Runnable, Pro
 			// Set the move received from the server on the board.
 			game.getBoard().setField(Integer.parseInt(commandSplit[1]),
 					game.getPlayers()[game.getCurrentPlayerIndex()].getMark());
-			System.out.println("before setcurrentplayer in moveresult, "
-					+ game.getCurrentPlayer());
-			System.out.println("cmomandsplit " + commandSplit[4]);
-			System.out.println("name " + name);
-			System.out.println(game.getNextPlayer());
-			System.out.println(game.getPlayers()[game.getCurrentPlayerIndex()].getName());
-			System.out.println(game.getCurrentPlayerIndex());
-			if (commandSplit[4].equals(name)){
+			if (commandSplit[4].equals(name)) {
+				setChanged();
 				game.setCurrentPlayer("Easy");
+				notifyObservers("NEXT_PLAYER");
 			}
-			if (!commandSplit[4].equals(game.getCurrentPlayer())){
+			if (!commandSplit[4].equals(game.getCurrentPlayer())) {
+				setChanged();
 				game.setCurrentPlayer(commandSplit[4]);
+				notifyObservers("NEXT_PLAYER");
 			}
-			System.out.println("Client, after moveresult, currentplayer "
-					+ game.getCurrentPlayer());
-			
-
 			// If currentplayer is thisplayer and an AI, make automatically a
 			// move.
-			System.out.println("STUFF");
-			System.out.println(game.getCurrentPlayerIndex());
-			System.out.println(game.getPlayers()[game.getCurrentPlayerIndex()]
-					.getName());
-			System.out.println("STUFF");
 			if (game.getPlayers()[game.getCurrentPlayerIndex()] instanceof ComputerPlayer
 					&& game.getCurrentPlayer().equals("Easy")) {
 				if (game.getCurrentPlayerIndex() == 0
@@ -246,7 +238,6 @@ public class Client extends Observable implements ProtocolControl, Runnable, Pro
 					doMove(game.getBoard().dropMark(Mark.RED,
 							thisplayer.determineMove(game)));
 				}
-				System.out.println("ai has done a move");
 			}
 
 			/**
@@ -255,7 +246,9 @@ public class Client extends Observable implements ProtocolControl, Runnable, Pro
 			 */
 		case turn:
 			if (game.getNextPlayer().equals(commandSplit[1])) {
+				setChanged();
 				game.setCurrentPlayer(commandSplit[1]);
+				notifyObservers("NEXT_PLAYER");
 			}
 			break;
 
@@ -263,8 +256,10 @@ public class Client extends Observable implements ProtocolControl, Runnable, Pro
 		 * End the game.
 		 */
 		case endGame:
+			setChanged();
 			game.endGame();
 			closeClient();
+			notifyObservers("SERVER_MESSAGE");
 			break;
 
 		/**
@@ -278,9 +273,7 @@ public class Client extends Observable implements ProtocolControl, Runnable, Pro
 		 * Print in the client's console an error.
 		 */
 		case invalidMove:
-			setChanged();
 			setConsoleMessage(invalidMove);
-			notifyObservers();
 			break;
 
 		/**
@@ -303,9 +296,16 @@ public class Client extends Observable implements ProtocolControl, Runnable, Pro
 		case invalidUserTurn:
 			setConsoleMessage(invalidUserTurn);
 			break;
+		
+		case winner:
+			setConsoleMessage("You are the winner");
+			break;
+		
+		case draw:
+			setConsoleMessage("Draw game");
+			break;
 		}
 	}
-
 	/**
 	 * Send a request to the server to join.
 	 * 
@@ -428,8 +428,9 @@ public class Client extends Observable implements ProtocolControl, Runnable, Pro
 	 * Set the console message for the client.
 	 */
 	public void setConsoleMessage(String message) {
+		setChanged();
 		consoleMessage = message;
-		System.out.println(consoleMessage);
+		notifyObservers("SERVER_MESSAGE");
 	}
 
 	public String getConsoleMessage() {
@@ -438,27 +439,19 @@ public class Client extends Observable implements ProtocolControl, Runnable, Pro
 		return temp;
 	}
 
-	public String getClientName(){
+	public String getClientName() {
 		return name;
 	}
-	/**
-	 * Send a chatmessage to the server.
-	 * 
-	 * @param msg
-	 *            the message
-	 */
-	/*
-	 * @ requires msg != null;
-	 */
-	public void sendMessage(String msg) {
 
-	}
-
-	public void getLeaderBoard() {
-
-	}
-
-	public void sendLeaderBoard() {
-
+	public void rematchRequest(){
+		try {
+			out.write(rematch);
+			out.newLine();
+			out.flush();
+		} catch (Exception e) {
+			setChanged();
+			setConsoleMessage(unknownerror);
+			notifyObservers("SERVER_MESSAGE");
+		}
 	}
 }

@@ -6,7 +6,7 @@ package netwerkprotocol;
  * Aanpassingen door:
  * @author Martijn Gemmink
  * @author Bas Hendrikse
- * @version 1.1 (20-01-2015)
+ * @version 1.2.1 (25-01-2015)
  */
 
 public interface ProtocolConstants {

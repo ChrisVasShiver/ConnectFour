@@ -49,8 +49,12 @@ public class ClientHandler extends Thread {
 					break;
 				}
 
-			} catch (Exception e) {
+			} catch (NullPointerException e){
 				server.handleCommands("ConnectionLost", this);
+
+			}
+			catch (Exception e) {
+
 				/* SocketException = spel afgelopen! */
 				// server.broadcast(spelAfgelopen
 				// + msgDelim
