@@ -3,6 +3,7 @@ package GUI;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
@@ -33,7 +34,7 @@ public class BoardGUI {
 	private static int buttonWIDTH = 32;
 	private static int buttonHEIGHT = (buttonWIDTH / 16 * 9) / 2;
 	
-	private static int labelWIDTH = 32;
+	private static int labelWIDTH = 48;
 	private static int labelHEIGHT = (labelWIDTH / 16 * 9) / 2;
 	
 	private Container c;
@@ -114,9 +115,11 @@ public class BoardGUI {
 		backButton.setBorderPainted(false);
 		backButton.setForeground(Color.RED);
 		
-		playerName = new JLabel(client.getClientName();
+		Font playerNameFont = new Font("Ariel", Font.BOLD, 16);
+		playerName = new JLabel("You are: " + client.getClientName(), SwingConstants.CENTER);
 		playerName.setBackground(Color.BLACK);
 		playerName.setForeground(Color.RED);
+		playerName.setFont(playerNameFont);
 		
 		p2.add(scrollMessageBox);
 		p2.add(backButton);
@@ -126,7 +129,7 @@ public class BoardGUI {
 		messageBox.setBounds(0, 0, messageBoxWIDTH, messageBoxHEIGHT);
 		scrollMessageBox.setBounds(0, 0, 400, 200);
 		backButton.setBounds((405 - buttonSize.width) / 2 , 710 / 2, buttonSize.width, buttonSize.height);
-		playerName.setBounds((405 - labelSize.width) /2, (int)backButton.getBounds().getMaxY() + labelSize.height, labelSize.width, labelSize.height);
+		playerName.setBounds((405 - labelSize.width) /2, (int)backButton.getBounds().getMinY() - labelSize.height, labelSize.width, labelSize.height);
 		
 		
 		c.add(boardPanel);

@@ -112,7 +112,6 @@ public class MultiPlayerMenu implements ActionListener, ItemListener,
 		ipLabel.setForeground(Color.RED);
 		portLabel = new JLabel("Port:", SwingConstants.RIGHT);
 		portLabel.setFont(menuFont);
-		;
 		portLabel.setForeground(Color.RED);
 		AILabel = new JLabel("Computer Player:", SwingConstants.RIGHT);
 		AILabel.setFont(menuFont);
