@@ -433,5 +433,6 @@ ProtocolConstants, Runnable {
 				clienthandlers.sendToClient(rematchConfirm);
 			}
 		}
+		rematchMap.remove(gameID);
 	}
 }
