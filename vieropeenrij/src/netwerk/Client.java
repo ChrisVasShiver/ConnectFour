@@ -163,19 +163,20 @@ public class Client implements ProtocolControl, Runnable, ProtocolConstants {
 			for (int i = 1; i <= 2; i++) {
 				String[] aiSplit = commandSplit[i].split("_");
 				// Check the first playername from the server command.
-				if (aiSplit[0].equals("AI") && i == 1) {
+				if (aiSplit[0].equals("AI") && i == 1 && name.equals(commandSplit[1])) {
+					System.out.println("AISPLIT 1");
 					Strategy strategy = new RandomStrategy();
 					thisplayer = new ComputerPlayer(Mark.YELLOW, strategy);
 					opponent = new HumanPlayer(commandSplit[2], Mark.RED);
 					game = new Game(thisplayer, opponent);
-					// If thisplayer, instanceof ComputerPlayer, is the first
-					// player to start. Send the first move.
 					doMove(game.getBoard().dropMark(Mark.YELLOW,
 							thisplayer.determineMove(game.getBoard())));
 					break;
 				}
 				// Check the second playername from the server command.
 				if (aiSplit[0].equals("AI") && i == 2) {
+					System.out.println("AISPLIT 2");
+
 					Strategy strategy = new RandomStrategy();
 					thisplayer = new ComputerPlayer(Mark.RED, strategy);
 					opponent = new HumanPlayer(commandSplit[1], Mark.YELLOW);
@@ -185,6 +186,8 @@ public class Client implements ProtocolControl, Runnable, ProtocolConstants {
 				// If the playernames do not start with "AI", make a normal game
 				// with 2 HumanPlayers.
 				if (thisplayer instanceof HumanPlayer && i == 2) {
+					System.out.println("HUMANPLAYER");
+
 					if (commandSplit[1].equals(this.name)) {
 						thisplayer = new HumanPlayer(commandSplit[1],
 								Mark.YELLOW);
@@ -211,26 +214,44 @@ public class Client implements ProtocolControl, Runnable, ProtocolConstants {
 			// Set the move received from the server on the board.
 			game.getBoard().setField(Integer.parseInt(commandSplit[1]),
 					game.getPlayers()[game.getCurrentPlayerIndex()].getMark());
-			game.setCurrentPlayer(commandSplit[4]);
+			System.out.println("before setcurrentplayer in moveresult, "
+					+ game.getCurrentPlayer());
+			System.out.println("cmomandsplit " + commandSplit[4]);
+			System.out.println("name " + name);
+			System.out.println(game.getNextPlayer());
+			System.out.println(game.getPlayers()[game.getCurrentPlayerIndex()].getName());
+			System.out.println(game.getCurrentPlayerIndex());
+			if (commandSplit[4].equals(name)){
+				game.setCurrentPlayer("Easy");
+			}
+			if (!commandSplit[4].equals(game.getCurrentPlayer())){
+				game.setCurrentPlayer(commandSplit[4]);
+			}
+			System.out.println("Client, after moveresult, currentplayer "
+					+ game.getCurrentPlayer());
+			
 
 			// If currentplayer is thisplayer and an AI, make automatically a
 			// move.
+			System.out.println("STUFF");
+			System.out.println(game.getCurrentPlayerIndex());
+			System.out.println(game.getPlayers()[game.getCurrentPlayerIndex()]
+					.getName());
+			System.out.println("STUFF");
 			if (game.getPlayers()[game.getCurrentPlayerIndex()] instanceof ComputerPlayer
-					&& game.getPlayers()[game.getCurrentPlayerIndex()]
-							.getName().equals(thisplayer.getName())) {
-				if (game.getCurrentPlayerIndex() == 0) {
+					&& game.getCurrentPlayer().equals("Easy")) {
+				if (game.getCurrentPlayerIndex() == 0
+						&& game.getCurrentPlayer().equals("Easy")) {
 					doMove(game.getBoard().dropMark(Mark.YELLOW,
 							thisplayer.determineMove(game.getBoard())));
-				} else {
+				}
+				if (game.getCurrentPlayerIndex() == 1
+						&& game.getCurrentPlayer().equals("Easy")) {
 					doMove(game.getBoard().dropMark(Mark.RED,
 							thisplayer.determineMove(game.getBoard())));
 				}
-				System.out.println("ai move");
+				System.out.println("ai has done a move");
 			}
-			System.out.println("client moveResult: commandsplit "
-					+ commandSplit[4]);
-			System.out.println("client moveResult: getcurrentplayer "
-					+ game.getCurrentPlayer());
 
 			/**
 			 * Receive the player whose turn is next and set it to the
