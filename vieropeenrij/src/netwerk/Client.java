@@ -21,7 +21,7 @@ import main.Player;
 import netwerkprotocol.ProtocolConstants;
 import netwerkprotocol.ProtocolControl;
 
-public class Client implements ProtocolControl, Runnable, ProtocolConstants {
+public class Client extends Observable implements ProtocolControl, Runnable, ProtocolConstants {
 
 	/*
 	 * @ private invariant name.matches(charRegex); private invariant in !=
@@ -165,7 +165,6 @@ public class Client implements ProtocolControl, Runnable, ProtocolConstants {
 				String[] aiSplit = commandSplit[i].split("_");
 				// Check the first playername from the server command.
 				if (aiSplit[0].equals("AI") && i == 1 && name.equals(commandSplit[1])) {
-					System.out.println("AISPLIT 1");
 					Strategy strategy = new RandomStrategy();
 					thisplayer = new ComputerPlayer(Mark.YELLOW, strategy);
 					opponent = new HumanPlayer(commandSplit[2], Mark.RED);
@@ -176,8 +175,6 @@ public class Client implements ProtocolControl, Runnable, ProtocolConstants {
 				}
 				// Check the second playername from the server command.
 				if (aiSplit[0].equals("AI") && i == 2) {
-					System.out.println("AISPLIT 2");
-
 					Strategy strategy = new RandomStrategy();
 					thisplayer = new ComputerPlayer(Mark.RED, strategy);
 					opponent = new HumanPlayer(commandSplit[1], Mark.YELLOW);
@@ -187,8 +184,6 @@ public class Client implements ProtocolControl, Runnable, ProtocolConstants {
 				// If the playernames do not start with "AI", make a normal game
 				// with 2 HumanPlayers.
 				if (thisplayer instanceof HumanPlayer && i == 2) {
-					System.out.println("HUMANPLAYER");
-
 					if (commandSplit[1].equals(this.name)) {
 						thisplayer = new HumanPlayer(commandSplit[1],
 								Mark.YELLOW);
@@ -283,7 +278,9 @@ public class Client implements ProtocolControl, Runnable, ProtocolConstants {
 		 * Print in the client's console an error.
 		 */
 		case invalidMove:
+			setChanged();
 			setConsoleMessage(invalidMove);
+			notifyObservers();
 			break;
 
 		/**
