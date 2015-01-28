@@ -6,6 +6,7 @@ import java.util.Set;
 import main.Board;
 import main.Game;
 import main.Mark;
+import main.Rules;
 
 public class SmartStrategy implements Strategy{
 
@@ -17,12 +18,25 @@ public class SmartStrategy implements Strategy{
 	@Override
 	public int determineMove(Game game, Mark m) {
 		Board testMoveBoard = game.getBoard().copyBoard();
+		Rules testRules = new Rules(testMoveBoard);
+		
 		for (int i = 0; i < Board.MAXFIELDS; i++) {
+			testMoveBoard = game.getBoard().copyBoard();
 			if (testMoveBoard.getField(i) == Mark.EMPTY) {
 				testMoveBoard.setField(i, m);
 			}
-			if (game.getRules().getHasWinner()) {
+			if (testRules.getHasWinner()) {
 				return i;
+			}
+		}
+		
+		for (int j = 0; j < Board.MAXFIELDS; j++) {
+			testMoveBoard = game.getBoard().copyBoard();
+			if (testMoveBoard.getField(j) == Mark.EMPTY) {
+				testMoveBoard.setField(j, m.opponent());
+			}
+			if (testRules.getHasWinner()) {
+				return j;
 			}
 		}
 		
