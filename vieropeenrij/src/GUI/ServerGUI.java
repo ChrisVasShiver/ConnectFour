@@ -21,26 +21,26 @@ import netwerk.Server;
 public class ServerGUI extends JFrame{
 	private static final long serialVersionUID = 1L;
 
-	private static int SCALE = 4;
-	private static int SPACING = 4;
+	private final static int SCALE = 4;
+	private final static int SPACING = 4;
 	
-	private static int WIDTH = 320;
-	private static int halfWIDTH = 160;
-	private static int HEIGHT = WIDTH / 16 * 9;
+	private final static int WIDTH = 320;
+	private final static int halfWIDTH = 160;
+	private final static int HEIGHT = WIDTH / 16 * 9;
 
-	private static int labelWIDTH = 32;
-	private static int labelHEIGHT = (labelWIDTH / 16 * 9) / 2;
+	private final static int labelWIDTH = 32;
+	private final static int labelHEIGHT = (labelWIDTH / 16 * 9) / 2;
 	
-	private static int textFieldWIDTH = 32;
-	private static int textFieldHEIGHT = (textFieldWIDTH / 16 * 9) / 2;
+	private final static int textFieldWIDTH = 32;
+	private final static int textFieldHEIGHT = (textFieldWIDTH / 16 * 9) / 2;
 	
-	private static int buttonWIDTH = 32;
-	private static int buttonHEIGHT = (buttonWIDTH / 16 * 9) / 2; 
+	private final static int buttonWIDTH = 32;
+	private final static int buttonHEIGHT = (buttonWIDTH / 16 * 9) / 2; 
 	
-	private static int scrollBarWIDTH = 4;
+	private final static int scrollBarWIDTH = 4;
 	
-	private static int messageBoxWIDTH = WIDTH - (2 * SPACING) - scrollBarWIDTH;
-	private static int messageBoxHEIGHT = 140;
+	private final static int messageBoxWIDTH = WIDTH - (2 * SPACING) - scrollBarWIDTH;
+	private final static int messageBoxHEIGHT = 140;
 	
 	private JLabel ipLabel;
 	private JLabel portLabel;
@@ -115,7 +115,7 @@ public class ServerGUI extends JFrame{
 		messageBox.setBounds(SPACING * SCALE, (int)portTField.getBounds().getMaxY() + SPACING * SCALE, messageBoxSize.width, messageBoxSize.height);
 		scrollMessageBox.setBounds((SPACING * ClientGUI.SCALE), (int)messageBox.getBounds().getMinY(), messageBoxSize.width + scrollBarSize.width, scrollBarSize.height);
 		
-		getContentPane().setBackground(new Color(183, 105, 211));
+		getContentPane().setBackground(Color.GREEN);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setVisible(true);

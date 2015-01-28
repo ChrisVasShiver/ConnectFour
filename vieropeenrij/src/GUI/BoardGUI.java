@@ -27,15 +27,17 @@ import main.Mark;
  * 
  */
 public class BoardGUI {
-	private static int messageBoxWIDTH = 400;
-	private static int messageBoxHEIGHT = 200;
-	private static int scrollBarWIDTH = 4;
+	private final static int SPACING = 4;
 	
-	private static int buttonWIDTH = 32;
-	private static int buttonHEIGHT = (buttonWIDTH / 16 * 9) / 2;
+	private final static int messageBoxWIDTH = 400;
+	private final static int messageBoxHEIGHT = 200;
+	private final static int scrollBarWIDTH = 4;
 	
-	private static int labelWIDTH = 48;
-	private static int labelHEIGHT = (labelWIDTH / 16 * 9) / 2;
+	private final static int buttonWIDTH = 32;
+	private final static int buttonHEIGHT = (buttonWIDTH / 16 * 9) / 2;
+	
+	private final static int labelWIDTH = 48;
+	private final static int labelHEIGHT = (labelWIDTH / 16 * 9) / 2;
 	
 	private Container c;
 	private Client client;
@@ -45,6 +47,7 @@ public class BoardGUI {
 	private JFrame frame;
 	
 	private JLabel playerName;
+	private JButton rematchButton;
 	private JButton backButton;
 	private JButton[] fields = new JButton[board.MAXFIELDS];
 	private JPanel boardPanel;
@@ -110,6 +113,13 @@ public class BoardGUI {
 		scrollMessageBox.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollMessageBox.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
+		
+		rematchButton = new JButton("Play another game?");
+		rematchButton.addActionListener(controller);
+		rematchButton.setBorderPainted(false);
+		rematchButton.setEnabled(false);
+		rematchButton.setForeground(Color.RED);
+		
 		backButton = new JButton("Back to Menu");
 		backButton.addActionListener(controller);
 		backButton.setBorderPainted(false);
@@ -122,15 +132,16 @@ public class BoardGUI {
 		playerName.setFont(playerNameFont);
 		
 		p2.add(scrollMessageBox);
-		p2.add(backButton);
+		p2.add(rematchButton);
 		p2.add(playerName);
+		p2.add(backButton);
 		
 		
 		messageBox.setBounds(0, 0, messageBoxWIDTH, messageBoxHEIGHT);
 		scrollMessageBox.setBounds(0, 0, 400, 200);
-		backButton.setBounds((405 - buttonSize.width) / 2 , 710 / 2, buttonSize.width, buttonSize.height);
-		playerName.setBounds((405 - labelSize.width) /2, (int)backButton.getBounds().getMinY() - labelSize.height, labelSize.width, labelSize.height);
-		
+		rematchButton.setBounds((405 - buttonSize.width) / 2 , 710 / 2, buttonSize.width, buttonSize.height);
+		playerName.setBounds((405 - labelSize.width) /2, (int)rematchButton.getBounds().getMinY() - labelSize.height, labelSize.width, labelSize.height);
+		backButton.setBounds((405 - buttonSize.width) / 2, (int)rematchButton.getBounds().getMinY() + buttonSize.height + ClientGUI.SCALE * SPACING, buttonSize.width, buttonSize.height);
 		
 		c.add(boardPanel);
 		c.add(p2);

@@ -14,13 +14,13 @@ public class ClientGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	
-	public static int SCALE = 4;
+	public final static int SCALE = 4;
 	
-	public static int WIDTH = 320;
-	public static int halfWIDTH = 160;
-	public static int HEIGHT = WIDTH / 16 * 9;
-	public static int halfHEIGHT = (WIDTH / 16 * 9) / 2;
-	public static int quaterHEIGHT = (WIDTH / 16 * 9) / 4;
+	public final static int WIDTH = 320;
+	public final static int halfWIDTH = 160;
+	public final static int HEIGHT = WIDTH / 16 * 9;
+	public final static int halfHEIGHT = (WIDTH / 16 * 9) / 2;
+	public final static int quaterHEIGHT = (WIDTH / 16 * 9) / 4;
 	
 	private MainMenu menu;
 

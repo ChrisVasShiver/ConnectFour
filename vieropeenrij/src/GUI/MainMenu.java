@@ -14,13 +14,13 @@ import javax.swing.SwingConstants;
 
 class MainMenu implements ActionListener {
 	
-	private static int SPACING = 64;
+	private final static int SPACING = 64;
 	
-	private static int buttonWIDTH = 128;
-	private static int buttonHEIGHT = (buttonWIDTH / 16 * 9) / 2;
+	private final static int buttonWIDTH = 128;
+	private final static int buttonHEIGHT = (buttonWIDTH / 16 * 9) / 2;
 
-	private static int titleWIDTH = 128;
-	private static int titleHEIGHT = (titleWIDTH / 16 * 9) / 2;
+	private final static int titleWIDTH = 128;
+	private final static int titleHEIGHT = (titleWIDTH / 16 * 9) / 2;
 	
 	private Container c;
 	private JFrame frame;
