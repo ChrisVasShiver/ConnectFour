@@ -25,8 +25,7 @@ import javax.swing.event.DocumentListener;
 
 import netwerk.Client;
 
-public class MultiPlayerMenu implements ActionListener, ItemListener,
-		DocumentListener {
+public class MultiPlayerMenu  {
 	private final static int SPACING = 4;
 
 	private final static int WIDTH = 320;
@@ -63,6 +62,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener,
 	private JFrame frame;
 	private BoardGUI boardGUI;
 	private Client client;
+	private MultiPlayerMenuController controller;
 
 	private JButton connectButton;
 	private JButton backButton;
@@ -82,6 +82,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener,
 		this.mainMenu = mainMenu;
 		this.frame = frame;
 		c = frame.getContentPane();
+		controller = new MultiPlayerMenuController(this);
 	}
 
 	public void buildMPMenu() {
@@ -119,24 +120,24 @@ public class MultiPlayerMenu implements ActionListener, ItemListener,
 
 		userTField = new JTextField();
 		userTField.setBackground(Color.LIGHT_GRAY);
-		userTField.getDocument().addDocumentListener(this);
+		userTField.getDocument().addDocumentListener(controller);
 		ipTField = new JTextField();
 		ipTField.setBackground(Color.LIGHT_GRAY);
-		ipTField.getDocument().addDocumentListener(this);
+		ipTField.getDocument().addDocumentListener(controller);
 		portTField = new JTextField();
 		portTField.setBackground(Color.LIGHT_GRAY);
-		portTField.getDocument().addDocumentListener(this);
+		portTField.getDocument().addDocumentListener(controller);
 
 		AICheckBox = new JCheckBox("Use");
 		AICheckBox.setBorderPainted(false);
 		AICheckBox.setFont(menuFont);
 		AICheckBox.setForeground(Color.RED);
 		AICheckBox.setBackground(Color.BLACK);
-		AICheckBox.addActionListener(this);
-		AICheckBox.addItemListener(this);
+		AICheckBox.addActionListener(controller);
+		AICheckBox.addItemListener(controller);
 
 		connectButton = new JButton("Connect");
-		connectButton.addActionListener(this);
+		connectButton.addActionListener(controller);
 		connectButton.setBorderPainted(false);
 		connectButton.setEnabled(false);
 		connectButton.setFont(menuFont);
@@ -150,7 +151,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener,
 		AIComboBox.setFont(comboBoxFont);
 		AIComboBox.setBackground(Color.LIGHT_GRAY);
 		AIComboBox.setForeground(Color.RED);
-		AIComboBox.addActionListener(this);
+		AIComboBox.addActionListener(controller);
 
 		messageBox = new JTextArea();
 		messageBox.setEditable(false);
@@ -164,7 +165,7 @@ public class MultiPlayerMenu implements ActionListener, ItemListener,
 				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 		backButton = new JButton("Back to Menu");
-		backButton.addActionListener(this);
+		backButton.addActionListener(controller);
 		backButton.setBorderPainted(false);
 		backButton.setFont(menuFont);
 		backButton.setForeground(Color.RED);
@@ -287,70 +288,82 @@ public class MultiPlayerMenu implements ActionListener, ItemListener,
 		}
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		if (event.getSource() == connectButton) {
-			addMessage("<Message: Trying to connect, please wait!>");
-			connectButton.setEnabled(false);
-			connect();
-			if (connectionSucces && client.getClientRunning()) {
-				boolean temp = true;
-				while (client.getClientRunning() && temp) {
-					System.out.println(client.getGameRunning());
 
-					if (client.getGameRunning()) {
-						c.removeAll();
-						boardGUI = new BoardGUI(frame, client, this);
-						boardGUI.buildBoardGUI();
-						c.repaint();
-						temp = false;
+	
+	public class MultiPlayerMenuController implements ActionListener, ItemListener,
+	DocumentListener {
+		
+		private MultiPlayerMenu mpmenu;
+		
+		public MultiPlayerMenuController(MultiPlayerMenu mpmenu) {
+			this.mpmenu = mpmenu;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			if (event.getSource() == connectButton) {
+				addMessage("<Message: Trying to connect, please wait!>");
+				connectButton.setEnabled(false);
+				connect();
+				if (connectionSucces && client.getClientRunning()) {
+					boolean temp = true;
+					while (client.getClientRunning() && temp) {
+						System.out.println(client.getGameRunning());
+
+						if (client.getGameRunning()) {
+							c.removeAll();
+							boardGUI = new BoardGUI(frame, client, mpmenu);
+							boardGUI.buildBoardGUI();
+							c.repaint();
+							temp = false;
+						}
 					}
+				} else {
+					addMessage("<Error: Making Connection failed!>");
+					connectButton.setEnabled(true);
 				}
+			} else if (event.getSource() == backButton) {
+				c.removeAll();
+				mainMenu.buildMenu();
+				c.repaint();
+			}
+		}
+
+		@Override
+		public void itemStateChanged(ItemEvent event) {
+			if (event.getSource() == AICheckBox) {
+				if (AICheckBox.isSelected()) {
+					AIComboBox.setEnabled(true);
+				} else {
+					AIComboBox.setEnabled(false);
+				}
+			}
+
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent event) {
+			updatedTF();
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			updatedTF();
+
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			updatedTF();
+		}
+
+		public void updatedTF() {
+			if (userTField.getText().equals("") || portTField.getText().equals("")
+					|| ipTField.getText().equals("")) {
+				connectButton.setEnabled(false);
 			} else {
-				addMessage("<Error: Making Connection failed!>");
 				connectButton.setEnabled(true);
 			}
-		} else if (event.getSource() == backButton) {
-			c.removeAll();
-			mainMenu.buildMenu();
-			c.repaint();
-		}
-	}
-
-	@Override
-	public void itemStateChanged(ItemEvent event) {
-		if (event.getSource() == AICheckBox) {
-			if (AICheckBox.isSelected()) {
-				AIComboBox.setEnabled(true);
-			} else {
-				AIComboBox.setEnabled(false);
-			}
-		}
-
-	}
-
-	@Override
-	public void changedUpdate(DocumentEvent event) {
-		updatedTF();
-	}
-
-	@Override
-	public void insertUpdate(DocumentEvent e) {
-		updatedTF();
-
-	}
-
-	@Override
-	public void removeUpdate(DocumentEvent e) {
-		updatedTF();
-	}
-
-	public void updatedTF() {
-		if (userTField.getText().equals("") || portTField.getText().equals("")
-				|| ipTField.getText().equals("")) {
-			connectButton.setEnabled(false);
-		} else {
-			connectButton.setEnabled(true);
 		}
 	}
 }
