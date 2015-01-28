@@ -43,7 +43,7 @@ public class SmartStrategy implements Strategy{
 		}
 		
 		Set<Integer> validmoves = new HashSet<Integer>();
-		for (int i = 0; i < game.getBoard().MAXFIELDS; i++) {
+		for (int i = 0; i < Board.MAXFIELDS; i++) {
 			if (game.getBoard().isEmptyField(i)) {
 				validmoves.add(i);
 			}

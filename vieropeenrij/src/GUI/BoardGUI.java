@@ -10,9 +10,11 @@ import java.util.Observer;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
 import netwerk.Client;
 import main.Board;
@@ -31,6 +33,9 @@ public class BoardGUI {
 	private static int buttonWIDTH = 32;
 	private static int buttonHEIGHT = (buttonWIDTH / 16 * 9) / 2;
 	
+	private static int labelWIDTH = 32;
+	private static int labelHEIGHT = (labelWIDTH / 16 * 9) / 2;
+	
 	private Container c;
 	private Client client;
 	private Game game;
@@ -38,6 +43,7 @@ public class BoardGUI {
 	private Board board;
 	private JFrame frame;
 	
+	private JLabel playerName;
 	private JButton backButton;
 	private JButton[] fields = new JButton[board.MAXFIELDS];
 	private JPanel boardPanel;
@@ -62,6 +68,8 @@ public class BoardGUI {
 	}
 	
 	public void buildBoardGUI() {
+		Dimension labelSize = new Dimension(labelWIDTH * ClientGUI.SCALE,
+				labelHEIGHT * ClientGUI.SCALE);
 		Dimension scrollBarSize = new Dimension(scrollBarWIDTH * ClientGUI.SCALE ,messageBoxHEIGHT * ClientGUI.SCALE);
 		Dimension buttonSize = new Dimension(buttonWIDTH * ClientGUI.SCALE,
 				buttonHEIGHT * ClientGUI.SCALE);
@@ -106,12 +114,20 @@ public class BoardGUI {
 		backButton.setBorderPainted(false);
 		backButton.setForeground(Color.RED);
 		
+		playerName = new JLabel(client.getClientName();
+		playerName.setBackground(Color.BLACK);
+		playerName.setForeground(Color.RED);
+		
 		p2.add(scrollMessageBox);
 		p2.add(backButton);
+		p2.add(playerName);
+		
 		
 		messageBox.setBounds(0, 0, messageBoxWIDTH, messageBoxHEIGHT);
 		scrollMessageBox.setBounds(0, 0, 400, 200);
 		backButton.setBounds((405 - buttonSize.width) / 2 , 710 / 2, buttonSize.width, buttonSize.height);
+		playerName.setBounds((405 - labelSize.width) /2, (int)backButton.getBounds().getMaxY() + labelSize.height, labelSize.width, labelSize.height);
+		
 		
 		c.add(boardPanel);
 		c.add(p2);
