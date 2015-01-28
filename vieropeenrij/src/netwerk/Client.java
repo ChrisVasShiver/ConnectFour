@@ -176,8 +176,8 @@ public class Client extends Observable implements ProtocolControl, Runnable,
 					if (aiSplit[1].equals("Random")){
 						strategy = new RandomStrategy();
 					}
-					if (aiSplit[1].equals("SMART")){ 
-						strategy = new RandomStrategy();
+					if (aiSplit[1].equals("Smart")){ 
+						strategy = new SmartStrategy();
 					}
 					thisplayer = new ComputerPlayer(Mark.YELLOW, strategy);
 					opponent = new HumanPlayer(commandSplit[2], Mark.RED);

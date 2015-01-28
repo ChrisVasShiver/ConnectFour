@@ -260,16 +260,13 @@ public class MultiPlayerMenu  {
 		}
 
 		if (AICheckBox.isSelected()) {
-			String AIname;
+			String AIname = null;
 			switch ((String) AIComboBox.getSelectedItem()) {
 			case "Random Strategy":
 				AIname = "Random";
 				break;
 			case "Smart Strategy" :
 				AIname = "Smart";
-			default:
-				AIname = "Random";
-				break;
 			}
 			name = "AI_" + AIname + "_" + userTField.getText();
 		} else {
