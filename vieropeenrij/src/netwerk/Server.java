@@ -32,6 +32,7 @@ ProtocolConstants, Runnable {
 	private List<ClientHandler> clientqueue;
 	private List<Game> games;
 	private boolean serverRunning = false;
+	private Map<Integer, ArrayList<String>> rematchMap = new HashMap<Integer, ArrayList<String>>();
 
 	/**
 	 * Creates the server with the given port.
@@ -408,8 +409,10 @@ ProtocolConstants, Runnable {
 	 */
 	public void addRematch(ClientHandler clienthandler){
 		assert clienthandler != null;
-		Map<Integer, ArrayList<String>> rematchMap = new HashMap<Integer, ArrayList<String>>();
 		ArrayList<String> ar = new ArrayList<String>();
+		if (rematchMap.get(clienthandler.getGameID()) != null){
+			ar = rematchMap.get(clienthandler.getGameID());
+		}	
 		ar.add(clienthandler.getClientName());
 		rematchMap.put(clienthandler.getGameID(), ar);
 
