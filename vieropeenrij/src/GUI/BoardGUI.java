@@ -200,6 +200,11 @@ public class BoardGUI {
             //p2 repaint
             rematchButton.setEnabled(false);
             
+    		p2.add(scrollMessageBox);
+    		p2.add(rematchButton);
+    		p2.add(playerName);
+    		p2.add(backButton);
+            
             messageBox.setBounds(0, 0, messageBoxWIDTH, messageBoxHEIGHT);
     		scrollMessageBox.setBounds(0, 0, 400, 200);
     		rematchButton.setBounds((405 - buttonSize.width) / 2 , 710 / 2, buttonSize.width, buttonSize.height);
@@ -247,6 +252,11 @@ public class BoardGUI {
             }
             
             rematchButton.setEnabled(true);
+            
+    		p2.add(scrollMessageBox);
+    		p2.add(rematchButton);
+    		p2.add(playerName);
+    		p2.add(backButton);
             
             messageBox.setBounds(0, 0, messageBoxWIDTH, messageBoxHEIGHT);
     		scrollMessageBox.setBounds(0, 0, 400, 200);
