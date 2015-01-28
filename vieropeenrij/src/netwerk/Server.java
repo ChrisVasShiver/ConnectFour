@@ -126,12 +126,14 @@ public class Server extends Observable implements ProtocolControl,
 			boolean isvalidmove = (game.getBoard().isEmptyField(move) && game
 					.getRules().isValidMove(move));
 			System.out.println("current index" + game.getCurrentPlayerIndex());
-			System.out.println("getnextplayer" + game.getNextPlayer()); // try {
-			if (!game.getRules().getGameOver()
-					&& isvalidmove
-					&& game.getCurrentPlayer().equals(
-							clienthandler.getClientName())
-					|| game.getCurrentPlayer().equals("Easy")) {
+			System.out.println("getnextplayer" + game.getNextPlayer());
+			System.out.println("game getcurrentplayer"
+					+ game.getCurrentPlayer());
+			System.out.println("Clienetname" + clienthandler.getClientName());
+			if (game.getRules().getGameOver()) {
+				game.setWinner(clienthandler.getClientName());
+				endGame(clienthandler.getGameID());
+			} else {
 				if (game.getCurrentPlayer().equals(
 						clienthandler.getClientName())
 						&& isvalidmove) {
@@ -151,80 +153,60 @@ public class Server extends Observable implements ProtocolControl,
 									clienthandler));
 						}
 					}
-					if (game.getRules().getGameOver()) {
-						game.setWinner(clienthandler.getClientName());
-						endGame(clienthandler.getGameID());
-					}
-					setChanged();
-					game.setNextPlayer();
-					notifyObservers("NEXT_PLAYER");
-					System.out.println("after setnext in domove current index"
-							+ game.getCurrentPlayerIndex());
-					System.out.println("getnextplayer" + game.getNextPlayer());
-				}
-			}
-			if (isvalidmove
-					&& !game.getNextPlayer().equals(
-							clienthandler.getClientName())) {
-				setChanged();
-				System.out.println("doMove, invaliduserturn : ");
-				clienthandler.sendToClient(invalidUserTurn);
-				notifyObservers("SERVER_MESSAGE");
-			}
-			if (!isvalidmove) {
-				setChanged();
-				System.out.println("doMove, invalidmove : ");
-				clienthandler.sendToClient(invalidMove);
-				clienthandler.sendToClient(moveResult(move, clienthandler));
-				notifyObservers("SERVER_MESSAGE");
 
-			}
-
-			try {
-				if (game.getCurrentPlayerIndex() == 0
-						&& game.getCurrentPlayer().equals(
-								clienthandler.getClientName())
-						&& game.getBoard().isEmptyField(move)) {
-					move = game.getBoard().dropMark(Mark.YELLOW, move);
-					game.getBoard().setField(move, Mark.YELLOW);
-					for (ClientHandler clienthandlers : threads) {
-						if (clienthandler.getGameID() == clienthandlers
-								.getGameID()) {
-							clienthandlers.sendToClient(moveResult(move,
-									clienthandler));
-						}
-					}
-					setChanged();
-					game.setNextPlayer();
-					notifyObservers("NEXT_PLAYER");
 				}
-				if (game.getCurrentPlayerIndex() == 1
-						&& game.getCurrentPlayer().equals(
-								clienthandler.getClientName())
-						&& game.getBoard().isEmptyField(move)) {
-					move = game.getBoard().dropMark(Mark.RED, move);
-					game.getBoard().setField(move, Mark.RED);
-					for (ClientHandler clienthandlers : threads) {
-						if (clienthandler.getGameID() == clienthandlers
-								.getGameID()) {
-							clienthandlers.sendToClient(moveResult(move,
-									clienthandler));
-						}
-					}
-					setChanged();
-					game.setNextPlayer();
-					notifyObservers("NEXT_PLAYER");
-				}
-				if (games.get(clienthandler.getGameID()).getRules()
-						.getGameOver()) {
-					game.setWinner(clienthandler.getClientName());
-					endGame(clienthandler.getGameID());
-				} else
-					throw new Exception();
-			} catch (Exception e) {
-				clienthandler.sendToClient(invalidMove);
+				setChanged();
+				game.setNextPlayer();
+				notifyObservers("NEXT_PLAYER");
+				System.out.println("after setnext in domove current index"
+						+ game.getCurrentPlayerIndex());
+				System.out.println("getnextplayer" + game.getNextPlayer());
 			}
 			break;
+
+			// if (game.getCurrentPlayerIndex() == 0
+			// && game.getCurrentPlayer().equals(
+			// clienthandler.getClientName())
+			// && game.getBoard().isEmptyField(move)) {
+			// move = game.getBoard().dropMark(Mark.YELLOW, move);
+			// game.getBoard().setField(move, Mark.YELLOW);
+			// for (ClientHandler clienthandlers : threads) {
+			// if (clienthandler.getGameID() == clienthandlers
+			// .getGameID()) {
+			// clienthandlers.sendToClient(moveResult(move,
+			// clienthandler));
+			// }
+			// }
+			// setChanged();
+			// game.setNextPlayer();
+			// notifyObservers("NEXT_PLAYER");
+			// }
+			// if (game.getCurrentPlayerIndex() == 1
+			// && game.getCurrentPlayer().equals(
+			// clienthandler.getClientName())
+			// && game.getBoard().isEmptyField(move)) {
+			// move = game.getBoard().dropMark(Mark.RED, move);
+			// game.getBoard().setField(move, Mark.RED);
+			// for (ClientHandler clienthandlers : threads) {
+			// if (clienthandler.getGameID() == clienthandlers
+			// .getGameID()) {
+			// clienthandlers.sendToClient(moveResult(move,
+			// clienthandler));
+			// }
+			// }
+			// setChanged();
+			// game.setNextPlayer();
+			// notifyObservers("NEXT_PLAYER");
+			// }
+			// if (games.get(clienthandler.getGameID()).getRules()
+			// .getGameOver()) {
+			// game.setWinner(clienthandler.getClientName());
+			// endGame(clienthandler.getGameID());
+			// } else
+			// throw new Exception();
+			// } catch (Exception e) {
+			// clienthandler.sendToClient(invalidMove);
+			// }
 
 		case playerTurn:
 			clienthandler.sendToClient(games.get(clienthandler.getGameID())

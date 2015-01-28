@@ -441,6 +441,9 @@ public class Client implements ProtocolControl, Runnable, ProtocolConstants {
 		return temp;
 	}
 
+	public String getClientName(){
+		return name;
+	}
 	/**
 	 * Send a chatmessage to the server.
 	 * 
