@@ -307,14 +307,23 @@ public class Client extends Observable implements ProtocolControl, Runnable,
 			setConsoleMessage(invalidUserTurn);
 			break;
 		
+			/**
+			 * Print in the client's console that you are a winner
+			 */
 		case winner:
 			setConsoleMessage("You are the winner");
 			break;
 		
+			/**
+			 * Print in the client's console that it is a draw
+			 */
 		case draw:
 			setConsoleMessage("Draw game");
 			break;
 		
+			/**
+			 * Restart the game
+			 */
 		case rematchConfirm:
 			setChanged();
 			game.reset();			
@@ -323,6 +332,9 @@ public class Client extends Observable implements ProtocolControl, Runnable,
 			notifyObservers("UPDATE_BOARD");
 			break;
 		
+			/**
+			 * Close client
+			 */
 		case "Stop":
 			closeClient();
 		}
