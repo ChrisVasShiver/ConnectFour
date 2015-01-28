@@ -17,13 +17,13 @@ import javax.swing.SwingConstants;
  * @version 25-01-2015
  */
 public class CreditsMenu implements ActionListener {
-	private static int SPACING = 4;
+	private final static int SPACING = 4;
 	
-	private static int labelWIDTH = 128;
-	private static int labelHEIGHT = labelWIDTH / 16 * 9;
+	private final static int labelWIDTH = 128;
+	private final static int labelHEIGHT = labelWIDTH / 16 * 9;
 	
-	private static int buttonWIDTH = 32;
-	private static int buttonHEIGHT = (buttonWIDTH / 16 * 9) / 2; 
+	private final static int buttonWIDTH = 32;
+	private final static int buttonHEIGHT = (buttonWIDTH / 16 * 9) / 2; 
 	
 	private Container c;
 	private MainMenu menu;

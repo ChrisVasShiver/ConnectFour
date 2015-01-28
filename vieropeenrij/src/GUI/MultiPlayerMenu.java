@@ -27,31 +27,31 @@ import netwerk.Client;
 
 public class MultiPlayerMenu implements ActionListener, ItemListener,
 		DocumentListener {
-	private static int SPACING = 4;
+	private final static int SPACING = 4;
 
-	private static int WIDTH = 320;
-	private static int halfWIDTH = 160;
-	private static int HEIGHT = WIDTH / 16 * 9;
+	private final static int WIDTH = 320;
+	private final static int halfWIDTH = 160;
+	private final static int HEIGHT = WIDTH / 16 * 9;
 
-	private static int labelWIDTH = 32;
-	private static int labelHEIGHT = (labelWIDTH / 16 * 9) / 2;
-	private static int widerLabelWIDTH = 48;
+	private final static int labelWIDTH = 32;
+	private final static int labelHEIGHT = (labelWIDTH / 16 * 9) / 2;
+	private final static int widerLabelWIDTH = 48;
 
-	private static int textFieldWIDTH = 32;
-	private static int textFieldHEIGHT = (textFieldWIDTH / 16 * 9) / 2;
+	private final static int textFieldWIDTH = 32;
+	private final static int textFieldHEIGHT = (textFieldWIDTH / 16 * 9) / 2;
 
-	private static int buttonWIDTH = 32;
-	private static int buttonHEIGHT = (buttonWIDTH / 16 * 9) / 2;
+	private final static int buttonWIDTH = 32;
+	private final static int buttonHEIGHT = (buttonWIDTH / 16 * 9) / 2;
 
-	private static int checkBoxWIDTH = 32;
-	private static int checkBoxHEIGHT = (checkBoxWIDTH / 16 * 9) / 2;
+	private final static int checkBoxWIDTH = 32;
+	private final static int checkBoxHEIGHT = (checkBoxWIDTH / 16 * 9) / 2;
 
-	private static int comboBoxWIDTH = 32;
-	private static int comboBoxHEIGHT = (labelWIDTH / 16 * 9) / 2;
+	private final static int comboBoxWIDTH = 32;
+	private final static int comboBoxHEIGHT = (labelWIDTH / 16 * 9) / 2;
 
-	private static int scrollBarWIDTH = 4;
+	private final static int scrollBarWIDTH = 4;
 
-	private static int messageBoxWIDTH = ClientGUI.WIDTH - (2 * SPACING)
+	private final static int messageBoxWIDTH = ClientGUI.WIDTH - (2 * SPACING)
 			- scrollBarWIDTH;
 	private static int messageBoxHEIGHT = ClientGUI.HEIGHT - (8 * SPACING)
 			- (3 * labelHEIGHT) - comboBoxHEIGHT;
