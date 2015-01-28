@@ -179,6 +179,7 @@ public class BoardGUI {
                             fields[i].setText(Mark.EMPTY.toString());
                     }
                     fields[i].addActionListener(controller);
+                    fields[i].setEnabled(true);
                     boardPanel.add(fields[i]);
             }
 
@@ -188,7 +189,35 @@ public class BoardGUI {
                     }
             }
             boardPanel.repaint();
-    }
+		}
+		
+		public void gameOverGUI() {
+            board = game.getBoard();
+            boardPanel.removeAll();
+            for(int i = 0; i < Board.MAXFIELDS; i++) {
+                    fields[i] = new JButton();
+                    if (board.getField(i) == Mark.YELLOW) {
+                            fields[i].setBackground(Color.YELLOW);
+                            fields[i].setText(Mark.YELLOW.toString());
+                    } else if (board.getField(i) == Mark.RED) {
+                            fields[i].setBackground(Color.RED);
+                            fields[i].setText(Mark.RED.toString());
+                    } else {
+                            fields[i].setBackground(Color.WHITE);
+                            fields[i].setText(Mark.EMPTY.toString());
+                    }
+                    fields[i].addActionListener(controller);
+                    fields[i].setEnabled(false);
+                    boardPanel.add(fields[i]);
+            }
+
+            for(int r = 0; r < board.HEIGHT; r++) {
+                    for(int c = 0; c < board.WIDTH; c++) {
+                            fields[(r * Board.WIDTH) + c].setBounds(c * 125, r * (710/6 - 3), 125, 710/6 - 3);
+                    }
+            }
+            boardPanel.repaint();
+		}
 		
 		@Override
 		public void actionPerformed(ActionEvent event) {
@@ -215,6 +244,7 @@ public class BoardGUI {
 			case "UPDATE_BOARD" : updateBoard(); break;
 			case "NEXT_PLAYER" : addMessage("It is " + game.getCurrentPlayer()  + "'s turn!"); break;
 			case "SERVER_MESSAGE" : addMessage(client.getConsoleMessage()); break;
+			case "END_GAME" : gameOverGUI(); break;
 			}
 		}
 	}
