@@ -22,6 +22,7 @@ public class SmartStrategy implements Strategy{
 		
 		for (int i = 0; i < Board.MAXFIELDS; i++) {
 			testMoveBoard = game.getBoard().copyBoard();
+			testRules = new Rules(testMoveBoard);
 			if (testMoveBoard.getField(i) == Mark.EMPTY) {
 				testMoveBoard.setField(i, m);
 			}
@@ -32,6 +33,7 @@ public class SmartStrategy implements Strategy{
 		
 		for (int j = 0; j < Board.MAXFIELDS; j++) {
 			testMoveBoard = game.getBoard().copyBoard();
+			testRules = new Rules(testMoveBoard);
 			if (testMoveBoard.getField(j) == Mark.EMPTY) {
 				testMoveBoard.setField(j, m.opponent());
 			}
