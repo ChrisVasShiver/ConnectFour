@@ -251,7 +251,11 @@ public class BoardGUI {
                     }
             }
             
-            rematchButton.setEnabled(true);
+            rematchButton = new JButton("Play another game?");
+    		rematchButton.addActionListener(controller);
+    		rematchButton.setBorderPainted(false);
+    		rematchButton.setEnabled(true);
+    		rematchButton.setForeground(Color.RED);
             
     		p2.add(scrollMessageBox);
     		p2.add(rematchButton);
@@ -282,7 +286,7 @@ public class BoardGUI {
 				c.repaint();
 			}
 			if (event.getSource() == rematchButton) {
-				updateBoard();
+				client.rematchRequest();
 			}
 		}
 
@@ -294,6 +298,7 @@ public class BoardGUI {
 			switch(notify) {
 			case "UPDATE_BOARD" : updateBoard(); break;
 			case "NEXT_PLAYER" : addMessage("It is " + game.getCurrentPlayer()  + "'s turn!"); break;
+            case "GAME_RESTARTED" : addMessage("Rematch confirmed. Game has been restarten. GL HF"); break;
 			case "SERVER_MESSAGE" : addMessage(client.getConsoleMessage()); break;
 			case "END_GAME" : gameOverGUI(); break;
 			}
