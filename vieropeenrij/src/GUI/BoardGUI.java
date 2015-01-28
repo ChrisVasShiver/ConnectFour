@@ -186,9 +186,5 @@ public class BoardGUI {
 			case "SERVER_MESSAGE" : addMessage(client.getConsoleMessage());
 			}
 		}
-		
-		public void guiGameOver() {
-			
-		}
 	}
 }
