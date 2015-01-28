@@ -170,7 +170,7 @@ public class Client implements ProtocolControl, Runnable, ProtocolConstants {
 					opponent = new HumanPlayer(commandSplit[2], Mark.RED);
 					game = new Game(thisplayer, opponent);
 					doMove(game.getBoard().dropMark(Mark.YELLOW,
-							thisplayer.determineMove(game.getBoard())));
+							thisplayer.determineMove(game)));
 					break;
 				}
 				// Check the second playername from the server command.
