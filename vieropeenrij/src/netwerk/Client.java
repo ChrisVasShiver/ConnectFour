@@ -172,7 +172,13 @@ public class Client extends Observable implements ProtocolControl, Runnable,
 				// Check the first playername from the server command.
 				if (aiSplit[0].equals("AI") && i == 1
 						&& name.equals(commandSplit[1])) {
-					Strategy strategy = new RandomStrategy();
+					Strategy strategy = null;
+					if (aiSplit[1].equals("Random")){
+						strategy = new RandomStrategy();
+					}
+					if (aiSplit[1].equals("SMART")){ 
+						strategy = new RandomStrategy();
+					}
 					thisplayer = new ComputerPlayer(Mark.YELLOW, strategy);
 					opponent = new HumanPlayer(commandSplit[2], Mark.RED);
 					game = new Game(thisplayer, opponent);
